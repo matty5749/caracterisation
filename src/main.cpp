@@ -16,10 +16,14 @@ int main ( int argc,char** argv )
     }
 
     Instance instance;
+		
+// 		instance.test();
+		
     instance.parseDac ( argv[1] );
     instance.preTraitement();
-
+		instance.parcoursSansHeuristique();
 		instance.rechercheExacteEnProfondeurAPartirde(instance._genes.size()-1,false);
+// 		instance.rechercheExacteEnProfondeurAPartirde(40,true);
 // instance.rechercheExacteEnLargeurAPartirde(2);
 
 

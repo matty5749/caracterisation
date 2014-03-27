@@ -3,8 +3,7 @@
 #include "groupe.h"
 #include "entite.h"
 #include "gene.h"
-
-#include "comb.h"
+#include "combinaison.h"
 
 using namespace std;
 
@@ -18,7 +17,7 @@ using namespace std;
 
 
 
-Instance::Instance() :_nbEntites ( 0 )
+Instance::Instance()
 {
 
 }
@@ -96,7 +95,7 @@ void Instance::parseDac ( char* nomFic )
 
         //Création de l'entité
         Entite* entite=new Entite ( id,idGroupe,chaine_de_bit,this );
-        _nbEntites++;
+//         _nbEntites++;
         //Récupération ou création de groupe
         Groupe* groupe=getGroupById ( idGroupe );
         if ( groupe==0 )
@@ -114,11 +113,7 @@ void Instance::parseDac ( char* nomFic )
     cout<<"Nb entites:\t"<<_entites.size() <<endl;
     cout<<"Nb variables:\t"<<_genes.size() <<endl;
 
-    if ( nbEntites!=_nbEntites )
-    {
-        cout<<"Probleme dans le nombre d'entite dans void Instance::parseDac ( char* nomFic )"<<endl;
-        exit ( EXIT_FAILURE );
-    }
+
 }
 
 void Instance::preTraitement()
@@ -132,7 +127,7 @@ void Instance::preTraitement()
         //1.Colonne dont toutes les valeurs sont identiques (tout a 1 ou tout a 0)
         for ( vector<Gene*>::iterator it=_genes.begin(); it!=_genes.end(); it++ )
         {
-            if ( ( *it )->nbOne() ==0 || ( *it )->nbOne() == _nbEntites )
+            if ( ( *it )->nbOne() ==0 || ( *it )->nbOne() == _entites.size() )
             {
                 geneASupprimer.insert ( *it );
             }
@@ -222,7 +217,6 @@ void Instance::preTraitement()
             cout<<"Après réduction, au moins un groupe est vide (groupe id="<< ( *it )->_id<<"), l'instance est donc mal formé!"<<endl;
             exit ( EXIT_FAILURE );
         }
-    _nbEntites=_entites.size();
     cout<<"Après traitement:"<<endl;
     cout<<"Nb groupes:\t"<<_groupes.size() <<endl;
     cout<<"Nb entites:\t"<<_entites.size() <<endl;
@@ -231,66 +225,55 @@ void Instance::preTraitement()
 
 void Instance::rechercheExacteEnProfondeurAPartirde ( unsigned int k, bool allSolution ) const
 {
-//On part de kMax vers kMin
+// 				parcoursSansHeuristique();
+	assert(_parcours.size()>0);
+	//On part de kMax vers kMin
+    bool solution=false;
     do
     {
-        vector<int> enumeration ( _genes.size() );
-        for ( unsigned int i=0; i<_genes.size(); i++ )
-            enumeration[i]=i;
-        //Génération et parcours des combinaisons de taille k
-        std::size_t comb_size = k;
+			//Parcours des combinaisons de taille k
+        Combinaison combinaison ( _parcours );
         cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
-        do
+        while ( combinaison.next ( k ).size() >0 )
         {
-            //Combinaison à traiter
-            vector<int> indices ( k );
-            int i=0;
-            for ( std::vector<int>::iterator it=enumeration.begin(); it!=enumeration.begin() +comb_size; it++ )
-                indices[i++]=*it;
-
-            if ( estCaracterisePar ( indices ) )
+            if ( estCaracterisePar ( combinaison._combinaisonCourante ) )
+            {
+                if ( solution==false ) solution=true;
                 if ( !allSolution ) break; //On passe à k-1
-
+            }
             //Sinon on cherche avec une autre combinaison
         }
-        while ( next_combination ( enumeration.begin(),enumeration.begin() + comb_size,enumeration.end() ) );
     }
-    while ( --k>0 );
+    while ( --k>0 || solution );
+		cout<<"La borne minimale a été atteinte et est de "<<++k<<endl;
 }
 
 void Instance::rechercheExacteEnLargeurAPartirde ( unsigned int k, bool allSolution ) const
 {
-		bool solution=false;
-		//On part de kMin vers kMax
+// 				parcoursSansHeuristique();
+	assert(_parcours.size()>0);
+    bool solution=false;
+    //On part de kMin vers kMax
     do
     {
-				cout<<"La borne minimale est de taille "<< k <<endl;
-        vector<int> enumeration ( _genes.size() );
-        for ( unsigned int i=0; i<_genes.size(); i++ )
-            enumeration[i]=i;
-        //Génération et parcours des combinaisons de taille k
-        std::size_t comb_size = k;
+        cout<<"La borne minimale est de taille "<< k <<endl;
+        //Parcours des combinaisons de taille k
+        Combinaison combinaison ( _parcours );
         cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
-        do
+        while ( combinaison.next ( k ).size() >0 )
         {
-            //Combinaison à traiter
-            vector<int> indices ( k );
-            int i=0;
-            for ( std::vector<int>::iterator it=enumeration.begin(); it!=enumeration.begin() +comb_size; it++ )
-                indices[i++]=*it;
-
-            if ( estCaracterisePar ( indices ) )
-                if ( !allSolution ) 
-								{
-									solution=true;
-									break;
-								} //On arrete
+            if ( estCaracterisePar ( combinaison._combinaisonCourante ) )
+                if ( !allSolution )
+                {
+                    solution=true;
+                    break;
+                } //On arrete
             //Sinon on cherche avec une autre combinaison
         }
-        while ( next_combination ( enumeration.begin(),enumeration.begin() + comb_size,enumeration.end() ) );
-				++k;
+        ++k;
     }
     while ( !solution );
+		cout<<"La borne minimale a été atteinte et est de "<<--k<<endl;
 }
 
 
@@ -303,15 +286,6 @@ Groupe* Instance::getGroupById ( unsigned int id ) const
     return 0; //Le groupe n'a pas encore été créé
 }
 
-
-//     for ( vector<Entite*>::iterator it=_entites.begin(); it!=_entites.end(); it++ )
-//         delete *it;
-//
-//     for ( vector<Gene*>::iterator it=_genes.begin(); it!=_genes.end(); it++ )
-//         delete *it;
-//
-//     for ( vector<Groupe*>::iterator it=_groupes.begin(); it!=_groupes.end(); it++ )
-//         delete *it;
 
 bool Instance::estCaracterisePar ( const vector< int >& indices ) const
 {
@@ -361,11 +335,12 @@ bool Instance::estCaracterisePar ( const vector< int >& indices ) const
 }
 
 
-
-
-
-
-
+void Instance::parcoursSansHeuristique()
+{
+	        _parcours.resize( _genes.size() );
+        for ( unsigned int i=0; i<_genes.size(); i++ )
+            _parcours[i]=i;
+}
 
 
 

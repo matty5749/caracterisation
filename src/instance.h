@@ -14,8 +14,8 @@ public:
     std::vector<Groupe*> _groupes;
     std::vector<Entite*> _entites;
     std::vector<Gene*> _genes;
-
-    unsigned int _nbEntites;
+		std::vector<int> _parcours;/*!<L'ordre dans lequel sera parcouru l'espace de recherche, initialiser par les méthodes de type parcoursSansHeuristique , parcours.............*/
+    
 
     //METHODES
     Instance();
@@ -54,7 +54,13 @@ public:
      * \param indices est composé des positions des gènes dont on veut savoir si ils caractérisent l'instance
      */
     bool estCaracterisePar ( const std::vector<int> &indices ) const;
-
+		
+		/*!
+		 * \brief Instancie le vecteur _parcours d'entier de 1 à _genes.size() dans l'ordre croissant
+		 */
+		void parcoursSansHeuristique();
+		
+		void test() const;
 
 };
 
