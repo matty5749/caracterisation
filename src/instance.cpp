@@ -4,6 +4,8 @@
 #include "entite.h"
 #include "gene.h"
 
+#include "comb.h"
+
 using namespace std;
 
 // #ifdef INSTANCE_DEBUG
@@ -227,6 +229,71 @@ void Instance::preTraitement()
     cout<<"Nb variables:\t"<<_genes.size() <<endl;
 }
 
+void Instance::rechercheExacteEnProfondeurAPartirde ( unsigned int k, bool allSolution ) const
+{
+//On part de kMax vers kMin
+    do
+    {
+        vector<int> enumeration ( _genes.size() );
+        for ( unsigned int i=0; i<_genes.size(); i++ )
+            enumeration[i]=i;
+        //Génération et parcours des combinaisons de taille k
+        std::size_t comb_size = k;
+        cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
+        do
+        {
+            //Combinaison à traiter
+            vector<int> indices ( k );
+            int i=0;
+            for ( std::vector<int>::iterator it=enumeration.begin(); it!=enumeration.begin() +comb_size; it++ )
+                indices[i++]=*it;
+
+            if ( estCaracterisePar ( indices ) )
+                if ( !allSolution ) break; //On passe à k-1
+
+            //Sinon on cherche avec une autre combinaison
+        }
+        while ( next_combination ( enumeration.begin(),enumeration.begin() + comb_size,enumeration.end() ) );
+    }
+    while ( --k>0 );
+}
+
+void Instance::rechercheExacteEnLargeurAPartirde ( unsigned int k, bool allSolution ) const
+{
+		bool solution=false;
+		//On part de kMin vers kMax
+    do
+    {
+				cout<<"La borne minimale est de taille "<< k <<endl;
+        vector<int> enumeration ( _genes.size() );
+        for ( unsigned int i=0; i<_genes.size(); i++ )
+            enumeration[i]=i;
+        //Génération et parcours des combinaisons de taille k
+        std::size_t comb_size = k;
+        cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
+        do
+        {
+            //Combinaison à traiter
+            vector<int> indices ( k );
+            int i=0;
+            for ( std::vector<int>::iterator it=enumeration.begin(); it!=enumeration.begin() +comb_size; it++ )
+                indices[i++]=*it;
+
+            if ( estCaracterisePar ( indices ) )
+                if ( !allSolution ) 
+								{
+									solution=true;
+									break;
+								} //On arrete
+            //Sinon on cherche avec une autre combinaison
+        }
+        while ( next_combination ( enumeration.begin(),enumeration.begin() + comb_size,enumeration.end() ) );
+				++k;
+    }
+    while ( !solution );
+}
+
+
 
 Groupe* Instance::getGroupById ( unsigned int id ) const
 {
@@ -236,6 +303,62 @@ Groupe* Instance::getGroupById ( unsigned int id ) const
     return 0; //Le groupe n'a pas encore été créé
 }
 
+
+//     for ( vector<Entite*>::iterator it=_entites.begin(); it!=_entites.end(); it++ )
+//         delete *it;
+//
+//     for ( vector<Gene*>::iterator it=_genes.begin(); it!=_genes.end(); it++ )
+//         delete *it;
+//
+//     for ( vector<Groupe*>::iterator it=_groupes.begin(); it!=_groupes.end(); it++ )
+//         delete *it;
+
+bool Instance::estCaracterisePar ( const vector< int >& indices ) const
+{
+    bool identique=true;//Vrai si deux entités sont identiques,faux sinon
+    //Parcours des groupes
+    for ( vector<Groupe*>::const_iterator itGroupe=_groupes.begin(); itGroupe!=_groupes.end(); itGroupe++ )
+    {
+        //Parcours des entités du groupes
+        for ( vector<Entite*>::const_iterator entiteIt= ( *itGroupe )->_entites.begin(); entiteIt!= ( *itGroupe )->_entites.end(); entiteIt++ )
+        {
+            //Nouveau parcours des groupes
+            for ( vector<Groupe*>::const_iterator itGroupe2=itGroupe+1; itGroupe2!=_groupes.end(); itGroupe2++ )
+            {
+                //Nouveau parcours des entite
+                for ( vector<Entite*>::const_iterator entiteIt2= ( *itGroupe2 )->_entites.begin(); entiteIt2!= ( *itGroupe2 )->_entites.end(); entiteIt2++ )
+                {
+                    //Les k-uplets doivent être différents 2 à 2
+                    //Parcours des indices
+                    bool tempIdentique=true;
+                    identique=true;
+                    for ( unsigned int indice=0; indice<indices.size(); indice++ )
+                    {
+//                         assert ( ( (*entiteIt)->_genes[indices[indice]].first )->_id == ( (*entiteIt2)->_genes[indices[indice]].first )->_id );
+                        tempIdentique= ( *entiteIt )->_genes[indices[indice]].second== ( *entiteIt2 )->_genes[indices[indice]].second;
+                        if ( !tempIdentique )
+                        {
+                            identique=false;
+                            break;
+                        }
+                    }//Fin parcours indices
+                    //Si deux entites identique, changement de combinaisons
+                    if ( identique ) break;
+                }//Fin parcours entiteIt2
+                if ( identique ) break;
+            }//Fin parcours itGroupe2
+            if ( identique ) break;
+        }//Fin parcours entiteIt
+        if ( identique ) break;
+    }//Fin parcours itGroupe
+    if ( ! identique )
+    {
+//         cout<<"Cette combinaison de taille "<< indices.size() <<" permet de caractériser l'instance"<<endl;
+        afficheVecteur ( indices );
+        return true;
+    }
+    return false;
+}
 
 
 

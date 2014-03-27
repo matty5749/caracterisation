@@ -17,4 +17,7 @@
 #include <utility> //pair,make_pair
 #include <functional> //bind2nd
 
+void afficheVecteur ( std::vector<int> vecteur );
+
+
 #endif //STANDARD_H
