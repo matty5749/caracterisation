@@ -13,18 +13,18 @@ private:
     std::vector<std::vector<int>::const_iterator> _iterElements;	/*!<Les itérateurs vers les éléments qui sont combinés,cela afin de pouvoir traiter
 		un vecteur d'éléments non triés (ex: [3,4,5,2,3,1]), les combinaisons se feront sur les itérateurs qui eux sont triés par ordre croissant*/
 public:
-		std::vector<int> _combinaisonCourante;
+    std::vector<int> _combinaisonCourante;
 
 public:
     //METHODES
     Combinaison ( const std::vector<int> &elements );
-		
-		/*!
-		 * \param k parmi n
-		 * \return La prochaine combinaison de taille k , vecteur vide si toute les combinaisons ont été effectuées
-		 * \warning Si le k change d'un appel à l'autre, c'est toute les combinaisons qui sont reprises depuis le début.
-		 */
-		const std::vector<int>& next(unsigned int k);
+
+    /*!
+     * \param k parmi n
+     * \return La prochaine combinaison de taille k , vecteur vide si toute les combinaisons ont été effectuées
+     * \warning Si le k change d'un appel à l'autre, c'est toute les combinaisons qui sont reprises depuis le début.
+     */
+    const std::vector<int>& next ( unsigned int k );
 
 
 private:
@@ -33,7 +33,7 @@ private:
     * \warning Cette méthode ne peut effectuer les combinaisons que sur
     * des conteneur triés par ordre croissant
     */
-		template <typename Iterator>
+    template <typename Iterator>
     bool next_combination ( const Iterator first, Iterator k, const Iterator last );
 
 

@@ -54,13 +54,13 @@ const std::vector< int >& Combinaison::next ( unsigned int k )
             _iterElements[i]=it;
 
         //Premiere combinaison
-				_combinaisonCourante.resize ( k );
+        _combinaisonCourante.resize ( k );
         for ( i=0; i<_k; i++ )
             _combinaisonCourante[i]=_elements[i];
     }
     else
     {
-        
+
         std::size_t comb_size = k;
 
         bool enCoursDeCycle=next_combination ( _iterElements.begin(),_iterElements.begin() +comb_size,_iterElements.end() );
@@ -68,12 +68,12 @@ const std::vector< int >& Combinaison::next ( unsigned int k )
         {
             int i=0;
             for ( vector<vector<int>::const_iterator>::iterator it=_iterElements.begin(); it!=_iterElements.begin() + comb_size; it++,i++ )
-						_combinaisonCourante[i]=**it;
+                _combinaisonCourante[i]=**it;
 // 						afficheVecteur(_combinaisonCourante);
         }
         else _combinaisonCourante.clear();
     }
-    
+
     //Dans tout les cas
     return _combinaisonCourante;
 }

@@ -217,65 +217,32 @@ void Instance::preTraitement()
             cout<<"Après réduction, au moins un groupe est vide (groupe id="<< ( *it )->_id<<"), l'instance est donc mal formé!"<<endl;
             exit ( EXIT_FAILURE );
         }
+
+    //Calcul de _borneMin
+    _borneMin=ceil ( log2 ( _groupes.size() ) );
+
     cout<<"Après traitement:"<<endl;
     cout<<"Nb groupes:\t"<<_groupes.size() <<endl;
     cout<<"Nb entites:\t"<<_entites.size() <<endl;
     cout<<"Nb variables:\t"<<_genes.size() <<endl;
+    cout<<"Borne minimum;\t"<<_borneMin<<endl<<endl;
+
 }
 
-void Instance::rechercheExacteEnProfondeurAPartirde ( unsigned int k, bool allSolution ) const
-{
-// 				parcoursSansHeuristique();
-	assert(_parcours.size()>0);
-	//On part de kMax vers kMin
-    bool solution=false;
-    do
-    {
-			//Parcours des combinaisons de taille k
-        Combinaison combinaison ( _parcours );
-        cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
-        while ( combinaison.next ( k ).size() >0 )
-        {
-            if ( estCaracterisePar ( combinaison._combinaisonCourante ) )
-            {
-                if ( solution==false ) solution=true;
-                if ( !allSolution ) break; //On passe à k-1
-            }
-            //Sinon on cherche avec une autre combinaison
-        }
-    }
-    while ( --k>0 || solution );
-		cout<<"La borne minimale a été atteinte et est de "<<++k<<endl;
-}
+// void Instance::rechercheExacteEnProfondeurAPartirde ( unsigned int k, bool allSolution )
+// {
+//
+// }
 
-void Instance::rechercheExacteEnLargeurAPartirde ( unsigned int k, bool allSolution ) const
-{
-// 				parcoursSansHeuristique();
-	assert(_parcours.size()>0);
-    bool solution=false;
-    //On part de kMin vers kMax
-    do
-    {
-        cout<<"La borne minimale est de taille "<< k <<endl;
-        //Parcours des combinaisons de taille k
-        Combinaison combinaison ( _parcours );
-        cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
-        while ( combinaison.next ( k ).size() >0 )
-        {
-            if ( estCaracterisePar ( combinaison._combinaisonCourante ) )
-                if ( !allSolution )
-                {
-                    solution=true;
-                    break;
-                } //On arrete
-            //Sinon on cherche avec une autre combinaison
-        }
-        ++k;
-    }
-    while ( !solution );
-		cout<<"La borne minimale a été atteinte et est de "<<--k<<endl;
-}
+// void Instance::rechercheExacteEnLargeurAPartirde ( unsigned int k, bool allSolution )
+// {
 
+// }
+//
+// void Instance::rechercheLocaleAleatoire ( unsigned int k,unsigned int nbIterations )
+// {
+
+// }
 
 
 Groupe* Instance::getGroupById ( unsigned int id ) const
@@ -287,62 +254,27 @@ Groupe* Instance::getGroupById ( unsigned int id ) const
 }
 
 
-bool Instance::estCaracterisePar ( const vector< int >& indices ) const
+// bool Instance::estCaracterisePar (  vector< int > indices )
+// {
+//
+// }
+
+
+// void Instance::parcoursSansHeuristique()
+// {
+//
+// }
+//
+// void Instance::parcoursAleatoire ( unsigned int k )
+// {
+//
+//
+// }
+
+bool Instance::certificat ( const vector< int >& solutions ) const
 {
-    bool identique=true;//Vrai si deux entités sont identiques,faux sinon
-    //Parcours des groupes
-    for ( vector<Groupe*>::const_iterator itGroupe=_groupes.begin(); itGroupe!=_groupes.end(); itGroupe++ )
-    {
-        //Parcours des entités du groupes
-        for ( vector<Entite*>::const_iterator entiteIt= ( *itGroupe )->_entites.begin(); entiteIt!= ( *itGroupe )->_entites.end(); entiteIt++ )
-        {
-            //Nouveau parcours des groupes
-            for ( vector<Groupe*>::const_iterator itGroupe2=itGroupe+1; itGroupe2!=_groupes.end(); itGroupe2++ )
-            {
-                //Nouveau parcours des entite
-                for ( vector<Entite*>::const_iterator entiteIt2= ( *itGroupe2 )->_entites.begin(); entiteIt2!= ( *itGroupe2 )->_entites.end(); entiteIt2++ )
-                {
-                    //Les k-uplets doivent être différents 2 à 2
-                    //Parcours des indices
-                    bool tempIdentique=true;
-                    identique=true;
-                    for ( unsigned int indice=0; indice<indices.size(); indice++ )
-                    {
-//                         assert ( ( (*entiteIt)->_genes[indices[indice]].first )->_id == ( (*entiteIt2)->_genes[indices[indice]].first )->_id );
-                        tempIdentique= ( *entiteIt )->_genes[indices[indice]].second== ( *entiteIt2 )->_genes[indices[indice]].second;
-                        if ( !tempIdentique )
-                        {
-                            identique=false;
-                            break;
-                        }
-                    }//Fin parcours indices
-                    //Si deux entites identique, changement de combinaisons
-                    if ( identique ) break;
-                }//Fin parcours entiteIt2
-                if ( identique ) break;
-            }//Fin parcours itGroupe2
-            if ( identique ) break;
-        }//Fin parcours entiteIt
-        if ( identique ) break;
-    }//Fin parcours itGroupe
-    if ( ! identique )
-    {
-//         cout<<"Cette combinaison de taille "<< indices.size() <<" permet de caractériser l'instance"<<endl;
-        afficheVecteur ( indices );
-        return true;
-    }
-    return false;
+    return true;
 }
-
-
-void Instance::parcoursSansHeuristique()
-{
-	        _parcours.resize( _genes.size() );
-        for ( unsigned int i=0; i<_genes.size(); i++ )
-            _parcours[i]=i;
-}
-
-
 
 
 

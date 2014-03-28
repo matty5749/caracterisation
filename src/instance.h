@@ -14,8 +14,9 @@ public:
     std::vector<Groupe*> _groupes;
     std::vector<Entite*> _entites;
     std::vector<Gene*> _genes;
-		std::vector<int> _parcours;/*!<L'ordre dans lequel sera parcouru l'espace de recherche, initialiser par les méthodes de type parcoursSansHeuristique , parcours.............*/
-    
+    unsigned int _borneMin;/*!<Partie entiere de log à base 2 de _groupes.size()*/
+
+
 
     //METHODES
     Instance();
@@ -38,29 +39,9 @@ public:
     Groupe* getGroupById ( unsigned int id ) const;
 
     /*!
-    * \param k borne supérieur
-    * \param allSolution si vrai, cherchera toute les formules de taille k caractérisant l'instance
-    */
-    void rechercheExacteEnProfondeurAPartirde ( unsigned int k , bool allSolution=false ) const;
-
-    /*!
-     * \param k borne inférieur
-     * \param allSolution si vrai, cherchera toute les formules de taille k caractérisant l'instance
+     * \brief Verifie l'exactitude d'une solution
      */
-    void rechercheExacteEnLargeurAPartirde ( unsigned int k , bool allSolution=false ) const;
-
-    /*!
-     * \brief Renvoie vrai si l'instance est caractérisable par les gènes présent aux positions d'indices dans _genes
-     * \param indices est composé des positions des gènes dont on veut savoir si ils caractérisent l'instance
-     */
-    bool estCaracterisePar ( const std::vector<int> &indices ) const;
-		
-		/*!
-		 * \brief Instancie le vecteur _parcours d'entier de 1 à _genes.size() dans l'ordre croissant
-		 */
-		void parcoursSansHeuristique();
-		
-		void test() const;
+    bool certificat ( const std::vector<int> &solutions ) const;
 
 };
 

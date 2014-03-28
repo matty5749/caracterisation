@@ -17,6 +17,7 @@
 #include <unistd.h> //sleep
 #include <utility> //pair,make_pair
 #include <functional> //bind2nd
+#include <cmath>
 
 void afficheVecteur ( std::vector<int> vecteur );
 
