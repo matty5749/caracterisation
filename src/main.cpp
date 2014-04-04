@@ -6,12 +6,15 @@
 #include "gene.h"
 #include "solveur.h"
 #include "rechercheapproche.h"
+#include "combinaison.h"
 
 using namespace std;
 
 
 int main ( int argc,char** argv )
 {
+
+	
     if ( argc<2 )
     {
         cout<<"Nombre d'arguments incorrect"<<endl;
@@ -19,23 +22,27 @@ int main ( int argc,char** argv )
     }
 
     srand ( time ( NULL ) );
-		
-		
+ 
+
     Instance instance;
     instance.parseDac ( argv[1] );
     instance.preTraitement();
-		
-// 		Solveur solveur ( &instance );
-// 		solveur.parcoursSansHeuristique();
-// 
+
+		Solveur solveur ( &instance );
+		solveur.parcoursStandard();
+
+					solveur.rechercheExacteEnProfondeurAPartirde_heuristique3 ( instance._genes.size()-1,false );
+// 			solveur.rechercheExacteEnProfondeurAPartirde_heuristique2 ( instance._genes.size()-1,false );
+// 			solveur.rechercheExacteEnProfondeurAPartirde_heuristique1 ( instance._genes.size()-1,false );
 // 		solveur.rechercheExacteEnProfondeurAPartirde ( instance._genes.size()-1,false );
-// // 		solveur.rechercheExacteEnProfondeurAPartirde(18,false);
-// // 		solveur.rechercheExacteEnLargeurAPartirde(instance._borneMin);
 		
-		
-		RechercheApproche aleaSearch( &instance );
-		aleaSearch.rechercheLocaleAleatoire(instance._genes.size()-1,10000);
-    
+					// 		solveur.rechercheExacteEnProfondeurAPartirde(18,false);
+// 		solveur.rechercheExacteEnLargeurAPartirde(instance._borneMin);
+
+
+// 		RechercheApproche aleaSearch( &instance );
+// 		aleaSearch.rechercheLocaleAleatoire(instance._genes.size()-1,1000000);
+
 
 
 
@@ -48,7 +55,29 @@ int main ( int argc,char** argv )
 
 
 
-
+// 	multimap<int,string> mmTest;
+// 	mmTest.emplace(3,"trois");
+// 	mmTest.emplace(3,"three");
+// 	mmTest.emplace(3,"drei");
+// 	mmTest.emplace(1,"un");
+// 	mmTest.emplace(1,"one");
+// 	mmTest.emplace(1,"ein");
+// 	mmTest.emplace(2,"deux");
+// 	mmTest.emplace(2,"zwei");
+// 	mmTest.emplace(2,"two");
+// 
+// 	
+// 	for(multimap<int,string>::iterator it=--mmTest.upper_bound(2-1);it!=--mmTest.begin();it--)
+// 	{
+// 		cout<<it->first<<" --> "<<it->second<<endl;
+// 		if (it->second == "one") mmTest.erase(it);
+// 	}
+// 	
+// 	cout<<endl<<endl;
+// 	for(multimap<int,string>::iterator it=mmTest.begin();it!=mmTest.end();it++)
+// 	{
+// 		cout<<it->first<<" --> "<<it->second<<endl;
+// 	}
 
 
 

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Combinaison::Combinaison ( const std::vector< int >& elements ) :_n ( elements.size() ),_k ( 0 ),_elements ( elements )
+Combinaison::Combinaison ( const std::vector< int >& elements ) :_n ( elements.size() ),_k ( 0 ),_elements ( elements ),_decalage(0)
 {
     _iterElements.resize ( _n );
 }
@@ -75,6 +75,8 @@ const std::vector< int >& Combinaison::next ( unsigned int k )
     }
 
     //Dans tout les cas
+//     cout<<_decalage<<"\t";
+//     afficheVecteur(_combinaisonCourante);
     return _combinaisonCourante;
 }
 
@@ -82,6 +84,7 @@ const std::vector< int >& Combinaison::next ( unsigned int k )
 template <typename Iterator>
 bool Combinaison::next_combination ( const Iterator first, Iterator k, const Iterator last )
 {
+	_decalage=0;
     /* Credits: Mark Nelson http://marknelson.us */
     if ( ( first == last ) || ( first == k ) || ( last == k ) )
         return false;
@@ -89,9 +92,9 @@ bool Combinaison::next_combination ( const Iterator first, Iterator k, const Ite
     Iterator i2 = last;
     ++i1;
     if ( last == i1 )
-        return false;
-    i1 = last;
-    --i1;
+		return false;
+//     i1 = last;
+//     --i1;
     i1 = k;
     --i2;
     while ( first != i1 )
@@ -113,6 +116,7 @@ bool Combinaison::next_combination ( const Iterator first, Iterator k, const Ite
             std::rotate ( k,i2,last );
             return true;
         }
+        else _decalage++;
     }
     std::rotate ( first,k,last );
     return false;

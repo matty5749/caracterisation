@@ -15,6 +15,8 @@ public:
     std::vector<Entite*> _entites;
     std::vector<Gene*> _genes;
     unsigned int _borneMin;/*!<Partie entiere de log à base 2 de _groupes.size()*/
+		std::vector<std::vector<float> > _image; /*!<Tableau des masques de groupe*/
+		std::vector<float> _tauxDeSimilariteGlobale; /*!<Taux de similarité entre 0 et 1 pour chaque colonne de _image*/
 
 
 
@@ -38,11 +40,22 @@ public:
      */
     Groupe* getGroupById ( unsigned int id ) const;
 
+    ///!\brief Remets tout les poids des entités à 0
+    void reInitialiseEntites() const;
+
+    void trieDesEntitesParPoidCritique() const;
+
     /*!
      * \brief Verifie l'exactitude d'une solution
      */
     bool certificat ( const std::vector<int> &solutions ) const;
 
+		///!\brief calcul les masques de chaque groupe qui permettent de définir l'_image et de calculer le _tauxDeSimilariteGlobale
+    void calculMasqueDesGroupesEtMajImage() ;
+
+		void trieSurLesGenesDApresLeursTauxDeSimilarite();
+		
+    void afficheImage() const;
 };
 
 

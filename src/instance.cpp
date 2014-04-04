@@ -7,15 +7,6 @@
 
 using namespace std;
 
-// #ifdef INSTANCE_DEBUG
-//   if (! id-1<_vGroupes.size() )
-// 	{
-// 		cout<<"Groupe* Instance::getGroupById ( unsigned int id ) const"<<endl;
-// 		cout<<"Le groupe "<<id<<" n'existe pas!"<<endl;
-// 	}
-// #endif
-
-
 
 Instance::Instance()
 {
@@ -220,30 +211,25 @@ void Instance::preTraitement()
 
     //Calcul de _borneMin
     _borneMin=ceil ( log2 ( _groupes.size() ) );
-
+		cout<<endl;
     cout<<"Après traitement:"<<endl;
     cout<<"Nb groupes:\t"<<_groupes.size() <<endl;
     cout<<"Nb entites:\t"<<_entites.size() <<endl;
     cout<<"Nb variables:\t"<<_genes.size() <<endl;
     cout<<"Borne minimum;\t"<<_borneMin<<endl<<endl;
 
+    //Calcul des masques de groupes
+    calculMasqueDesGroupesEtMajImage();
+    cout<<endl<<"Image brute"<<endl;
+    afficheImage();
+  
+		trieSurLesGenesDApresLeursTauxDeSimilarite();
+
+    calculMasqueDesGroupesEtMajImage();
+    cout<<endl<<"Image triée"<<endl;
+    afficheImage();
+    sleep ( 2 );
 }
-
-// void Instance::rechercheExacteEnProfondeurAPartirde ( unsigned int k, bool allSolution )
-// {
-//
-// }
-
-// void Instance::rechercheExacteEnLargeurAPartirde ( unsigned int k, bool allSolution )
-// {
-
-// }
-//
-// void Instance::rechercheLocaleAleatoire ( unsigned int k,unsigned int nbIterations )
-// {
-
-// }
-
 
 Groupe* Instance::getGroupById ( unsigned int id ) const
 {
@@ -253,23 +239,117 @@ Groupe* Instance::getGroupById ( unsigned int id ) const
     return 0; //Le groupe n'a pas encore été créé
 }
 
+void Instance::reInitialiseEntites() const
+{
+    for ( vector<Entite*>::const_iterator it=_entites.begin(); it!=_entites.end(); it++ )
+    {
+        ( *it )->_poid=0;
+        ( *it )->_ref=false;
+    }
+}
 
-// bool Instance::estCaracterisePar (  vector< int > indices )
-// {
-//
-// }
+void Instance::trieDesEntitesParPoidCritique() const
+{
+// 	for (vector<Entite*>::const_iterator it=_entites.begin();it!=_entites.end();it++) cout<<(*it)->_poid<<" ";
+// 	cout<<endl<<endl;
+
+    sort ( ( const_cast<Instance*> ( this ) )->_entites.begin(), ( const_cast<Instance*> ( this ) )->_entites.end(),comparaisonSurPointeurEntite );
+
+// 	for (vector<Entite*>::const_iterator it=_entites.begin();it!=_entites.end();it++) cout<<(*it)->_poid<<" ";
+// 	cout<<endl;
+}
 
 
-// void Instance::parcoursSansHeuristique()
-// {
-//
-// }
-//
-// void Instance::parcoursAleatoire ( unsigned int k )
-// {
-//
-//
-// }
+void Instance::calculMasqueDesGroupesEtMajImage()
+{
+    //Initialisation de _image
+    _image.resize ( _groupes.size() );
+    for ( vector<vector<float> >::iterator it=_image.begin(); it!=_image.end(); it++ )
+        it->resize ( _genes.size() );
+    //Fin Initialisation
+
+    int i=0;
+    for ( vector<Groupe*>::const_iterator it=_groupes.begin(); it!=_groupes.end(); it++ ,i++ )
+    {
+        ( *it )->calculMasque();
+        //MAJ _empreinte
+        _image[i]= ( *it )->_masque;
+    }
+
+    //Calcul de _tauxDeSimilariteGlobale
+    _tauxDeSimilariteGlobale.clear();
+    _tauxDeSimilariteGlobale.resize ( _genes.size(),0 );
+    for ( vector<vector<float> >::const_iterator l=_image.begin(); l!=_image.end(); l++ )
+    {
+        int ind=0;
+        for ( vector<float>::const_iterator c=l->begin(); c!=l->end(); c++ , ind++ )
+            _tauxDeSimilariteGlobale[ind]+=*c;
+    }
+    //Moyenne (calcul du taux intermediaire entre 0 et 0.5 et 0.5 et 1)
+    for ( vector<float>::iterator it=_tauxDeSimilariteGlobale.begin(); it!=_tauxDeSimilariteGlobale.end(); it++ )
+        *it=*it/_groupes.size();
+
+    //Transformation (calcul du taux véritable entre 0 et 1)
+    for ( vector<float>::iterator it=_tauxDeSimilariteGlobale.begin(); it!=_tauxDeSimilariteGlobale.end(); it++ )
+        if ( *it<0.5 ) *it= ( 0.5-*it ) *2*100;
+        else *it= ( 0.5- ( 1-*it ) ) *2*100;
+}
+
+void Instance::afficheImage() const
+{
+//     for ( vector<Groupe*>::const_iterator it=_groupes.begin(); it!=_groupes.end(); it++ )
+//     {
+//         ( *it )->afficheMasque();
+// //         cout<<endl;
+//     }
+
+    for ( vector<vector<float> >::const_iterator it=_image.begin(); it!=_image.end(); it++ )
+    {
+        for ( vector<float>::const_iterator it2=it->begin(); it2!=it->end(); it2++ )
+            if ( *it2 == 1 || *it2 == 0 ) cout<<*it2<<" ";
+            else cout<<"  ";
+        cout<<endl;
+    }
+
+//     //Affichage taux de similarite globale
+//     for ( vector<float>::const_iterator it=_tauxDeSimilariteGlobale.begin(); it!=_tauxDeSimilariteGlobale.end(); it++ )
+//         cout<<*it<<endl;
+//     cout<<endl;
+}
+
+//Fonction locale pour trieSurLesGenesDApresLeursTauxDeSimilarite
+bool comp ( const pair<float,unsigned int> &p1,const pair<float,unsigned int> &p2 )
+{
+    return p1.first<p2.first;
+}
+//Fin fonction locale trieSurLesGenesDApresLeursTauxDeSimilarite
+
+void Instance::trieSurLesGenesDApresLeursTauxDeSimilarite()
+{
+    vector<pair<float,unsigned int>> temp;
+    temp.resize ( _tauxDeSimilariteGlobale.size() );
+
+    for ( unsigned int i=0; i<_tauxDeSimilariteGlobale.size(); i++ )
+        temp[i]=make_pair ( _tauxDeSimilariteGlobale[i],i );
+
+    sort ( temp.begin(),temp.end(),comp );
+
+// 		//Affichage
+// 		for (unsigned int i=0;i<temp.size();i++)
+// 			cout<<temp[i].first<<"\t\t"<<temp[i].second<<endl;
+
+    //trie des gènes pour chaque entite
+    for ( vector<Entite*>::const_iterator it=_entites.begin(); it!=_entites.end(); it++ )
+    {
+        vector<pair<Gene*,bool> > genesTemp;
+        genesTemp.resize ( _genes.size() );
+        for ( unsigned int i=0; i<temp.size(); i++ )
+            genesTemp[i]= ( *it )->_genes[temp[i].second];
+
+        ( *it )->_genes=genesTemp;
+    }
+}
+
 
 bool Instance::certificat ( const vector< int >& solutions ) const
 {

@@ -2,7 +2,7 @@ project(caracterisation)
 cmake_minimum_required(VERSION 2.8)
 
 IF(UNIX OR MINGW OR MSYS OR CYGWIN)
-ADD_DEFINITIONS("-Wall -v -O3")					#-O3 -std=c++11 
+ADD_DEFINITIONS("-Wall -v -std=c++11 -O3")					#-O3 -std=c++11 
 ENDIF(UNIX OR MINGW OR MSYS OR CYGWIN)
 
 # link_directories ( ${Boost_LIBRARY_DIRS} )
