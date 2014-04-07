@@ -172,6 +172,7 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique3 ( unsigned int k
     bool solution=false;
     do
     {
+			_startTime=clock();
         _nbComparaisons=0;
         //Parcours des combinaisons de taille k
         Combinaison combinaison ( _parcours );
@@ -183,10 +184,13 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique3 ( unsigned int k
 // 						for ( vector<Entite*>::const_iterator itRef=_instance->_entites.begin(); itRef!=_instance->_entites.end(); itRef++ )
 //                     ( *itRef )->_entitesCritique.clear();
 // 					}
-					
+
             if ( estCaracterisePar_version3 ( combinaison._combinaisonCourante ) )
             {
-                if ( solution==false ) solution=true;
+                _endTime=clock();
+								cout<<"Résolu en "<< (double)(_endTime-_startTime)/CLOCKS_PER_SEC<< " secondes"<<endl;
+                if ( solution==false )
+                    solution=true;
                 if ( !allSolution ) break; //On passe à k-1
             }
             //Sinon on cherche avec une autre combinaison
@@ -197,6 +201,41 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique3 ( unsigned int k
 }
 
 
+void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique4 ( unsigned int k, bool allSolution )
+{
+// 				parcoursSansHeuristique();
+    assert ( _instance->_borneMin>0 );
+    assert ( _parcours.size() >0 );
+    //On part de kMax vers kMin
+    bool solution=false;
+    do
+    {
+        _startTime=clock();
+        _nbComparaisons=0;
+        //Parcours des combinaisons de taille k
+        Combinaison combinaison ( _parcours );
+        cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
+        while ( combinaison.next ( k ).size() >0 )
+        {
+// 					if (combinaison._decalage>=5)
+// 					{
+// 						for ( vector<Entite*>::const_iterator itRef=_instance->_entites.begin(); itRef!=_instance->_entites.end(); itRef++ )
+//                     ( *itRef )->_entitesCritique.clear();
+// 					}
+
+            if ( estCaracterisePar_version4 ( combinaison._combinaisonCourante ) )
+            {
+                _endTime=clock();
+                cout<<"Résolu en "<< (double)(_endTime-_startTime)/CLOCKS_PER_SEC<< " secondes"<<endl;
+                if ( solution==false ) solution=true;
+                if ( !allSolution ) break; //On passe à k-1
+            }
+            //Sinon on cherche avec une autre combinaison
+        }
+    }
+    while ( --k>=_instance->_borneMin || solution );
+    cout<<"La borne minimale a été atteinte et est de "<<++k<<endl;
+}
 
 
 

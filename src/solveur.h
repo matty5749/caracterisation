@@ -7,7 +7,8 @@ class Solveur : public Algo
 {
     //ATTRIBUTS
 private:
-
+		clock_t _startTime;
+		clock_t _endTime;
 public:
     //METHODES
     Solveur ( const Instance* instance );
@@ -37,6 +38,14 @@ public:
 		* \details Heuristique: calcul des poids d'identicite = k-1 sans trie par poids
 		*/
     void rechercheExacteEnProfondeurAPartirde_heuristique3 ( unsigned int k , bool allSolution=false ) ;
+		
+		
+		/*!
+    * \param k borne supérieur
+    * \param allSolution si vrai, cherchera toute les formules de taille k caractérisant l'instance
+		* \details Heuristique: calcul des poids d'identicite = k-1 sans trie par poids + utilisation de _tabous
+		*/
+    void rechercheExacteEnProfondeurAPartirde_heuristique4 ( unsigned int k , bool allSolution=false ) ;
 		
     /*!
     * \param k borne inférieur

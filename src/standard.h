@@ -19,6 +19,7 @@
 #include <utility> //pair,make_pair
 #include <functional> //bind2nd
 #include <cmath>
+#include <ctime>
 
 void afficheVecteur ( std::vector<int> vecteur );
 

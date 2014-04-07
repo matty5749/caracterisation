@@ -31,7 +31,8 @@ int main ( int argc,char** argv )
 		Solveur solveur ( &instance );
 		solveur.parcoursStandard();
 
-					solveur.rechercheExacteEnProfondeurAPartirde_heuristique3 ( instance._genes.size()-1,false );
+							solveur.rechercheExacteEnProfondeurAPartirde_heuristique4 ( instance._genes.size()-1,false );
+// 					solveur.rechercheExacteEnProfondeurAPartirde_heuristique3 ( instance._genes.size()-1,false );
 // 			solveur.rechercheExacteEnProfondeurAPartirde_heuristique2 ( instance._genes.size()-1,false );
 // 			solveur.rechercheExacteEnProfondeurAPartirde_heuristique1 ( instance._genes.size()-1,false );
 // 		solveur.rechercheExacteEnProfondeurAPartirde ( instance._genes.size()-1,false );

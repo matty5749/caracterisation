@@ -211,7 +211,7 @@ void Instance::preTraitement()
 
     //Calcul de _borneMin
     _borneMin=ceil ( log2 ( _groupes.size() ) );
-		cout<<endl;
+    cout<<endl;
     cout<<"Après traitement:"<<endl;
     cout<<"Nb groupes:\t"<<_groupes.size() <<endl;
     cout<<"Nb entites:\t"<<_entites.size() <<endl;
@@ -222,12 +222,25 @@ void Instance::preTraitement()
     calculMasqueDesGroupesEtMajImage();
     cout<<endl<<"Image brute"<<endl;
     afficheImage();
-  
-		trieSurLesGenesDApresLeursTauxDeSimilarite();
+
+    trieSurLesGenesDApresLeursTauxDeSimilarite();
 
     calculMasqueDesGroupesEtMajImage();
     cout<<endl<<"Image triée"<<endl;
     afficheImage();
+		
+		//Moyenne des taux de similarite:NOTE: peut servir de coef pour determiner une instance difficile
+		float moy=0;
+		for(vector<float>::const_iterator it=_tauxDeSimilariteGlobale.begin();it!=_tauxDeSimilariteGlobale.end();it++)
+			moy+=*it;
+		moy=moy/_tauxDeSimilariteGlobale.size();
+		
+		cout<<endl<<"Coeficient de difficulté de l'instance: "<<moy<< " %"<<endl;
+		
+		
+    //MAJ attribut _tabous dans chaque groupe
+    majListeTabousDansLesGroupes();
+
     sleep ( 2 );
 }
 
@@ -347,6 +360,29 @@ void Instance::trieSurLesGenesDApresLeursTauxDeSimilarite()
             genesTemp[i]= ( *it )->_genes[temp[i].second];
 
         ( *it )->_genes=genesTemp;
+    }
+}
+
+void Instance::majListeTabousDansLesGroupes() const
+{
+    for ( vector<Groupe*>::const_iterator itGroupeRef=_groupes.begin(); itGroupeRef!=_groupes.end(); itGroupeRef++ )
+    {
+        for ( vector<Groupe*>::const_iterator itGroupeComp=itGroupeRef+1; itGroupeComp!=_groupes.end(); itGroupeComp++ )
+        {
+            set<int> indiceTabou;
+            for ( unsigned int indice=0; indice< ( *itGroupeRef )->_masque.size(); indice++ )
+            {
+                if
+                (
+                    ( ( *itGroupeRef )->_masque[indice]==0 || ( *itGroupeRef )->_masque[indice]==1 )
+                    && ( ( *itGroupeComp )->_masque[indice]==0 || ( *itGroupeComp )->_masque[indice]==1 )
+                    && ( ( *itGroupeRef )->_masque[indice]!= ( *itGroupeComp )->_masque[indice] )
+                )
+                    indiceTabou.insert ( indice );
+            }
+            if (indiceTabou.size())
+							( *itGroupeRef )->_tabous[*itGroupeComp]=indiceTabou;
+        }
     }
 }
 

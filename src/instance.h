@@ -55,6 +55,8 @@ public:
 
 		void trieSurLesGenesDApresLeursTauxDeSimilarite();
 		
+		void majListeTabousDansLesGroupes () const;
+		
     void afficheImage() const;
 };
 

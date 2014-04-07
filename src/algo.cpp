@@ -317,7 +317,7 @@ bool Algo::estCaracterisePar_version3 ( const vector< int >& indices )
 //         for ( vector<Entite*>::const_iterator itRef=_instance->_entites.begin(); itRef!=_instance->_entites.end(); itRef++ )
 //         {
 //             ( *itRef )->_entitesCritique.clear();
-// 
+//
 //         }
 
         return true;
@@ -325,6 +325,109 @@ bool Algo::estCaracterisePar_version3 ( const vector< int >& indices )
     return false;
 }
 
+
+bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
+{
+    int k=indices.size();
+    bool caracterise=true;//Vrai si deux entités sont identiques,faux sinon
+
+    //Heuristique 
+    //NOTE:peut etre garder en memoire ceux qui ont été parcouru afin d'éviter de les parcourir une seconde fois
+    //FAIT: est trop couteux en temp de calcul par rapport à un parcours multiple
+    
+    for ( vector<Entite*>::const_iterator itRef=_instance->_entites.begin(); itRef!=_instance->_entites.end(); itRef++ )
+    {
+        if ( ( *itRef )->_entitesCritique.size() >0 )
+        {
+// 					if (k<30 && ( *itRef )->_entitesCritique.size()>6) cout<<"TAILLE \t"<<( *itRef )->_entitesCritique.size()<<endl;
+            for ( set<Entite*>::const_iterator itComp= ( *itRef )->_entitesCritique.begin(); itComp!= ( *itRef )->_entitesCritique.end(); itComp++ )
+            {
+                if ( entiteIdentiqueSurIndicesGenes ( *itRef,*itComp,indices ) )
+                {
+                    if ( _poidCourant < k-1 )
+                        ( *itRef )->_entitesCritique.erase ( *itComp );
+                    return false;
+                }
+            }
+        }
+    }
+
+    //Parcours des groupes
+    for ( vector<Groupe*>::const_iterator itGroupe=_instance->_groupes.begin(); itGroupe!=_instance->_groupes.end(); itGroupe++ )
+    {
+        //Nouveau parcours des groupes
+        for ( vector<Groupe*>::const_iterator itGroupe2=itGroupe+1; itGroupe2!=_instance->_groupes.end(); itGroupe2++ )
+        {
+            bool tabou=false;
+            map<Groupe*,set<int> >::const_iterator elementIt= ( *itGroupe )->_tabous.find ( *itGroupe2 );
+            //Si j'ai une liste d'indice tabous pour ce groupe de comparaison
+            if ( ( elementIt != ( *itGroupe )->_tabous.end() ) )
+            {
+//                         cout<< ( *itGroupe )->_id<<" / "<< ( *itGroupe2 )->_id<<endl;
+                //Je cherche si un des indices d'indices fait partie de cette liste
+                for ( unsigned int i=0; i<indices.size(); i++ )
+                {
+//                             cout<<i<<endl;
+                    if ( elementIt->second.find ( indices[i] ) !=elementIt->second.end() )
+                    {
+                        tabou=true;
+                        break;
+                    }
+                }
+//                         cout<<endl;
+                if ( tabou ) continue;//On change de groupe de comparaisons car on est sur d'avoir une caractérisation entre les deux groupes courants
+            }
+            
+            if (!tabou)//Parcours standard
+						{
+// 							cout<<"Parcours standard"<<endl;
+							if ((caracterise=caracteriseDeuxGroupe(*itGroupe,*itGroupe2,indices))) continue;
+							else break;
+						}
+        }
+//         cout<<"\t"<<caracterise<<endl;
+        if (!caracterise) break;
+    }
+    if (caracterise)
+		{
+			cout<<"Cette combinaison de taille "<< indices.size() <<" permet de caractériser l'instance"<<endl;
+        cout<<"Nb comparaisons: "<<_nbComparaisons<<endl;
+        afficheVecteur ( indices );
+        cout<<endl;
+		}
+//     cout<<caracterise<<endl;
+    return caracterise;
+}
+
+
+bool Algo::caracteriseDeuxGroupe ( const Groupe*const& g1, const Groupe*const& g2, const vector< int >& indices )
+{
+    int k=indices.size();
+    bool identique;//Vrai si deux entités sont identiques,faux sinon
+
+    //Parcours des entités du groupe g1
+    for ( vector<Entite*>::const_iterator itRef= g1->_entites.begin(); itRef!= g1->_entites.end(); itRef++ )
+    {
+        //Parcours des entités du groupe g2
+        for ( vector<Entite*>::const_iterator itComp= g2->_entites.begin(); itComp!= g2->_entites.end(); itComp++ )
+        {
+// 					set<Entite*>::const_iterator itFind=(*itRef)->_entitesCritique.find(*itComp);
+// 					if (itFind!=(*itRef)->_entitesCritique.end()) continue; //Si les entités ont déja été comparé, on continue
+            if ( ( identique=entiteIdentiqueSurIndicesGenes ( *itRef,*itComp,indices ) ) )
+            {
+                /*Si les deux entités sont identiques, on les garde en memoire afin de les tester en premier
+                					  lors de la prochaine combinaison afin de couper des brancges dans l'arbre de recherche*/
+                ( *itRef )->_entitesCritique.insert ( *itComp );
+                break;
+            }
+            if ( _poidCourant == k-1 )
+                ( *itRef )->_entitesCritique.insert ( *itComp );
+        }//Fin parcours itComp
+        if ( identique ) break;
+    }
+    if ( identique ) return false;
+    else return true;
+}
 
 
 
