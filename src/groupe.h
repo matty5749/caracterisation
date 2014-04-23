@@ -15,6 +15,7 @@ public:
 	std::vector<float> _masque;
 	std::map<Groupe*,std::set<int> > _tabous; /*!< Contient les éléments de combinaisons tabous entre ce 
 	groupe et les autres groupes avec qui il doit être comparé*/
+	float _ratio; /*!< Correspond au pourcentage de valeur entière présentent dans le masque*/
 
   //METHODES
   Groupe( unsigned int id , Instance* instance);

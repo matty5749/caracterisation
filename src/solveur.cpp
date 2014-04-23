@@ -19,18 +19,23 @@ void Solveur::rechercheExacteEnProfondeurAPartirde ( unsigned int k, bool allSol
     assert ( _instance->_borneMin>0 );
     assert ( _parcours.size() >0 );
     //On part de kMax vers kMin
-    bool solution=false;
+    bool solution;
     do
     {
+        solution=false;
+        _startTime=clock();
         _nbComparaisons=0;
 //         int nbSol=0;
         //Parcours des combinaisons de taille k
         Combinaison combinaison ( _parcours );
-        cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
+//         cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
         while ( combinaison.next ( k ).size() >0 )
         {
             if ( estCaracterisePar ( combinaison._combinaisonCourante ) )
             {
+                _endTime=clock();
+//                 cout<<"Résolu en "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<< " secondes"<<endl;
+// 								cout<<k<<" "<<( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl; //DATA
 //                 nbSol++;
                 if ( solution==false ) solution=true;
                 if ( !allSolution ) break; //On passe à k-1
@@ -39,8 +44,9 @@ void Solveur::rechercheExacteEnProfondeurAPartirde ( unsigned int k, bool allSol
         }
 //         cout<<"** Il y a "<<nbSol<<" solutions"<<endl;
     }
-    while ( --k>=_instance->_borneMin || solution );
-    cout<<"La borne minimale a été atteinte et est de "<<++k<<endl;
+    while ( --k>=_instance->_borneMin && solution );
+    if ( !solution ) cout<<"Pas de solution en "<<k+1<<endl<<endl;
+    cout<<"*** La borne minimale a été atteinte et est de "<<k+2<<" ***"<<endl<<endl;
 }
 
 
@@ -50,26 +56,35 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique1 ( unsigned int k
     assert ( _instance->_borneMin>0 );
     assert ( _parcours.size() >0 );
     //On part de kMax vers kMin
-    bool solution=false;
+    bool solution;
     do
     {
+        solution=false;
+        _startTime=clock();
         _nbComparaisons=0;
         //Parcours des combinaisons de taille k
         Combinaison combinaison ( _parcours );
-        cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
+//         cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
         while ( combinaison.next ( k ).size() >0 )
         {
             if ( estCaracterisePar_version1 ( combinaison._combinaisonCourante ) )
             {
+                _endTime=clock();
+                cout<<k<<" "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl; //DATA
+//                 cout<<"Résolu en "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<< " secondes"<<endl;
                 if ( solution==false ) solution=true;
                 if ( !allSolution ) break; //On passe à k-1
             }
             //Sinon on cherche avec une autre combinaison
         }
     }
-    while ( --k>=_instance->_borneMin || solution );
-    cout<<"La borne minimale a été atteinte et est de "<<++k<<endl;
+    while ( --k>=_instance->_borneMin && solution );
+    if ( !solution ) cout<<"Pas de solution en "<<k+1<<endl<<endl;
+    cout<<"*** La borne minimale a été atteinte et est de "<<k+2<<" ***"<<endl<<endl;
 }
+
+
+
 
 
 
@@ -90,9 +105,11 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique2 ( unsigned int k
     assert ( _parcours.size() > 0 );
     assert ( _instance->_borneMin>0 );
     //On part de kMax vers kMin
-    bool solution=false;
+    bool solution;
     do
     {
+        solution=false;
+        _startTime=clock();
         _nbComparaisons=0;
         //Parcours des combinaisons de taille k
         Combinaison combinaison ( _parcours );
@@ -130,14 +147,17 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique2 ( unsigned int k
 
             if ( estCaracterisePar_version2 ( combinaison._combinaisonCourante ) )
             {
+                _endTime=clock();
+                cout<<"Résolu en "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<< " secondes"<<endl;
                 if ( solution==false ) solution=true;
                 if ( !allSolution ) break; //On passe à k-1
             }
             //Sinon on cherche avec une autre combinaison
         }
     }
-    while ( --k>=_instance->_borneMin || solution );
-    cout<<"La borne minimale a été atteinte et est de "<<++k<<endl;
+    while ( --k>=_instance->_borneMin && solution );
+    if ( !solution ) cout<<"Pas de solution en "<<k+1<<endl<<endl;
+    cout<<"*** La borne minimale a été atteinte et est de "<<k+2<<" ***"<<endl<<endl;
 }
 
 
@@ -169,14 +189,15 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique3 ( unsigned int k
     assert ( _instance->_borneMin>0 );
     assert ( _parcours.size() >0 );
     //On part de kMax vers kMin
-    bool solution=false;
+    bool solution;
     do
     {
-			_startTime=clock();
+        solution=false;
+        _startTime=clock();
         _nbComparaisons=0;
         //Parcours des combinaisons de taille k
         Combinaison combinaison ( _parcours );
-        cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
+//         cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
         while ( combinaison.next ( k ).size() >0 )
         {
 // 					if (combinaison._decalage>=5)
@@ -188,7 +209,8 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique3 ( unsigned int k
             if ( estCaracterisePar_version3 ( combinaison._combinaisonCourante ) )
             {
                 _endTime=clock();
-								cout<<"Résolu en "<< (double)(_endTime-_startTime)/CLOCKS_PER_SEC<< " secondes"<<endl;
+//                 cout<<k<<" "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl; //DATA
+//                 cout<<"Résolu en "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<< " secondes"<<endl;
                 if ( solution==false )
                     solution=true;
                 if ( !allSolution ) break; //On passe à k-1
@@ -196,8 +218,9 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique3 ( unsigned int k
             //Sinon on cherche avec une autre combinaison
         }
     }
-    while ( --k>=_instance->_borneMin || solution );
-    cout<<"La borne minimale a été atteinte et est de "<<++k<<endl;
+    while ( --k>=_instance->_borneMin && solution );
+    if ( !solution ) cout<<"Pas de solution en "<<k+1<<endl<<endl;
+    cout<<"*** La borne minimale a été atteinte et est de "<<k+2<<" ***"<<endl<<endl;
 }
 
 
@@ -207,14 +230,15 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique4 ( unsigned int k
     assert ( _instance->_borneMin>0 );
     assert ( _parcours.size() >0 );
     //On part de kMax vers kMin
-    bool solution=false;
+    bool solution;
     do
     {
+        solution=false;
         _startTime=clock();
         _nbComparaisons=0;
         //Parcours des combinaisons de taille k
         Combinaison combinaison ( _parcours );
-        cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
+//         cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
         while ( combinaison.next ( k ).size() >0 )
         {
 // 					if (combinaison._decalage>=5)
@@ -226,15 +250,17 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique4 ( unsigned int k
             if ( estCaracterisePar_version4 ( combinaison._combinaisonCourante ) )
             {
                 _endTime=clock();
-                cout<<"Résolu en "<< (double)(_endTime-_startTime)/CLOCKS_PER_SEC<< " secondes"<<endl;
+                cout<<k<<" "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl; //DATA
+//                 cout<<"Résolu en "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<< " secondes"<<endl;
                 if ( solution==false ) solution=true;
                 if ( !allSolution ) break; //On passe à k-1
             }
             //Sinon on cherche avec une autre combinaison
         }
     }
-    while ( --k>=_instance->_borneMin || solution );
-    cout<<"La borne minimale a été atteinte et est de "<<++k<<endl;
+    while ( --k>=_instance->_borneMin && solution );
+    if ( !solution ) cout<<"Pas de solution en "<<k+1<<endl<<endl;
+    cout<<"*** La borne minimale a été atteinte et est de "<<k+2<<" ***"<<endl<<endl;
 }
 
 

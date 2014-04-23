@@ -43,7 +43,7 @@ bool Algo::entiteIdentiqueSurIndicesGenes ( const Entite* const & e1, const Enti
 }
 
 
-
+//OUI
 bool Algo::estCaracterisePar ( const vector< int > &indices )
 {
     bool identique=true;//Vrai si deux entités sont identiques,faux sinon
@@ -73,15 +73,19 @@ bool Algo::estCaracterisePar ( const vector< int > &indices )
     }//Fin parcours itGroupe
     if ( ! identique )
     {
-        cout<<"Cette combinaison de taille "<< indices.size() <<" permet de caractériser l'instance"<<endl;
-        cout<<"Nb comparaisons: "<<_nbComparaisons<<endl;
-        afficheVecteur ( indices );
-        cout<<endl;
+//         cout<<"Cette combinaison de taille "<< indices.size() <<" permet de caractériser l'instance"<<endl;
+//         cout<<"Nb comparaisons: "<<_nbComparaisons<<endl;
+//         afficheVecteur ( indices );
+//         cout<<endl;
+
+        cout<<indices.size() <<" "<<_nbComparaisons<<endl;	//DATA
+
         return true;
     }
     return false;
 }
 
+//NON
 bool Algo::estCaracterisePar_version1 ( const vector< int >& indices )
 {
     bool identique=true;//Vrai si deux entités sont identiques,faux sinon
@@ -121,18 +125,20 @@ bool Algo::estCaracterisePar_version1 ( const vector< int >& indices )
     }//Fin parcours itGroupe
     if ( ! identique )
     {
-        cout<<"Cette combinaison de taille "<< indices.size() <<" permet de caractériser l'instance"<<endl;
-        cout<<"Nb comparaisons: "<<_nbComparaisons<<endl;
+//         cout<<"Cette combinaison de taille "<< indices.size() <<" permet de caractériser l'instance"<<endl;
+//         cout<<"Nb comparaisons: "<<_nbComparaisons<<endl;
+// 				cout<<indices.size()<<" "<<_nbComparaisons<<endl; //DATA
+
         _e1=0;
         _e2=0;
-        afficheVecteur ( indices );
-        cout<<endl;
+//         afficheVecteur ( indices );
+//         cout<<endl;
         return true;
     }
     return false;
 }
 
-
+//A REVOIR MAIS A PRIORI NON
 bool Algo::estCaracterisePar_version2 ( const vector< int >& indices )
 {
     int k=indices.size();
@@ -253,15 +259,18 @@ bool Algo::estCaracterisePar_version2 ( const vector< int >& indices )
 
 
 
-
+//OUI
 bool Algo::estCaracterisePar_version3 ( const vector< int >& indices )
 {
     //TODO:Peut-etre mieux vaut il choisir une pile pour _entitesCritique ???
+    //FAIT: NON
 
     int k=indices.size();
     bool identique=true;//Vrai si deux entités sont identiques,faux sinon
 
     //Heuristique TODO:peut etre garder en memoire ceux qui ont été parcouru afin d'éviter de les parcourir une seconde fois
+    //FAIT: Non trop couteux
+
     for ( vector<Entite*>::const_iterator itRef=_instance->_entites.begin(); itRef!=_instance->_entites.end(); itRef++ )
     {
         if ( ( *itRef )->_entitesCritique.size() >0 )
@@ -309,10 +318,12 @@ bool Algo::estCaracterisePar_version3 ( const vector< int >& indices )
     }//Fin parcours itGroupe
     if ( ! identique )
     {
-        cout<<"Cette combinaison de taille "<< indices.size() <<" permet de caractériser l'instance"<<endl;
-        cout<<"Nb comparaisons: "<<_nbComparaisons<<endl;
-        afficheVecteur ( indices );
-        cout<<endl;
+//         cout<<"Cette combinaison de taille "<< indices.size() <<" permet de caractériser l'instance"<<endl;
+//         cout<<"Nb comparaisons: "<<_nbComparaisons<<endl;
+//         afficheVecteur ( indices );
+//         cout<<endl;
+
+        cout<<indices.size() <<" "<<_nbComparaisons<<endl;	//DATA
 
 //         for ( vector<Entite*>::const_iterator itRef=_instance->_entites.begin(); itRef!=_instance->_entites.end(); itRef++ )
 //         {
@@ -326,15 +337,16 @@ bool Algo::estCaracterisePar_version3 ( const vector< int >& indices )
 }
 
 
+//OUI
 bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
 {
     int k=indices.size();
     bool caracterise=true;//Vrai si deux entités sont identiques,faux sinon
 
-    //Heuristique 
+    //Heuristique
     //NOTE:peut etre garder en memoire ceux qui ont été parcouru afin d'éviter de les parcourir une seconde fois
     //FAIT: est trop couteux en temp de calcul par rapport à un parcours multiple
-    
+
     for ( vector<Entite*>::const_iterator itRef=_instance->_entites.begin(); itRef!=_instance->_entites.end(); itRef++ )
     {
         if ( ( *itRef )->_entitesCritique.size() >0 )
@@ -377,24 +389,26 @@ bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
 //                         cout<<endl;
                 if ( tabou ) continue;//On change de groupe de comparaisons car on est sur d'avoir une caractérisation entre les deux groupes courants
             }
-            
-            if (!tabou)//Parcours standard
-						{
+
+            if ( !tabou ) //Parcours standard
+            {
 // 							cout<<"Parcours standard"<<endl;
-							if ((caracterise=caracteriseDeuxGroupe(*itGroupe,*itGroupe2,indices))) continue;
-							else break;
-						}
+                if ( ( caracterise=caracteriseDeuxGroupe ( *itGroupe,*itGroupe2,indices ) ) ) continue;
+                else break;
+            }
         }
 //         cout<<"\t"<<caracterise<<endl;
-        if (!caracterise) break;
+        if ( !caracterise ) break;
     }
-    if (caracterise)
-		{
-			cout<<"Cette combinaison de taille "<< indices.size() <<" permet de caractériser l'instance"<<endl;
-        cout<<"Nb comparaisons: "<<_nbComparaisons<<endl;
-        afficheVecteur ( indices );
-        cout<<endl;
-		}
+    if ( caracterise )
+    {
+//         cout<<"Cette combinaison de taille "<< indices.size() <<" permet de caractériser l'instance"<<endl;
+//         cout<<"Nb comparaisons: "<<_nbComparaisons<<endl;
+//         afficheVecteur ( indices );
+//         cout<<endl;
+				
+// 				        cout<<indices.size() <<" "<<_nbComparaisons<<endl;	//DATA
+    }
 //     cout<<caracterise<<endl;
     return caracterise;
 }

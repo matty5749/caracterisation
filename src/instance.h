@@ -33,6 +33,8 @@ public:
     * \brief Permet de supprimer les redondances afin de réduire la taille de l'instance
     */
     void preTraitement();
+		
+		void heuristiqueDesMasques ();
 
     /*!
      * \warning La valeur de retour peut-être 0

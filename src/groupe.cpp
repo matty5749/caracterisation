@@ -25,6 +25,14 @@ void Groupe::calculMasque()
     //Moyenne
     for ( vector<float>::iterator it=_masque.begin(); it!=_masque.end(); it++ )
         *it=*it/_entites.size();
+		
+		//Calcul du _ratio
+		_ratio=0;
+		for (vector<float>::const_iterator it=_masque.begin();it!=_masque.end();it++)
+		{
+			if (*it==1 || *it==0) _ratio++;
+		}
+		_ratio=_ratio/_masque.size();
 }
 
 void Groupe::afficheMasque() const

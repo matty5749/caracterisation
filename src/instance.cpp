@@ -217,7 +217,10 @@ void Instance::preTraitement()
     cout<<"Nb entites:\t"<<_entites.size() <<endl;
     cout<<"Nb variables:\t"<<_genes.size() <<endl;
     cout<<"Borne minimum;\t"<<_borneMin<<endl<<endl;
+}
 
+void Instance::heuristiqueDesMasques()
+{
     //Calcul des masques de groupes
     calculMasqueDesGroupesEtMajImage();
     cout<<endl<<"Image brute"<<endl;
@@ -235,14 +238,19 @@ void Instance::preTraitement()
 			moy+=*it;
 		moy=moy/_tauxDeSimilariteGlobale.size();
 		
-		cout<<endl<<"Coeficient de difficulté de l'instance: "<<moy<< " %"<<endl;
+		cout<<endl<<"Coeficient de difficulté sigma de l'instance: "<<moy<<endl;
 		
+		//Moyenne des ratio:NOTE: peut servir de coef pour determiner une instance difficile
+		moy=0;
+		for(vector<Groupe*>::const_iterator it=_groupes.begin();it!=_groupes.end();it++)
+			moy+=(*it)->_ratio;
+		moy=moy/_groupes.size();
+		cout<<endl<<"Coeficient de difficulté rho de l'instance: "<<moy<<endl;
 		
     //MAJ attribut _tabous dans chaque groupe
     majListeTabousDansLesGroupes();
-
-    sleep ( 2 );
 }
+
 
 Groupe* Instance::getGroupById ( unsigned int id ) const
 {
@@ -304,8 +312,8 @@ void Instance::calculMasqueDesGroupesEtMajImage()
 
     //Transformation (calcul du taux véritable entre 0 et 1)
     for ( vector<float>::iterator it=_tauxDeSimilariteGlobale.begin(); it!=_tauxDeSimilariteGlobale.end(); it++ )
-        if ( *it<0.5 ) *it= ( 0.5-*it ) *2*100;
-        else *it= ( 0.5- ( 1-*it ) ) *2*100;
+        if ( *it<0.5 ) *it= ( 0.5-*it ) *2;
+        else *it= ( 0.5- ( 1-*it ) ) *2;
 }
 
 void Instance::afficheImage() const

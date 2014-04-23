@@ -27,17 +27,20 @@ int main ( int argc,char** argv )
     Instance instance;
     instance.parseDac ( argv[1] );
     instance.preTraitement();
+		
+		instance.heuristiqueDesMasques();
 
 		Solveur solveur ( &instance );
 		solveur.parcoursStandard();
 
 							solveur.rechercheExacteEnProfondeurAPartirde_heuristique4 ( instance._genes.size()-1,false );
 // 					solveur.rechercheExacteEnProfondeurAPartirde_heuristique3 ( instance._genes.size()-1,false );
-// 			solveur.rechercheExacteEnProfondeurAPartirde_heuristique2 ( instance._genes.size()-1,false );
-// 			solveur.rechercheExacteEnProfondeurAPartirde_heuristique1 ( instance._genes.size()-1,false );
 // 		solveur.rechercheExacteEnProfondeurAPartirde ( instance._genes.size()-1,false );
 		
-					// 		solveur.rechercheExacteEnProfondeurAPartirde(18,false);
+		
+		// 			solveur.rechercheExacteEnProfondeurAPartirde_heuristique2 ( instance._genes.size()-1,false );
+// 			solveur.rechercheExacteEnProfondeurAPartirde_heuristique1 ( instance._genes.size()-1,false );
+// 							solveur.rechercheExacteEnProfondeurAPartirde(18,false);
 // 		solveur.rechercheExacteEnLargeurAPartirde(instance._borneMin);
 
 
