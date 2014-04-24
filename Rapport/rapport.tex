@@ -305,8 +305,23 @@ Une instance dont le coefficient de difficulté $\rho$ est proche de 1 et dont l
 \end{proposition}
 
 \subsubsection{Heuristique par trie de taux de similarité globale $\mathcal{T}$ }
-Ici, nous nous interessons à parcourir les gènes dans 
+Les outils mis en place pour définir ce qu'est une instance difficile vont maintenant nous permettre d'obtenir de nouvelles heuristique. Dans cette section, nous ordonnons les gènes par ordre croissant sur leur taux de similarité globale $\mathcal{T}$. Dès lors, nous parcourons en priorité les gènes présentant un faible taux de similarité, ce qui a pour effet de caractériser au plus tôt l'instance.
 
+\subsubsection*{Résultats}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{./graphique/diff2_nbComp.png}
+\end{center}
+\caption{Heuristique 2: Différence sur le nombre de comparaisons effectués}
+\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.6]{./graphique/diff2_temps.png}
+\end{center}
+\caption{Heuristique 2: Différence de temps d'exécution}
+\end{figure}
+
+On constante que le nombre de comparaisons d'entités est considérablement diminué par l'heuristique. Sans surprise, le temps d'éxécution est également bien plus rapide, d'autant plus que cette heuristique ne coute rien en terme de calcul puisque celui est effectué une seul fois lancement de l'algorithme.
 
 \subsubsection{Heuristique par trie de taux de similarité locale $\tau$}
 \subsubsection{Heuristique par trie de ratio $r$}
