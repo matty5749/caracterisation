@@ -16,6 +16,7 @@ public:
 	std::map<Groupe*,std::set<int> > _tabous; /*!< Contient les éléments de combinaisons tabous entre ce 
 	groupe et les autres groupes avec qui il doit être comparé*/
 	float _ratio; /*!< Correspond au pourcentage de valeur entière présentent dans le masque*/
+	float _moyenneTauxDeSimilariteLocal;
 
   //METHODES
   Groupe( unsigned int id , Instance* instance);

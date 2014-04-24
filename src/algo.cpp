@@ -407,7 +407,7 @@ bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
 //         afficheVecteur ( indices );
 //         cout<<endl;
 				
-// 				        cout<<indices.size() <<" "<<_nbComparaisons<<endl;	//DATA
+				        cout<<indices.size() <<" "<<_nbComparaisons<<endl;	//DATA
     }
 //     cout<<caracterise<<endl;
     return caracterise;
