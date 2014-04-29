@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Solveur::Solveur ( const Instance* instance ) :Algo ( instance )
+Solveur::Solveur ( Instance* instance ) :Algo ( instance )
 {
 
 }
@@ -250,7 +250,7 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique4 ( unsigned int k
             if ( estCaracterisePar_version4 ( combinaison._combinaisonCourante ) )
             {
                 _endTime=clock();
-//                 cout<<k<<" "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl; //DATA
+                cout<<k<<" "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl; //DATA
 //                 cout<<"Résolu en "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<< " secondes"<<endl;
                 if ( solution==false ) solution=true;
                 if ( !allSolution ) break; //On passe à k-1

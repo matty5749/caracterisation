@@ -9,7 +9,7 @@ public:
     //ATTRIBUTS
 
     //METHODES
-    RechercheApproche ( const Instance* instance );
+    RechercheApproche ( Instance* instance );
 
     void rechercheLocaleAleatoire ( unsigned int k , unsigned int nbIterations );
 

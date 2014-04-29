@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Algo::Algo ( const Instance* instance ) :_instance ( instance ),_parcours ( vector<int>() ),_e1 ( 0 ),_e2 ( 0 ),_poidCourant ( 0 ),_nbComparaisons ( 0 ),_debut ( true )
+Algo::Algo ( Instance* instance ) :_instance ( instance ),_parcours ( vector<int>() ),_e1 ( 0 ),_e2 ( 0 ),_poidCourant ( 0 ),_nbComparaisons ( 0 ),_debut ( true )
 {
 
 }
@@ -337,6 +337,11 @@ bool Algo::estCaracterisePar_version3 ( const vector< int >& indices )
 }
 
 
+bool trieGroupeParTauLocal (Groupe const * const g1,Groupe const * const g2 )
+{
+	return g1->_moyenneTauxDeSimilariteLocal>g2->_moyenneTauxDeSimilariteLocal;
+}
+
 //OUI
 bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
 {
@@ -363,6 +368,35 @@ bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
             }
         }
     }
+
+
+    //AJOUT ALGO DYNAMIQUE TRIE PAR PETIT TAU SUR INDICE DES COMBINAISONS
+    //Heuristique sur les taux de similarite locale (petit tau)
+    //Parcours exhaustif des groupe
+    for ( vector<Groupe*>::const_iterator itRef=_instance->_groupes.begin(); itRef!=_instance->_groupes.end(); itRef++ )
+    {
+        //Initialisation _moyenneTauxDeSimilariteLocal
+        ( *itRef )->_moyenneTauxDeSimilariteLocal=0;
+        for ( vector<Groupe*>::iterator itComp=_instance->_groupes.begin(); itComp!=_instance->_groupes.end(); itComp++ )
+        {
+            if ( *itRef==*itComp ) continue;
+            //Calcul du tauxDeSimilariteLocal entre *itRef et *itComp
+            float moyTemp=0;
+            for ( unsigned int i =0; i<indices.size(); i++ )
+                moyTemp+= ( ( *itRef )->_masque[indices[i]]+ ( *itComp )->_masque[indices[i]] ) /2;
+            moyTemp/=indices.size();
+
+            ( *itRef )->_moyenneTauxDeSimilariteLocal+=moyTemp;
+        }
+        ( *itRef )->_moyenneTauxDeSimilariteLocal/=_instance->_groupes.size()-1;
+    }
+
+    //Trie des groupes par petit tau
+    sort ( _instance->_groupes.begin(),_instance->_groupes.end(),trieGroupeParTauLocal );
+    //FIN (petit tau)
+
+    //FIN AJOUT ALGO DYNAMIQUE TRIE PAR PETIT TAU SUR INDICE DES COMBINAISONS
+
 
     //Parcours des groupes
     for ( vector<Groupe*>::const_iterator itGroupe=_instance->_groupes.begin(); itGroupe!=_instance->_groupes.end(); itGroupe++ )
@@ -406,8 +440,8 @@ bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
 //         cout<<"Nb comparaisons: "<<_nbComparaisons<<endl;
 //         afficheVecteur ( indices );
 //         cout<<endl;
-				
-				        cout<<indices.size() <<" "<<_nbComparaisons<<endl;	//DATA
+
+//         cout<<indices.size() <<" "<<_nbComparaisons<<endl;	//DATA
     }
 //     cout<<caracterise<<endl;
     return caracterise;

@@ -11,7 +11,7 @@ private:
 		clock_t _endTime;
 public:
     //METHODES
-    Solveur ( const Instance* instance );
+    Solveur ( Instance* instance );
 
 		/*!
     * \param k borne supérieur

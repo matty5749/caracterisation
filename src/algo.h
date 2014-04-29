@@ -8,7 +8,7 @@ class Algo
 {
     //ATTRIBUTS
 protected:
-    const Instance* _instance;
+    Instance* _instance;
     std::vector<int> _parcours;/*!<L'ordre dans lequel sera parcouru l'espace de recherche, initialiser par les méthodes de type parcoursSansHeuristique , parcours.............*/
     Entite* _e1;
     Entite* _e2;
@@ -19,7 +19,7 @@ public:
 
 
     //METHODES
-    Algo ( const Instance* instance );
+    Algo ( Instance* instance );
 
 
 

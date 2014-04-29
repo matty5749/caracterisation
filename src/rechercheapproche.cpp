@@ -7,7 +7,7 @@
 
 using namespace std;
 
-RechercheApproche::RechercheApproche ( const Instance* instance ) :Algo ( instance )
+RechercheApproche::RechercheApproche ( Instance* instance ) :Algo ( instance )
 {
 
 }

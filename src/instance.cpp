@@ -239,41 +239,44 @@ void Instance::heuristiqueDesMasques()
     trieSurLesGenesDApresLeursTauxDeSimilarite();
 
     calculMasqueDesGroupesEtMajImage();
-    cout<<endl<<"Image triée"<<endl;
+    cout<<endl<<"Image triée par TAU"<<endl;
     afficheImage();
 
 
-// 					//Heuristique sur les taux de similarite locale (petit tau)
-// 					//Parcours exhaustif des groupe
-// 					for ( vector<Groupe*>::const_iterator itRef=_groupes.begin(); itRef!=_groupes.end(); itRef++ )
-// 					{
-// 							//Initialisation _moyenneTauxDeSimilariteLocal
-// 							( *itRef )->_moyenneTauxDeSimilariteLocal=0;
-// 							for ( vector<Groupe*>::const_iterator itComp=_groupes.begin(); itComp!=_groupes.end(); itComp++ )
-// 							{
-// 									if ( *itRef==*itComp ) continue;
-// 									//Calcul du tauxDeSimilariteLocal entre *itRef et *itComp
-// 									float moyTemp=0;
-// 									for ( unsigned int i =0; i<_genes.size(); i++ )
-// 											moyTemp+= ( ( *itRef )->_masque[i]+ ( *itComp )->_masque[i] ) /2;
-// 									moyTemp/=_genes.size();
-// 									
-// 									( *itRef )->_moyenneTauxDeSimilariteLocal+=moyTemp;
-// 							}
-// 							( *itRef )->_moyenneTauxDeSimilariteLocal/=_groupes.size()-1;
-// 					}
-// 					
-// 					//Trie des groupes par petit tau
-// 					sort(_groupes.begin(),_groupes.end(),trieGroupeParTau);
-// 					//FIN (petit tau)
+					//Heuristique sur les taux de similarite locale (petit tau)
+					//Parcours exhaustif des groupe
+					for ( vector<Groupe*>::const_iterator itRef=_groupes.begin(); itRef!=_groupes.end(); itRef++ )
+					{
+							//Initialisation _moyenneTauxDeSimilariteLocal
+							( *itRef )->_moyenneTauxDeSimilariteLocal=0;
+							for ( vector<Groupe*>::const_iterator itComp=_groupes.begin(); itComp!=_groupes.end(); itComp++ )
+							{
+									if ( *itRef==*itComp ) continue;
+									//Calcul du tauxDeSimilariteLocal entre *itRef et *itComp
+									float moyTemp=0;
+									for ( unsigned int i =0; i<_genes.size(); i++ )
+											moyTemp+= ( ( *itRef )->_masque[i]+ ( *itComp )->_masque[i] ) /2;
+									moyTemp/=_genes.size();
+									
+									( *itRef )->_moyenneTauxDeSimilariteLocal+=moyTemp;
+							}
+							( *itRef )->_moyenneTauxDeSimilariteLocal/=_groupes.size()-1;
+					}
+					
+					//Trie des groupes par petit tau
+					sort(_groupes.begin(),_groupes.end(),trieGroupeParTau);
+					//FIN (petit tau)
 		
+					//AFFICHAGE
+					for ( vector<Groupe*>::const_iterator itRef=_groupes.begin(); itRef!=_groupes.end(); itRef++ )
+						cout<<(*itRef)->_moyenneTauxDeSimilariteLocal<<endl;
 		
-		//Heuristique de trie par ratio de masques
-		sort(_groupes.begin(),_groupes.end(),trieGroupeParRatio);
-		//Fin Heuristique de trie par ratio de masques
+// 		//Heuristique de trie par ratio de masques
+// 		sort(_groupes.begin(),_groupes.end(),trieGroupeParRatio);
+// 		//Fin Heuristique de trie par ratio de masques
 		
 		calculMasqueDesGroupesEtMajImage();
-    cout<<endl<<"Image triée et net"<<endl;
+    cout<<endl<<"Image triée par TAU et tau"<<endl;
     afficheImage();
 		
 
@@ -283,14 +286,14 @@ void Instance::heuristiqueDesMasques()
         moy+=*it;
     moy=moy/_tauxDeSimilariteGlobale.size();
 
-    cout<<endl<<"Coeficient de difficulté sigma de l'instance: "<<moy<<endl;
+    cout<<endl<<"Coeficient de difficulté rho de l'instance: "<<moy<<endl;
 
     //Moyenne des ratio:NOTE: peut servir de coef pour determiner une instance difficile
     moy=0;
     for ( vector<Groupe*>::const_iterator it=_groupes.begin(); it!=_groupes.end(); it++ )
         moy+= ( *it )->_ratio;
     moy=moy/_groupes.size();
-    cout<<endl<<"Coeficient de difficulté rho de l'instance: "<<moy<<endl;
+    cout<<endl<<"Coeficient de difficulté sigma de l'instance: "<<moy<<endl;
 
     //MAJ attribut _tabous dans chaque groupe
     majListeTabousDansLesGroupes();
