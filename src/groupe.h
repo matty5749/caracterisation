@@ -10,7 +10,9 @@ class Groupe
 public:
   //ATTRIBUTS
 	static Instance* _static_instance;
+
 	unsigned int _id;
+	std::string _nom;
 	std::vector<Entite*> _entites;
 	std::vector<float> _masque;
 	std::map<Groupe*,std::set<int> > _tabous; /*!< Contient les éléments de combinaisons tabous entre ce 
@@ -19,7 +21,7 @@ public:
 	float _moyenneTauxDeSimilariteLocal;
 
   //METHODES
-  Groupe( unsigned int id , Instance* instance);
+  Groupe( unsigned int id , Instance* instance , std::string nom="");
 	
 	void calculMasque();
 	

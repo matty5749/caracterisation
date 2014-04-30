@@ -8,7 +8,7 @@
 using namespace std;
 
 
-Instance::Instance()
+Instance::Instance ( std::string nom ) :_nom ( nom )
 {
 
 }
@@ -103,15 +103,30 @@ void Instance::parseDac ( char* nomFic )
     cout<<"Nb groupes:\t"<<_groupes.size() <<endl;
     cout<<"Nb entites:\t"<<_entites.size() <<endl;
     cout<<"Nb variables:\t"<<_genes.size() <<endl;
+}
 
-
+void Instance::parseXml ( char* nomFic )
+{
+    QFile file ( nomFic );
+    QXmlInputSource inputSource ( &file );
+    QXmlSimpleReader reader;
+    SaxHandler handler ( this );
+    reader.setContentHandler ( &handler );
+    reader.setErrorHandler ( &handler );
+    reader.parse ( inputSource );
 }
 
 void Instance::preTraitement()
 {
+//     afficheInstance();
+//     exit ( EXIT_SUCCESS );
     bool supression;
     do
     {
+        cout<<"*"<<_entites.size() <<endl;
+        cout<<"*"<<_genes.size() <<endl;
+        cout<<"*"<<_groupes.size() <<endl;
+
         supression=false;
         set<Gene*> geneASupprimer;
         set<Entite*> entiteASupprimer;
@@ -219,14 +234,14 @@ void Instance::preTraitement()
     cout<<"Borne minimum;\t"<<_borneMin<<endl<<endl;
 }
 
-bool trieGroupeParTau (Groupe const * const g1,Groupe const * const g2 )
+bool trieGroupeParTau ( Groupe const * const g1,Groupe const * const g2 )
 {
-	return g1->_moyenneTauxDeSimilariteLocal>g2->_moyenneTauxDeSimilariteLocal;
+    return g1->_moyenneTauxDeSimilariteLocal>g2->_moyenneTauxDeSimilariteLocal;
 }
 
-bool trieGroupeParRatio (Groupe const * const g1,Groupe const * const g2 )
+bool trieGroupeParRatio ( Groupe const * const g1,Groupe const * const g2 )
 {
-	return g1->_ratio>g2->_ratio;
+    return g1->_ratio>g2->_ratio;
 }
 
 void Instance::heuristiqueDesMasques()
@@ -243,42 +258,42 @@ void Instance::heuristiqueDesMasques()
     afficheImage();
 
 
-					//Heuristique sur les taux de similarite locale (petit tau)
-					//Parcours exhaustif des groupe
-					for ( vector<Groupe*>::const_iterator itRef=_groupes.begin(); itRef!=_groupes.end(); itRef++ )
-					{
-							//Initialisation _moyenneTauxDeSimilariteLocal
-							( *itRef )->_moyenneTauxDeSimilariteLocal=0;
-							for ( vector<Groupe*>::const_iterator itComp=_groupes.begin(); itComp!=_groupes.end(); itComp++ )
-							{
-									if ( *itRef==*itComp ) continue;
-									//Calcul du tauxDeSimilariteLocal entre *itRef et *itComp
-									float moyTemp=0;
-									for ( unsigned int i =0; i<_genes.size(); i++ )
-											moyTemp+= ( ( *itRef )->_masque[i]+ ( *itComp )->_masque[i] ) /2;
-									moyTemp/=_genes.size();
-									
-									( *itRef )->_moyenneTauxDeSimilariteLocal+=moyTemp;
-							}
-							( *itRef )->_moyenneTauxDeSimilariteLocal/=_groupes.size()-1;
-					}
-					
-					//Trie des groupes par petit tau
-					sort(_groupes.begin(),_groupes.end(),trieGroupeParTau);
-					//FIN (petit tau)
-		
-					//AFFICHAGE
-					for ( vector<Groupe*>::const_iterator itRef=_groupes.begin(); itRef!=_groupes.end(); itRef++ )
-						cout<<(*itRef)->_moyenneTauxDeSimilariteLocal<<endl;
-		
+    //Heuristique sur les taux de similarite locale (petit tau)
+    //Parcours exhaustif des groupe
+    for ( vector<Groupe*>::const_iterator itRef=_groupes.begin(); itRef!=_groupes.end(); itRef++ )
+    {
+        //Initialisation _moyenneTauxDeSimilariteLocal
+        ( *itRef )->_moyenneTauxDeSimilariteLocal=0;
+        for ( vector<Groupe*>::const_iterator itComp=_groupes.begin(); itComp!=_groupes.end(); itComp++ )
+        {
+            if ( *itRef==*itComp ) continue;
+            //Calcul du tauxDeSimilariteLocal entre *itRef et *itComp
+            float moyTemp=0;
+            for ( unsigned int i =0; i<_genes.size(); i++ )
+                moyTemp+= ( ( *itRef )->_masque[i]+ ( *itComp )->_masque[i] ) /2;
+            moyTemp/=_genes.size();
+
+            ( *itRef )->_moyenneTauxDeSimilariteLocal+=moyTemp;
+        }
+        ( *itRef )->_moyenneTauxDeSimilariteLocal/=_groupes.size()-1;
+    }
+
+    //Trie des groupes par petit tau
+    sort ( _groupes.begin(),_groupes.end(),trieGroupeParTau );
+    //FIN (petit tau)
+
+    //AFFICHAGE
+    for ( vector<Groupe*>::const_iterator itRef=_groupes.begin(); itRef!=_groupes.end(); itRef++ )
+        cout<< ( *itRef )->_moyenneTauxDeSimilariteLocal<<endl;
+
 // 		//Heuristique de trie par ratio de masques
 // 		sort(_groupes.begin(),_groupes.end(),trieGroupeParRatio);
 // 		//Fin Heuristique de trie par ratio de masques
-		
-		calculMasqueDesGroupesEtMajImage();
+
+    calculMasqueDesGroupesEtMajImage();
     cout<<endl<<"Image triée par TAU et tau"<<endl;
     afficheImage();
-		
+
 
     //Moyenne des taux de similarite:NOTE: peut servir de coef pour determiner une instance difficile
     float moy=0;
@@ -448,6 +463,12 @@ bool Instance::certificat ( const vector< int >& solutions ) const
     return true;
 }
 
+void Instance::afficheInstance() const
+{
+    for ( vector<Entite*>::const_iterator it=_entites.begin(); it!=_entites.end(); it++ )
+        cout<<**it;
+
+}
 
 
 

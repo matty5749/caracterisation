@@ -22,6 +22,6 @@
 #include <ctime>
 
 void afficheVecteur ( std::vector<int> vecteur );
-
+int toInt(std::string str);
 
 #endif //STANDARD_H

@@ -15,10 +15,11 @@ private:
 public:
     static Instance* _static_instance;
     unsigned int _id;
+		std::string _nom;
     std::vector<std::pair<Entite*,bool> > _entites;/*!<Présence/absence du gene dans l'entite*/
 
     //METHODES
-    Gene ( unsigned int id , unsigned int nbEntites ,Instance* instance );
+    Gene ( unsigned int id , unsigned int nbEntites ,Instance* instance ,std::string nom="");
 
     /*!
      * \return Le nombre d'entite composé de ce gène

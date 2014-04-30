@@ -4,7 +4,7 @@ using namespace std;
 
 Instance* Groupe::_static_instance=0;
 
-Groupe::Groupe ( unsigned int id , Instance* instance ) :_id ( id )
+Groupe::Groupe ( unsigned int id , Instance* instance, std::string nom ) :_id ( id ), _nom(nom)
 {
     if ( ! _static_instance ) _static_instance=instance;
     _masque.resize ( _static_instance->_genes.size(),0 );

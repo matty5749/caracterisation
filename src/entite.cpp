@@ -5,15 +5,14 @@ using namespace std;
 
 Instance* Entite::_static_instance=0;
 
-Entite::Entite ( unsigned int id, unsigned int idGroupe, std::string chaine_de_bits, Instance* instance )
-    :_id ( id ),_idGroupe ( idGroupe ),_poid ( 0 )
+Entite::Entite ( unsigned int id, unsigned int idGroupe, string chaine_de_bits, Instance* instance, string idString, string nom, string groupeRef )
+    :_id ( id ),_idGroupe ( idGroupe ),_idString(idString),_nom(nom),_groupeRef(groupeRef),_poid ( 0 )
 {
     if ( ! _static_instance ) _static_instance=instance;
 
     _genes.resize ( chaine_de_bits.size() );
 
-
-    //Initialisation de _vVariables
+    //Initialisation de _genes
     for ( unsigned int i=0; i<chaine_de_bits.size(); i++ )
     {
         bool presence= ( chaine_de_bits[i]=='1' );

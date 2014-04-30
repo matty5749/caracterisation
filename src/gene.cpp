@@ -4,7 +4,7 @@ using namespace std;
 
 Instance* Gene::_static_instance=0;
 
-Gene::Gene ( unsigned int id, unsigned int nbEntites, Instance* instance ) :_nbOne ( -1 ),_id ( id )
+Gene::Gene ( unsigned int id, unsigned int nbEntites, Instance* instance , std::string nom) :_nbOne ( -1 ),_id ( id ),_nom(nom)
 {
     if ( ! _static_instance ) _static_instance=instance;
     _entites.resize ( nbEntites );

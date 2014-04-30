@@ -10,7 +10,6 @@
 
 using namespace std;
 
-
 int main ( int argc,char** argv )
 {
 
@@ -25,11 +24,12 @@ int main ( int argc,char** argv )
  
 
     Instance instance;
-    instance.parseDac ( argv[1] );
+		instance.parseXml( argv[1] );		
+//     instance.parseDac ( argv[1] );
     instance.preTraitement();
-		
+// 		
 		instance.heuristiqueDesMasques();
-
+// 
 		Solveur solveur ( &instance );
 		solveur.parcoursStandard();
 

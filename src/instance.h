@@ -2,6 +2,7 @@
 #define INSTANCE_H
 
 #include "standard.h"
+#include "saxhandler.h"
 
 class Groupe;
 class Entite;
@@ -11,6 +12,7 @@ class Instance
 {
 public:
     //ATTRIBUTS
+		std::string _nom;
     std::vector<Groupe*> _groupes;
     std::vector<Entite*> _entites;
     std::vector<Gene*> _genes;
@@ -21,14 +23,15 @@ public:
 
 
     //METHODES
-    Instance();
+    Instance(std::string nom="");
     ~Instance();
 
-    /*!
-    * \brief Permet d'initialiser l'instance à partir d'un fichier .dac
-    */
+		///!\brief Permet d'initialiser l'instance à partir d'un fichier .dac
     void parseDac ( char* nomFic );
 
+    ///!\brief Permet d'initialiser l'instance à partir d'un fichier .xml
+    void parseXml ( char* nomFic );
+		
     /*!
     * \brief Permet de supprimer les redondances afin de réduire la taille de l'instance
     */
@@ -60,6 +63,8 @@ public:
 		void majListeTabousDansLesGroupes () const;
 		
     void afficheImage() const;
+		
+		void afficheInstance() const;
 };
 
 
