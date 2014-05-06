@@ -98,11 +98,6 @@ void Instance::parseDac ( char* nomFic )
         groupe->_entites.push_back ( entite );
         _entites.push_back ( entite );
     }
-
-    cout<<"Avant traitement:"<<endl;
-    cout<<"Nb groupes:\t"<<_groupes.size() <<endl;
-    cout<<"Nb entites:\t"<<_entites.size() <<endl;
-    cout<<"Nb variables:\t"<<_genes.size() <<endl;
 }
 
 void Instance::parseXml ( char* nomFic )
@@ -120,13 +115,15 @@ void Instance::preTraitement()
 {
 //     afficheInstance();
 //     exit ( EXIT_SUCCESS );
+
+    cout<<"Avant traitement:"<<endl;
+    cout<<"Nb groupes:\t"<<_groupes.size() <<endl;
+    cout<<"Nb entites:\t"<<_entites.size() <<endl;
+    cout<<"Nb variables:\t"<<_genes.size() <<endl;
+
     bool supression;
     do
     {
-        cout<<"*"<<_entites.size() <<endl;
-        cout<<"*"<<_genes.size() <<endl;
-        cout<<"*"<<_groupes.size() <<endl;
-
         supression=false;
         set<Gene*> geneASupprimer;
         set<Entite*> entiteASupprimer;
@@ -230,7 +227,8 @@ void Instance::preTraitement()
     cout<<"Après traitement:"<<endl;
     cout<<"Nb groupes:\t"<<_groupes.size() <<endl;
     cout<<"Nb entites:\t"<<_entites.size() <<endl;
-    cout<<"Nb variables:\t"<<_genes.size() <<endl;
+    cout<<"Nb variables:\t"<<_genes.size() <<endl<<endl;
+		
     cout<<"Borne minimum;\t"<<_borneMin<<endl<<endl;
 }
 
@@ -282,9 +280,9 @@ void Instance::heuristiqueDesMasques()
     sort ( _groupes.begin(),_groupes.end(),trieGroupeParTau );
     //FIN (petit tau)
 
-    //AFFICHAGE
-    for ( vector<Groupe*>::const_iterator itRef=_groupes.begin(); itRef!=_groupes.end(); itRef++ )
-        cout<< ( *itRef )->_moyenneTauxDeSimilariteLocal<<endl;
+//     //AFFICHAGE
+//     for ( vector<Groupe*>::const_iterator itRef=_groupes.begin(); itRef!=_groupes.end(); itRef++ )
+//         cout<< ( *itRef )->_moyenneTauxDeSimilariteLocal<<endl;
 
 // 		//Heuristique de trie par ratio de masques
 // 		sort(_groupes.begin(),_groupes.end(),trieGroupeParRatio);

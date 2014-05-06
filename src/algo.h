@@ -13,8 +13,10 @@ protected:
     Entite* _e1;
     Entite* _e2;
 		unsigned short int _poidCourant;
+		unsigned int _fitness;
 		unsigned int _nbComparaisons;
 		bool _debut;
+		int _nbComparaisonsMax;/*<!Le nombre de comparaisons max est le nombre de comparaisons qu'il faut effectuer pour caractériser une instance*/
 public:
 
 
@@ -26,11 +28,20 @@ public:
 
 
 protected:
+		///!\brief Le nombre de comparaisons max est le nombre de comparaisons qu'il faut effectuer pour caractériser une instance
+		int calculNbComparaisonsMax();
+	
     /*!
     * \brief Renvoie vrai si l'instance est caractérisable par les gènes présent aux positions d'indices dans _genes
     * \param indices est composé des positions des gènes dont on veut savoir si ils caractérisent l'instance
     */
     bool estCaracterisePar ( const std::vector<int> &indices ) ;
+		
+// 		/*!
+// 		 * \brief Concu pour la roulette adaptative, permet de déterminer un fitness pour la combinaison indices
+// 		 * \return le fitness de la combinaison
+// 		 */
+// 		bool estCaracteriseParFullVersion ( const std::vector<int> &indices ) ;
 
 		/*!
     * \brief Renvoie vrai si l'instance est caractérisable par les gènes présent aux positions d'indices dans _genes
