@@ -335,12 +335,12 @@ Instances & $\rho$ & $\sigma$ \\
 \hline 
 s3836-0 & 0 & 0.024322 \\ 
 \hline
-rch10 & 0.906115 & 0.626381 \\ 
+rch10 & 0.626381 & 0.906115 \\ 
 \hline
 \end{tabular} 
 \end{center}
 
-Nous observons que le coefficient de difficulté $\rho$ est plus significatif que $\sigma$, mais nous ne sommes pas en mesure d'indiquer dans quel proportions. Cependant les travaux de [CHHEL et al, 2013] nous indiquent que seul une heuristique sur le choix des variables est en mesure de pouvoir améliorer un algorithme de recherche exacte. Nous pensons donc que $\rho$ a plus d'influence que $\sigma$ sur la difficulté d'une instance. 
+Nous observons que le coefficient de difficulté $\rho$ semble plus significatif que $\sigma$ pour déterminer la difficulté d'une instance, mais nous ne sommes pas en mesure d'indiquer dans quel proportions. Cependant les travaux de [CHHEL et al, 2013] nous indiquent que seul une heuristique sur le choix des variables est en mesure de pouvoir améliorer un algorithme de recherche exacte. Cela nous conforte dans l'idée que $\rho$ a plus d'influence que $\sigma$ sur la difficulté d'une instance. 
 
 \begin{proposition}
 Une instance dont le coefficient de difficulté $\rho$ est proche de 1 est une \textbf{instance difficile} à résoudre.
@@ -351,11 +351,53 @@ Une instance dont le coefficient de difficulté $\rho$ est proche de 1 et dont l
 \end{proposition}
 
 \begin{proposition}
-La taille d'une instance (caractérisé par son nombre de gènes et d'entités mais pas son nombre de groupe) est une information sur la difficulté de sa résolution. Cependant cette difficulté est intrinsèque au problème est ne peut pas être réduite de façon significative par un algorithme.
+La taille d'une instance (caractérisé par son nombre de gènes et d'entités mais pas son nombre de groupe) est une information sur la difficulté de sa résolution. On peut passer outre cette difficulté uniquement si l'instance à un coeficient $sigma$ proche de 1, dans le cas contraire, cette difficulté ne peut pas être réduite de façon significative par un algorithme.
 \end{proposition}
 
 %Les observations sur notre jeu de 15 instances nous permettent de conclure que $\sigma$ en particulier, et $\rho$ dans une moindre mesure, nous permettent de définir ce qu'est une instance difficile. 
 
+\subsubsection{Résultats}
+
+Nous présentons ici les instances avec leurs coefficients de difficultés respectifs:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline 
+Instances & Entités(SR) & Groupes & Gènes(SR)& $\rho$ & $\sigma$ & PL & EPC & LSPC \\ 
+\hline 
+s301-0 & 500 & 30 & 400 & 0.034 & 0.00008 & - & 13 & 14 \\ 
+\hline 
+s326-0 & 500 & 10 & 500 & 0.033 & 0 & - & 13 & 14 \\ 
+\hline 
+s413-30 & 500 & 20 & 600 & 0.035 & 0 & - & 13 & 13 \\ 
+\hline 
+s555-20 & 800 & 20 & 800 & 0.039 & 0.00016 & - & 13 & 13 \\ 
+\hline 
+s625-20 & 500 & 5 & 1000 & 0.035 & 0 & - & 13 & 13 \\ 
+\hline 
+s754-10 & 600 & 10 & 200 & 0.034 & 0 & - & 13 & 14 \\ 
+\hline 
+s882-20 & 600 & 10 & 400 & 0.032 & 0 & - & 13 & 14 \\ 
+\hline 
+s2501-70 & 800 & 10 & 800 & 0.033 & 0 & - & 15 & 15 \\ 
+\hline 
+s31294-50 & 200 & 15 & 1000 & 0.065 & 0.072 & 10 & 10 & 11 \\ 
+\hline 
+s3836-0 & 1000 & 15 & 1000 & 0.024 & 0 & - & 16 & 16 \\ 
+\hline 
+raphv & 109 (108) & 8 & 155 (68) & 0.588 & 0.581 & \textbf{6} & \textbf{6} & 9 \\ 
+\hline 
+raphy & 113 (112) & 4 & 155 (70) & 0.609 & 0.332 & \textbf{6} & \textbf{6} & 8 \\ 
+\hline 
+rarep & 112 & 7 & 155 (72) & 0.651 & 0.498 & \textbf{12} & 39 & 14 \\ 
+\hline 
+rch8 & 132 (56) & 21 & 37 (27) & 0.569 & 0.933 & \textbf{9} & \textbf{9} & 9 \\ 
+\hline 
+rch10 & 173 (112) & 27 & 98 (86) & 0.626 & 0.906 & \textbf{10} & 25 & 15 \\ 
+\hline 
+\end{tabular} 
+\end{center}
+
+Toute les instances aléatoires ont un coefficient $\rho$ proche de 0. Mais elles ont pour difficulté leurs coefficients $\sigma$ qui sont proche de 0 également, cela signifie que nous ne pourrons pas réduire de façon significative leurs temps de résolution. L'instance raphv et raphy ont un ordre difficulté similaire, rch8 a un coefficient $\sigma$ proche de 1 ainsi qu'un coefficient $\rho$ satisfaisant, de plus, elle est de faible taille, c'est l'instance qui semble la plus facile à résoudre. L'instance rch10 à un très bon coefficient $\sigma$, elle doit être plus facile à résoudre que l'instance rarep. Ces deux dernières semble être les instances les plus difficiles à résoudre.Cette série d'observation et de raisonnement est corroboré par les résultats obtenus par [CHHEL et al,2013].
 
 \subsection{Recherche exacte}
 \subsubsection{Introduction}
