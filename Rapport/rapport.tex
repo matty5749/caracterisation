@@ -1,6 +1,6 @@
 
 % Le type de votre document
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,10pt]{article}
 
 % Quelques packages pour le francais, vous pouvez saisir du texte accentué.
 \usepackage[utf8]{inputenc}
@@ -19,6 +19,10 @@
 % Pour inclure des graphiques.
 \usepackage{graphicx}
 
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+
 % Pour faire déborder les cases d'un tableau sur plusieurs lignes.
 \usepackage{multirow}
 
@@ -28,32 +32,34 @@
 
 \usepackage[french]{algorithme}
 
-\geometry{top=3cm, bottom=3cm, left=2.5cm, right=2.5cm}
+%\geometry{top=3cm, bottom=3cm, left=2.5cm, right=2.5cm}
 
 \newtheorem{definition}{Définition}
 \newtheorem{proposition}{Proposition}
 
 \begin{document}
-\includepdf[pages=1]{./couverture.pdf}
-\includepdf[pages=1]{./nonPlagiat.pdf}
 
-\section*{\begin{center}Remerciements\end{center}}
-\par Tout d'abord, je tiens à remercier Frédéric LARDEUX et Frédéric SAUBION pour leur écoute, leurs disponibilités et leurs explications et pour la liberté qu'ils m'ont laissé lors de la réalisation de ce projet.
-\par Je remercie également les membres du LERIA\footnote{Laboratoire d'études et de recherche en informatique d'Angers}, pour m'avoir accordé leur confiance en m'attribuant ce stage.
-\par Je remercie l'équipe enseignante du DAEU\footnote{Diplôme d'accès aux études universitaire} d'Angers, et particulièrement Eric SCHRAFSTETTER qui m'a mis le pied à l'étrier pour intégrer la faculté des sciences d'Angers.
-\par Enfin, je remercie ma famille, qui m'a toujours soutenu dans la reprise de mes études, et tout particulièrement Lucie, Marius et Paulin qui partagent mes humeurs et mon quotidien.
+%\includepdf[pages=1]{./couverture.pdf}
+%\includepdf[pages=1]{./nonPlagiat.pdf}
+%
+%\section*{\begin{center}Remerciements\end{center}}
+%\par Tout d'abord, je tiens à remercier Frédéric LARDEUX et Frédéric SAUBION pour leur écoute, leurs disponibilités et leurs explications et pour la liberté qu'ils m'ont laissé lors de la réalisation de ce projet.
+%\par Je remercie également les membres du LERIA\footnote{Laboratoire d'études et de recherche en informatique d'Angers}, pour m'avoir accordé leur confiance en m'attribuant ce stage.
+%\par Je remercie l'équipe enseignante du DAEU\footnote{Diplôme d'accès aux études universitaire} d'Angers, et particulièrement Eric SCHRAFSTETTER qui m'a mis le pied à l'étrier pour intégrer la faculté des sciences d'Angers.
+%\par Enfin, je remercie ma famille, qui m'a toujours soutenu dans la reprise de mes études, et tout particulièrement Lucie, Marius et Paulin qui partagent mes humeurs et mon quotidien.
+%
+%
+%\newpage
+%\null
+%\begin{flushright}
+%\vspace{\fill}
+%\textbf{À Marius et Paulin.}
+%\vspace{\fill}
+%\end{flushright}
 
 
-\newpage
-\null
-\begin{flushright}
-\vspace{\fill}
-\textbf{À Marius et Paulin.}
-\vspace{\fill}
-\end{flushright}
-\newpage
-
-\section*{Rappel du sujet}
+\section*{Introduction}
+\subsection*{Sujet du stage}
 \par La plupart des bactéries appartenant au genre Xanthomonas sont responsables de pathologies sur
 une large gamme de cultures économiquement importantes, induisant notamment des pertes
 de rendement et diminuant ainsi la valeur marchande des semences. Quelques graines
@@ -64,7 +70,7 @@ endémique en Europe mais pour limiter son introduction, il est inscrit sur la l
 pathogènes de quarantaine. Une approche possible pour l'identification des souches bactériennes
 consiste à utiliser un répertoire de gènes de virulence. Il s'agit ainsi de trouver la plus petite
 combinaison de gènes de virulence spécifiques. Cette combinaison peut ainsi être utilisée pour
-concevoir un test d'identification. Des travaux préliminaires montrent que la combinaison des
+concevoir un test d'identification. Des travaux préliminaires[CHHEL et al.2013] montrent que la combinaison des
 tests moléculaires ainsi obtenus fournit une technique rapide pour l'identification de toutes les
 souches de Xanthomonas pathogènes sur les haricots.
 \par Avec les possibilités accrues d'acquisition de données génomiques – par exemple le séquençage à
@@ -89,15 +95,18 @@ approches pour traiter des instances de grande taille. Cette phase s'inspire des
 résolution de problèmes combinatoires (SAT-CSP).
 \end{itemize}
 
+\subsection*{Plan du mémoire}
+Dans la première partie de ce mémoire, nous dressons un état de l'art concernant l'étude du MIN-PCM, ensuite nous décrivons les contributions que nous apportons à l'étude de ce problème: nous définissons la notion d'instance difficile, nous proposons des heuristiques de résolution (exactes ou approchées) et nous fournissons les résultats ainsi obtenus.\textit{[Ici, peut etre la génération d'instance difficile].} Enfin, nous tirons les conclusions de nos travaux et nous discutons les perspectives de recherche envisagées\textit{[à court et à long terme]}.
+
 % La table des matières
 \newpage
 \tableofcontents
 \newpage
 
 \section{État de l'art}
-\subsection{Introduction}
+
 \subsection{Notations}
-Dans ce rapport, on utilise les notations suivantes:
+Dans ce mémoire, nous utilisons les notations suivantes:
 \begin{itemize}
 \item $\mathcal{X}$ représente l'ensemble des gènes d'une instance non redondante.
 \item $\mathcal{G}$ représente l'ensemble des gènes d'une instance non redondante.
@@ -107,31 +116,261 @@ Dans ce rapport, on utilise les notations suivantes:
 \item $|\mathcal{E}|$ représente la cardinalité l'ensemble $\mathcal{E}$.
 \end{itemize}
 
+\subsection{Présentation du problème}
+\subsubsection*{Problème de caractérisation multiple}
+Reprise des définitions présente dans l'article [CHHEL et al.2013](voir si cela est possible)
+\subsubsection*{Minimisation du problème de caractérisation multiple}
+La minimisation du problème de caractérisation multiple consiste à définir le plus petit nombre de gène pouvant caractériser une instance PCM.
+\subsection{Complexité}
+Le problème SET-COVER appartient à la classe de complexité W[2]-complet. Il a été montré dans [CHHEL et al.2013] qu'une instance PCM pouvait être réduite en temps polynômial en une instance SET-COVER. Il en résulte que PCM appartient à la classe de complexité W[2]-complet \footnote{En admettant l'hypothèse que la WEFT-hiérarchie proposé par [Downey, Fellows, 1995] soit correcte.}. Dès lors, il a été prouvé que le MIN-PCM appartient à la classe de complexité W[2]-difficile. L'impact direct de l'appartenance de MIN-PCM à cette classe de complexité est que l'\textbf{unique} possibilité d'améliorier significativement la résolution complète\footnote{Recherche exacte permettant de prouver l'optimalité d'une solution.} d'une instance est de \textbf{travailler sur des heuristiques de choix de variables}(gènes). 
+
+\subsection{Une résolution basés sur les fonctions booléenes partiellement définis}
+\subsubsection{Résolution complète : Exact-Proj-Car et reformulation en programmation linéaire}
+\paragraph{Exact-Proj-Car}
+\paragraph{Reformulation en programmation linéaire}
+MIN-ONES
+\subsubsection{Résolution par recherche locale}
+Local-Search-Proj-Car
+
+\subsection{Résultats expérimentaux}
+Afin d'avoir un moyen de comparaison pour nos contributions, nous reproduisons ici les résultats fourni dans [CHHEL et al, 2013]\footnote{Nous nous sommes servi du code mis à disposition sur \url{http://forge.info.univ-angers.fr/~gh/Idas/Ccd/mcps/}}. Les expérimentations sont faites sur une machine composé d'un processeur Intel Core\up{tm} i7-2620M CPU à 2.70GHz (deux cœurs) avec 4 Go Ram tournant sous Linux 64-bits. L'option de compilation -Ofast est activé pour obtenir notre exécutable.
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline 
+Instances & Entités(SR) & Groupes & Gènes(SR) & PL & EPC(DIFF)(SH) & LSPC(DIFF) \\ 
+\hline 
+s301-0 & 500 & 30 & 400 & - & 13 & 14 \\ 
+\hline 
+s326-0 & 500 & 10 & 500 & - & 13 & 14 \\ 
+\hline 
+s413-30 & 500 & 20 & 600 & - & 13 & \textcolor{blue}{13} (14) \\ 
+\hline 
+s555-20 & 800 & 20 & 800 & - & 13 & \textcolor{blue}{13} (14) \\ 
+\hline 
+s625-20 & 500 & 5 & 1000 & - & 13 & \textcolor{blue}{13} (14) \\ 
+\hline 
+s754-10 & 600 & 10 & 200 & - & 13 & 14 \\ 
+\hline 
+s882-20 & 600 & 10 & 400 & - & 13 & 14 \\ 
+\hline 
+s2501-70 & 800 & 10 & 800 & - & \textcolor{blue}{15} (14) & 15 \\ 
+\hline 
+s31294-50 & 200 & 15 & 1000 & 10 & 10 & 11 \\ 
+\hline 
+s3836-0 & 1000 & 15 & 1000 & - & 16 & 16 \\ 
+\hline 
+raphv & 109 (108) & 8 & 155 (68) & \textbf{6} & \textbf{6} & 9 \\ 
+\hline 
+raphy & 113 (112) & 4 & 155 (70) & \textbf{6} & \textbf{6} & 8 \\ 
+\hline 
+rarep & 112 & 7 & 155 (72) & \textbf{12} & 95 (59) (\textcolor{blue}{39}) & 14 \\ 
+\hline 
+rch8 & 132 (56) & 21 & 37 (27) & \textbf{9} & \textbf{9} & 9 \\ 
+\hline 
+rch10 & 173 (112) & 27 & 98 (86) & \textbf{10} & 27 (15) (\textcolor{blue}{25}) & 15 \\ 
+\hline 
+\end{tabular} 
+\end{center}
+Colonne PL: Résultats obtenu par reformulation en programmation linéaire sur le solveur IBM \textit{cplex}\footnote{\url{http:://www.ibm.com/software/integration/optimization/cplex-optimizer}}.Les instances marqués par "-" ne pas pu être chargé en mémoire car elles solicitaient plus de 32 Go de RAM.\\
+SR: Obtenu après suppression des redondances.\\
+DIFF: Résultats affichés dans l'article étant différents de ceux obtenus sur notre machine.\\
+SH: Résultats obtenu sans heuristique avec notre programme sur notre machine.\\
+
+
+Les différences significatives sur les instances rarep et rch10 sont du au fait que ces résultats ont été obtenu en partant d'une borne supérieur égale aux nombre de gènes divisé par deux. De fait , il apparaît clairement que l'instance rarep n'a pas bénéficié de la suppression de ses redondances\footnote{$72/2<59$}.
+
+Pour les comparaisons à venir sur les résultats qui diffèrent, nous prendrons en compte les résultats en bleu.
+
+Pour l'instance rch10, le résultat sans heuristique étant meilleur que celui avec l'heuristique de EPC \footnote{Ce qui peut s'expliquer par une différence de structure et d'implémentation du code source.} sur notre machine, nous sommes en mesure de penser que le résultat indiqué dans l'article est erroné, donc nous choisissons de conserver le résultat sans heuristique.
+
+
+
 \section{Contributions}
 
 \subsection{Introduction} 
-Cette section présente les démarches de recherche qui ont été effectué durant le stage. Nous abordons la résolution du problème MIN-PCM avec deux approches différentes :
+Cette section présente les démarches de recherche qui ont été effectué durant le stage.\\
+Dans un premier temps, nous faisons une proposition qui permet d'identifier si une instance est difficile ou non.\\
+Ensuite, nous abordons la résolution du problème MIN-PCM avec deux approches différentes :
 \begin{itemize}
-\item Une recherche exacte qui à la possibilité de prouver la borne minimum du MIN-PCM sur certains type d'instance de taille raisonnable.
-\item Une recherche approché qui à la possibilité de trouver des solutions de bonne qualité mais non nécessairement optimal en un temps polynômial sur certains type d'instance de très grande taille.\\
+\item Une recherche exacte qui à la possibilité de prouver la borne minimum du MIN-PCM sur des instances de taille raisonnable.
+\item Une recherche approché qui à la possibilité de trouver des solutions de bonne qualité mais non nécessairement optimal en un temps polynômial sur des instance de grande taille.
 \end{itemize} 
+\textit{TODO: Enfin, nous générons des instances pseudo-aléatoire de différents degrés de difficultés que nous soumettons à nos algorithmes.}
+
+\subsection{Définition d'une instance difficile}
+Prenons deux instances: une réelle (rch10) et une aléatoire (s3836-0), voici leurs caractéristiques:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+Instances & Entités & Groupes & Gènes & Résolution PL & Résolution EPC\footnote{[Exact-Proj-Car CHHEL et al]} \\ 
+\hline 
+s3836-0 & 1000 & 15 & 1000 & - & 16 \\ 
+\hline
+rch10 & 173 & 27 & 98 & \textbf{10}\footnote{En gras = solution optimal} & 14 \\ 
+\hline
+\end{tabular} 
+\end{center}
+\vspace{7mm}
+
+A priori, on peut supposer que l'instance aléatoire est plus difficile à résoudre: elle est bien plus volumineuse que l'instance réelle à tel point qu'elle nécessite plus de 32 Go de RAM pour une résolution en programmation linéaire.
+
+Observons leurs résolutions avec notre algorithme sans heuristique:
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[enlarge x limits=false,
+xlabel={Caractérisation de taille k},
+ylabel={Nombre de comparaisons d'entités},
+xmin={14},
+xmax={40},
+%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+]
+\addplot +[mark=none] table[x index=0,y index=1]{./resultats/sh_rch10_nbComp};
+\addplot +[mark=none] table[x index=0,y index=1]{./resultats/sh_s3836_nbComp};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Résolution sans heuristique de rch10 et s3836-0 : nombre de comparaisons}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[enlarge x limits=false,
+xlabel={Caractérisation de taille k},
+ylabel={Temps d'éxécution en seconde},
+xmin={14},
+xmax={40}]
+\addplot +[mark=none] table[x index=0,y index=1]{./resultats/sh_rch10_temps};
+\addplot +[mark=none] table[x index=0,y index=1]{./resultats/sh_s3836_temps};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Résolution sans heuristique de rch10 et s3836-0 : temps d'éxécution}
+\end{figure}
+
+Nous apercevons que l'instance aléatoire est facilement résolu jusqu'à une caractérisation de taille 15. Ce n'est pas le cas de l'instance réelle qui ne peut plus caractériser en un temps raisonnable à partir d'une caractérisation de taille 25. Ce type d'observation étant \textbf{systématique} quelque soit les caractéristiques des instances réelles ou aléatoire comparés, nous pouvons alors affirmer que la taille d'une instance ne suffit pas à elle seule pour définir sa difficulté. Dès lors, nous nous posons les deux questions suivantes:\\
+
+\begin{itemize}
+\item \textbf{Qu'est ce qui peut bien être à l'origine de cette différence de résolution entre une instance aléatoire et une instance réelle?}
+\item \textbf{Existe il une méthode permettant de définir si une instance est difficile à résoudre ou non ?}\\
+\end{itemize}
+Afin de répondre à ces questions, nous définissons les notions suivantes:
+
+\begin{definition}
+Le \textbf{masque $M$ d'un groupe $g$} correspond à la moyenne des présences/absences des gènes pour chaque entité du groupe.\\
+Formellement, soit $M$ le masque d'un groupe $g \in \mathcal{G}$, $M_i$ la valeur du masque en position $i$, $i \in [1,|\mathcal{X}|]$,
+% $|\mathcal{X}|$ étant le nombre de gènes de l'instance après la suppression des redondances,
+$$\forall i \in  [1, |\mathcal{X}|], M_i= \frac{\sum_{i=1}^{|\mathcal{G}|}e_i}{|\mathcal{G}|} $$
+\end{definition}
+
+\begin{definition}
+Le \textbf{ratio $r$ d'un masque $M$} correspond au pourcentage de valeur entière (0/1) présentent dans le masque.\\
+Formellement, soit $M$ le masque d'un groupe $g \in \mathcal{G}$, $r_g(I)$ le ratio du groupe $g$ dans l'image $I$,
+\begin{center}
+$$ r_g(I)=\frac{|{i / M_i \in \{0,1\}}|}{|\mathcal{X}|},\forall i \in [1,|\mathcal{X}|]$$
+\end{center}
+\end{definition}
+
+\subsubsection*{Exemple :}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+\backslashbox{Entités}{Gènes} & g0 & g1 & g2 & g3 & g4 & g5 & g6 & g7 & g8 & g9 \\ 
+\hline 
+e1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 1 \\ 
+\hline 
+e2 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 1 \\ 
+\hline 
+e3 & 1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ 
+\hline 
+e4 & 1 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\ 
+\hline 
+e5 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 0 \\ 
+\hline 
+\hline
+Masque & 1 & 1 & 0 & 0.8 & 0.6 & 1 & 0 & 0.4 & 0 & 0.4 \\
+\hline
+\end{tabular}
+\end{center}
+Le ratio $r$ de ce groupe est : \\
+$r=6/10$\\
+soit  $r=0.6$
+
+\begin{definition}
+L'\textbf{image $I$ d'une instance} est une matrice en deux dimensions de taille $|\mathcal{G}|*|\mathcal{X}|$ où chaque ligne correspond au masque de chacun des groupes de l'instance.\\
+Formellement, soit $I_i$ la ligne i de la matrice $I$ correspondant à l'image de l'instance $\mathcal{I}$, $M_i$ le masque du groupe $i$ de l'instance $\mathcal{I}$,
+$$\forall i \in [1,|\mathcal{G}|], I_i=M_i$$
+\end{definition}
 
 
-Tout au long de la section "Recherche exacte", nous dégageons les propriétés d'une instance difficile, ce qui nous permet de présenter une méthode permettant de caractériser le degré de difficulté de résolution d'une instance. Celle-ci nous permet de générer des instances pseudo-aléatoire de différents degrés de difficultés, celles-ci sont abordées dans la section "Génération d'instance difficile".
+\begin{definition}
+Le \textbf{taux de similarité globale} $\mathcal{T}_j$ d'un gène $j$ correspond à la moyenne des valeurs de la colonne $j$ sur l'image $I$ d'une instance $\mathcal{I}$.\\
+Formellement, soit $I$ l'image d'une instance $\mathcal{I}$, $i$ la $i$\up{ème} ligne de $I$, $j$ la $j$\up{ème} colonne de $I$, $I_{ij}$ est la valeur dans $I$ en ligne $i$ et en colonne $j$, $\mathcal{T}_j(I)$ le taux de similarité globale du gène $j$ dans l'image $I$,
+$$ \text{Soit } X=\frac{\sum_{i=1}^{|\mathcal{G}|} I_{ij}}{\mathcal{G}} $$ 
+$$\text{Si } X<0.5 \text{ alors } \mathcal{T}_j(I)=(0.5-X)*2 $$
+$$\text{sinon }\mathcal{T}_j(I)=(0.5-(1-X))*2$$ 
+\end{definition}
+Ainsi formuler, $\mathcal{T}_j(I) \in [0,1]$, et, plus le taux de similarité globale d'un gène est élevé, plus sa présence(resp. abscence) dans l'instance est redondante.
+
+\begin{definition}
+Le \textbf{coefficient de difficulté $\rho$ d'une instance}, correspond à la moyenne des taux de similarité globaux d'une instance.\\
+Formellement, soit $I$ l'image d'une instance $\mathcal{I}$, $j$ la $j$\up{ème} colonne de $I$, $\mathcal{T}_j(I)$ le taux de similarité globale du gène $j$ dans l'image $I$,
+$$ \rho=\frac{\sum_{j=1}^{|\mathcal{X}|}\tau_j(I)}{|\mathcal{X}|} $$
+\end{definition}
+
+\begin{definition}
+Le \textbf{coefficient de difficulté $\sigma$ d'une instance}, correspond à la moyenne des ratios des masques d'une instance.\\
+Formellement, soit $I$ l'image d'une instance $\mathcal{I}$, $i$ la $i$\up{ème} ligne de $I$, $r_i(I)$ le ratio du groupe $i$ dans l'image $I$,
+$$ \sigma=\frac{\sum_{i=1}^{|\mathcal{G}|}r_i(I)} {|\mathcal{G}|} $$
+\end{definition}
+
+Reprenons nos deux instances rch10 et s3836-0 et calculons leurs coefficients de difficultés:
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline 
+Instances & $\rho$ & $\sigma$ \\ 
+\hline 
+s3836-0 & 0 & 0.024322 \\ 
+\hline
+rch10 & 0.906115 & 0.626381 \\ 
+\hline
+\end{tabular} 
+\end{center}
+
+Nous observons que le coefficient de difficulté $\rho$ est plus significatif que $\sigma$, mais nous ne sommes pas en mesure d'indiquer dans quel proportions. Cependant les travaux de [CHHEL et al, 2013] nous indiquent que seul une heuristique sur le choix des variables est en mesure de pouvoir améliorer un algorithme de recherche exacte. Nous pensons donc que $\rho$ a plus d'influence que $\sigma$ sur la difficulté d'une instance. 
+
+\begin{proposition}
+Une instance dont le coefficient de difficulté $\rho$ est proche de 1 est une \textbf{instance difficile} à résoudre.
+\end{proposition}
+
+\begin{proposition}
+Une instance dont le coefficient de difficulté $\rho$ est proche de 1 et dont le coefficient de difficulté $\sigma$ est proche de 0 est une \textbf{instance très difficile} à résoudre.
+\end{proposition}
+
+\begin{proposition}
+La taille d'une instance (caractérisé par son nombre de gènes et d'entités mais pas son nombre de groupe) est une information sur la difficulté de sa résolution. Cependant cette difficulté est intrinsèque au problème est ne peut pas être réduite de façon significative par un algorithme.
+\end{proposition}
+
+%Les observations sur notre jeu de 15 instances nous permettent de conclure que $\sigma$ en particulier, et $\rho$ dans une moindre mesure, nous permettent de définir ce qu'est une instance difficile. 
+
 
 \subsection{Recherche exacte}
 \subsubsection{Introduction}
 Nous présentons les heuristiques ayant été mise en place pour la résolution d'instance MIN-PCM. Chaque nouvelle heuristique est ajouté à(aux) précédentes. Les comparaisons se font sur l'instance rch10, entre l'ancienne heuristique la plus puissante connu et la nouvelle mise en place. 
 
-Une comparaison entre la meilleure combinaison d'heuristique trouvé et l'heuristique "CCD" proposé par [CHHEL et al] ainsi que les résultats obtenus avec nos méthodes sur un plus grand nombre d'instance sont présentés à la fin de la cette section. 
-
-\subsubsection{Heuristique des plus mauvais d'abord}
+Une comparaison entre la meilleure combinaison d'heuristique trouvé et l'heuristique "CCD" proposé par [CHHEL et al,2013] dans \textit{Exact-Proj-Car} est présenté à la fin de la cette section.
+\subsubsection{Heuristique des plus mauvais d'abord (pmda)}
 Lorsque nous parcourons une instance pour une caractérisation de taille $k$. On peut affecter un poids sur la paire d'entités comparés deux à deux sur les indices de la combinaison courante.
 
-Formellement, soit $e_a$, $e_z$ deux entités n'appartenant pas au même groupe, soit $\mathcal{C}$ une combinaison de $\mathcal{C}_{|\mathcal{X}|}^k$, soit $P$ le poids de la paire $\{e_a,e_z\}$.
+Formellement, soit $e_a$, $e_z$ deux entités n'appartenant pas au même groupe, $\mathcal{C}$ une combinaison de $\mathcal{C}_{|\mathcal{X}|}^k$, $P$ le poids de la paire $\{e_a,e_z\}$.
 $$ P = |\{i / e_a(i)=e_z(i), \forall i \in \mathcal{C}\}| $$
 
-Si $P>=k-1$ alors la paire d'entités $\{e_a,e_z\}$ est critique car lors du parcours de la prochaine combinaisons, cette paire à la plus forte probabilité de permettre une coupure.
+\begin{definition}
+Si $P>=k-1$ alors la \textbf{paire d'entités $\{e_a,e_z\}$ est critique} car lors du parcours de la prochaine combinaisons, cette paire à la plus forte probabilité de permettre une coupure dans l'arbre de recherche.
+\end{definition}
 
 \subsubsection*{Exemple :}
 Soit les 2 entités suivante:
@@ -175,134 +414,6 @@ On constante que le nombre de comparaisons d'entités ainsi que le temps d'éxé
 
 Ce type de résultat ayant été observé systématiquement sur un jeu de 15 instances(aléatoire et réelle), on peut conclure que cette heuristique est efficace.
 
-\subsubsection{Définir une instance difficile}
-Prenons deux instances: une réelle (rch10) et une aléatoire (s3836-0), voici leurs caractéristique:
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|c|}
-\hline 
-Instances & Entités & Groupes & Gènes & Résolution PL & Résolution EPC\footnote{[Exact-Proj-Car CHHEL et al]} \\ 
-\hline 
-s3836-0 & 1000 & 15 & 1000 & - & 16 \\ 
-\hline
-rch10 & 173 & 27 & 98 & \textbf{10}\footnote{En gras = solution optimal} & 14 \\ 
-\hline
-\end{tabular} 
-\end{center}
-\vspace{7mm}
-Observons leurs résolutions avec l'heuristique "les plus mauvais d'abord":
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.6]{./graphique/observation_nbComp.png}
-\end{center}
-\caption{Observation: Différence sur le nombre de comparaisons effectués}
-\end{figure}
-
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[scale=0.6]{./graphique/observation_temps.png}
-\end{center}
-\caption{Observation: Différence de temps d'exécution}
-\end{figure}
-
-On aperçoit clairement que l'instance aléatoire est trivial à résoudre, ce qui n'est pas le cas de l'instance réelle. Ce type d'observation est \textbf{systématique} quelque soit les caractéristiques des instances réelles ou aléatoire comparés.\footnote{A priori, il n'y a donc pas d'influence significative du nombre de gènes, de groupes ou d'entités présents dans l'instance.}\\
-
-\textbf{Qu'est ce qui peut bien être à l'origine de cette différence?}
-
-\textbf{Y a t'il une méthode permettant de définir si une instance est difficile à résoudre ou non ?}
-
-Afin de répondre à ces questions, nous définissons les notions suivantes:
-
-\begin{definition}
-Le \textbf{masque $M$ d'un groupe} correspond à la moyenne des présences/absences de gènes pour chaque entité du groupe.\\
-Formellement, soit $M$ le masque d'un groupe $g \in \mathcal{G}$, $M_i$ la valeur du masque en position $i$, $i \in [1,|\mathcal{X}|]$, $|\mathcal{X}|$ étant le nombre de gènes de l'instance après la suppression des redondances,
-$$\forall i \in  [1, |\mathcal{X}|], M_i= \frac{\sum_{i=1}^{|\mathcal{G}|}e_i}{|\mathcal{G}|} $$
-\end{definition}
-
-\begin{definition}
-Le \textbf{ratio $r$ d'un masque} correspond au pourcentage de valeur entière (0/1) présentent dans le masque.\\
-Formellement, soit $M$ le masque d'un groupe $g \in \mathcal{G}$,
-\begin{center}
-$$ r=\frac{|{i / M_i \in \{0,1\}}|}{|\mathcal{X}|},\forall i \in [1,|\mathcal{X}|]$$
-\end{center}
-\end{definition}
-
-\subsubsection*{Exemple :}
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
-\hline 
-\backslashbox{Entités}{Gènes} & g0 & g1 & g2 & g3 & g4 & g5 & g6 & g7 & g8 & g9 \\ 
-\hline 
-e1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 1 \\ 
-\hline 
-e2 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 1 \\ 
-\hline 
-e3 & 1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ 
-\hline 
-e4 & 1 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\ 
-\hline 
-e5 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 0 \\ 
-\hline 
-\hline
-Masque & 1 & 1 & 0 & 0.8 & 0.6 & 1 & 0 & 0.4 & 0 & 0.4 \\
-\hline
-\end{tabular}
-\end{center}
-Le ratio de ce groupe est : \\
-$r=6/10$\\
-soit  $r=0.6$
-
-\begin{definition}
-L'\textbf{image $I$ d'une instance} est une matrice en deux dimensions de taille $|\mathcal{G}|*|\mathcal{X}|$ où chaque ligne correspond au masque de chacun des groupes de l'instance.\\
-\end{definition}
-
-
-\begin{definition}
-Le \textbf{taux de similarité globale} $\mathcal{T}_j$ d'un gène $j$ correspond à la moyenne des valeurs de la colonne $j$ sur l'image de l'instance.\\
-Formellement, soit $I$ l'image d'une instance $\mathcal{I}$, $j$ la $j$\up{ème} colonne dans $I$, $i$ la $i$\up{ème} ligne d'un masque dans $I$, $I_{ij}$ est la valeur dans $I$ en ligne $i$ et en colonne $j$,
-$$ \text{Soit } X=\frac{\sum_{i=1}^{|\mathcal{G}|} I_{ij}}{\mathcal{G}} $$ 
-$$\text{Si } X<0.5 \text{ alors } \mathcal{T}_j=(0.5-X)*2 $$
-$$\text{sinon }\mathcal{T}_j=(0.5-(1-X))*2$$ 
-
-Ainsi formuler, $\mathcal{T}_j \in [0,1]$, et, plus le taux de similarité globale d'un gène est élevé, plus sa présence(resp. abscence) dans l'instance est redondante.
-\end{definition}
-
-\begin{definition}
-Le \textbf{coefficient de difficulté $\rho$ d'une instance}, correspond à la moyenne des taux de similarité globale des gènes d'une instance.\\
-Formellement, soit $I$ l'image d'une instance $\mathcal{I}$, $j$ la $j$\up{ème} colonne dans $I$,
-$$ \rho=\frac{\sum_{j=1}^{|\mathcal{X}|}\tau_j}{|\mathcal{X}|} $$
-\end{definition}
-
-\begin{definition}
-Le \textbf{coefficient de difficulté $\sigma$ d'une instance}, correspond à la moyenne des ratios des masques d'une instance.\\
-Formellement, soit $I$ l'image d'une instance $\mathcal{I}$, $i$ la $i$\up{ème} ligne dans $I$,
-$$ \sigma=\frac{\sum_{i=1}^{|\mathcal{G}|}r_i} {|\mathcal{G}|} $$
-\end{definition}
-
-Reprenons nos deux instances rch10 et s3836-0 et calculons leur coefficient de difficultés:
-
-\begin{center}
-\begin{tabular}{|c|c|c|}
-\hline 
-Instances & $\rho$ & $\sigma$ \\ 
-\hline 
-s3836-0 & 0 & 0.024322 \\ 
-\hline
-rch10 & 0.906115 & 0.626381 \\ 
-\hline
-\end{tabular} 
-\end{center}
-
-Nous observons que le coefficient de difficulté $\sigma$ est plus significatif que $\rho$, mais nous ne sommes pas en mesure d'indiquer en quel proportions. Les observations sur notre jeu de 15 instances nous permettent de conclure que $\sigma$ en particulier, et $\rho$ dans une moindre mesure, nous permettent de définir ce qu'est une instance difficile. 
-
-\begin{proposition}
-Une instance dont le coefficient de difficulté $\rho$ est proche de 1 est une \textbf{instance difficile} à résoudre.
-\end{proposition}
-
-\begin{proposition}
-Une instance dont le coefficient de difficulté $\rho$ est proche de 1 et dont le coefficient de difficulté $\sigma$ est proche de 0 est une \textbf{instance très difficile} à résoudre.
-\end{proposition}
 
 \subsubsection{Heuristique par trie de taux de similarité globale $\mathcal{T}$ }
 Les outils mis en place pour définir ce qu'est une instance difficile vont maintenant nous permettre d'obtenir de nouvelles heuristique. Dans cette section, nous ordonnons les gènes par ordre croissant sur leur taux de similarité globale $\mathcal{T}$. Dès lors, nous parcourons en priorité les gènes présentant un faible taux de similarité, ce qui a pour effet de caractériser au plus tôt l'instance.
