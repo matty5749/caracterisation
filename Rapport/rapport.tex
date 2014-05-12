@@ -219,15 +219,17 @@ Observons leurs résolutions avec notre algorithme sans heuristique:
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}
-\begin{axis}[enlarge x limits=false,
+\begin{axis}[
+legend entries={rch10,s3836-0},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
 xlabel={Caractérisation de taille k},
 ylabel={Nombre de comparaisons d'entités},
 xmin={14},
 xmax={40},
 %title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
 ]
-\addplot +[mark=none] table[x index=0,y index=1]{./resultats/sh_rch10_nbComp};
-\addplot +[mark=none] table[x index=0,y index=1]{./resultats/sh_s3836_nbComp};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_rch10.dat};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_s3836.dat};
 \end{axis}
 \end{tikzpicture}
 \end{center}
@@ -237,13 +239,15 @@ xmax={40},
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}
-\begin{axis}[enlarge x limits=false,
+\begin{axis}[
+legend entries={rch10,s3836-0},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
 xlabel={Caractérisation de taille k},
 ylabel={Temps d'éxécution en seconde},
 xmin={14},
 xmax={40}]
-\addplot +[mark=none] table[x index=0,y index=1]{./resultats/sh_rch10_temps};
-\addplot +[mark=none] table[x index=0,y index=1]{./resultats/sh_s3836_temps};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_rch10.dat};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_s3836.dat};
 \end{axis}
 \end{tikzpicture}
 \end{center}
@@ -260,16 +264,16 @@ Afin de répondre à ces questions, nous définissons les notions suivantes:
 
 \begin{definition}
 Le \textbf{masque $M$ d'un groupe $g$} correspond à la moyenne des présences/absences des gènes pour chaque entité du groupe.\\
-Formellement, soit $M$ le masque d'un groupe $g \in \mathcal{G}$, $M_i$ la valeur du masque en position $i$, $i \in [1,|\mathcal{X}|]$,
+Formellement, soit $M_g$ le masque d'un groupe $g$, $g \in \mathcal{G}$, $M_g[i]$ la valeur du masque $g$ en position $i$, $i \in [1,|\mathcal{X}|]$,
 % $|\mathcal{X}|$ étant le nombre de gènes de l'instance après la suppression des redondances,
-$$\forall i \in  [1, |\mathcal{X}|], M_i= \frac{\sum_{i=1}^{|\mathcal{G}|}e_i}{|\mathcal{G}|} $$
+$$\forall i \in  [1, |\mathcal{X}|], M_g[i]= \frac{\sum_{i=1}^{|\mathcal{G}|}e_i}{|\mathcal{G}|} $$
 \end{definition}
 
 \begin{definition}
 Le \textbf{ratio $r$ d'un masque $M$} correspond au pourcentage de valeur entière (0/1) présentent dans le masque.\\
-Formellement, soit $M$ le masque d'un groupe $g \in \mathcal{G}$, $r_g(I)$ le ratio du groupe $g$ dans l'image $I$,
+Formellement, soit $M_g$ le masque d'un groupe $g$, $r_g(I)$ le ratio du groupe $g$ dans l'image $I$, $g \in \mathcal{G}$,
 \begin{center}
-$$ r_g(I)=\frac{|{i / M_i \in \{0,1\}}|}{|\mathcal{X}|},\forall i \in [1,|\mathcal{X}|]$$
+$$ r_g(I)=\frac{|{i / M_g[i] \in \{0,1\}}|}{|\mathcal{X}|},\forall i \in [1,|\mathcal{X}|]$$
 \end{center}
 \end{definition}
 
@@ -300,8 +304,8 @@ soit  $r=0.6$
 
 \begin{definition}
 L'\textbf{image $I$ d'une instance} est une matrice en deux dimensions de taille $|\mathcal{G}|*|\mathcal{X}|$ où chaque ligne correspond au masque de chacun des groupes de l'instance.\\
-Formellement, soit $I_i$ la ligne i de la matrice $I$ correspondant à l'image de l'instance $\mathcal{I}$, $M_i$ le masque du groupe $i$ de l'instance $\mathcal{I}$,
-$$\forall i \in [1,|\mathcal{G}|], I_i=M_i$$
+Formellement, soit $I_g$ la ligne g de la matrice $I$ correspondant à l'image de l'instance $\mathcal{I}$, $M_g$ le masque du groupe $g$ de l'instance $\mathcal{I}$,
+$$\forall g \in [1,|\mathcal{G}|], I_g=M_g$$
 \end{definition}
 
 
@@ -356,7 +360,7 @@ La taille d'une instance (caractérisé par son nombre de gènes et d'entités m
 
 %Les observations sur notre jeu de 15 instances nous permettent de conclure que $\sigma$ en particulier, et $\rho$ dans une moindre mesure, nous permettent de définir ce qu'est une instance difficile. 
 
-\subsubsection{Résultats}
+\subsubsection{Observations}
 
 Nous présentons ici les instances avec leurs coefficients de difficultés respectifs:
 \begin{center}
@@ -397,13 +401,204 @@ rch10 & 173 (112) & 27 & 98 (86) & 0.626 & 0.906 & \textbf{10} & 25 & 15 \\
 \end{tabular} 
 \end{center}
 
-Toute les instances aléatoires ont un coefficient $\rho$ proche de 0. Mais elles ont pour difficulté leurs coefficients $\sigma$ qui sont proche de 0 également, cela signifie que nous ne pourrons pas réduire de façon significative leurs temps de résolution. L'instance raphv et raphy ont un ordre difficulté similaire, rch8 a un coefficient $\sigma$ proche de 1 ainsi qu'un coefficient $\rho$ satisfaisant, de plus, elle est de faible taille, c'est l'instance qui semble la plus facile à résoudre. L'instance rch10 à un très bon coefficient $\sigma$, elle doit être plus facile à résoudre que l'instance rarep. Ces deux dernières semble être les instances les plus difficiles à résoudre.Cette série d'observation et de raisonnement est corroboré par les résultats obtenus par [CHHEL et al,2013].
+Toute les instances aléatoires ont un coefficient $\rho$ proche de 0. Mais elles ont pour difficulté leurs coefficients $\sigma$ qui sont proche de 0 également, cela signifie que nous ne pourrons pas réduire de façon significative leurs temps de résolution. L'instance raphv et raphy ont un ordre difficulté similaire, rch8 a un coefficient $\sigma$ proche de 1 ainsi qu'un coefficient $\rho$ satisfaisant, de plus, elle est de faible taille, c'est l'instance qui semble la plus facile à résoudre. L'instance rch10 à un très bon coefficient $\sigma$, elle doit être plus facile à résoudre que l'instance rarep. Ces deux dernières semble être les instances les plus difficiles à résoudre.Cette série d'observations et de raisonnement est corroboré par les résultats obtenus par [CHHEL et al,2013].
 
 \subsection{Recherche exacte}
 \subsubsection{Introduction}
 Nous présentons les heuristiques ayant été mise en place pour la résolution d'instance MIN-PCM. Chaque nouvelle heuristique est ajouté à(aux) précédentes. Les comparaisons se font sur l'instance rch10, entre l'ancienne heuristique la plus puissante connu et la nouvelle mise en place. 
 
 Une comparaison entre la meilleure combinaison d'heuristique trouvé et l'heuristique "CCD" proposé par [CHHEL et al,2013] dans \textit{Exact-Proj-Car} est présenté à la fin de la cette section.
+
+\subsubsection{Heuristique par trie de taux de similarité globale $\mathcal{T}$ }
+Les outils mis en place pour définir ce qu'est une instance difficile vont maintenant nous permettre d'obtenir de nouvelles heuristique. Dans cette section, nous ordonnons les gènes par ordre croissant sur leur taux de similarité globale $\mathcal{T}$. Dès lors, nous parcourons en priorité les gènes présentant un faible taux de similarité. Ce trie par $\mathcal{T}$ permet de générer un arbre de recherche qui a pour particularité de présenter en priorité les branches ayant le plus de chances de fournir une éventuelle solution. Un tel arbre de recherche nous permet de caractériser bien plus vite une instance. Le coût de calcul de ce trie est insignifiant et est effectué de façon unique avant le lancement de l'algorithme de résolution.
+
+\subsubsection*{Résultats}
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+legend entries={rch10 sans heuristique,rch10 heuristique de trie par $\mathcal{T}$},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
+xlabel={Caractérisation de taille k},
+ylabel={Nombre de comparaisons d'entités},
+xmin={10},
+xmax={40},
+]
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_rch10.dat};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/tau_rch10.dat};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Comparaison de la résolution de rch10 sans heuristique et avec heuristique de trie par $\mathcal{T}$ : nombre de comparaisons}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+legend entries={rch10 sans heuristique,rch10 heuristique de trie par $\mathcal{T}$},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
+xlabel={Caractérisation de taille k},
+ylabel={Temps d'éxécution en seconde},
+xmin={10},
+xmax={40}]
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_rch10.dat};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/tau_rch10.dat};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Comparaison de la résolution de rch10 sans heuristique et avec heuristique de trie par $\mathcal{T}$ : temps d'éxécution}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+legend entries={s3836-0 sans heuristique,s3836-0 heuristique de trie par $\mathcal{T}$},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
+xlabel={Caractérisation de taille k},
+ylabel={Nombre de comparaisons d'entités},
+xmin={15},
+xmax={40},
+%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+]
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_s3836.dat};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/tau_s3836.dat};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Comparaison de la résolution de s3836-0 sans heuristique et avec heuristique de trie par $\mathcal{T}$ : nombre de comparaisons}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+legend entries={s3836-0 sans heuristique,s3836-0 heuristique de trie par $\mathcal{T}$},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
+xlabel={Caractérisation de taille k},
+ylabel={Temps d'éxécution en seconde},
+xmin={15},
+xmax={40}]
+
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_s3836.dat};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/tau_s3836.dat};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Comparaison de la résolution de s3836-0 sans heuristique et avec heuristique de trie par $\mathcal{T}$ : temps d'éxécution}
+\end{figure}
+
+
+Sur l'instance réelle rch10, on constante que le nombre de comparaisons d'entités  et le temps d'éxécution est considérablement diminué par l'heuristique. Cependant, on s'aperçoit que cette heuristique a peu d'influence (voir même une influence négative dans le cas présent) sur la résolution d'instance aléatoire car celles-ci ne disposent pas de variations significative entre les $\mathcal{T}$ des gènes. La possibilité que l'influence soit négative nous permet de conclure que le trie des gènes par $\mathcal{T}$ n'est pas un trie optimal. 
+
+
+\subsubsection{Heuristique par trie de taux de similarité globale $\Gamma$}
+Lors de la précédente section, nous avons ordonné les gènes d'après leurs $\mathcal{T}$. Ici, nous souhaitons ordonner les entités dans le but de pouvoir effectuer des retour arrière(backtrack) lorsque nous parcourons notre arbre de recherche. Nous définissons alors les concepts de taux de similarité locale et de taux se similarité globale d'un groupe.
+
+\begin{definition}
+Le \textbf{taux de similarite locale $\tau(g,g')$ d'un groupe $g$} par rapport à un groupe $g'$ correspond à la moyenne des sommes des moyennes des valeurs du masque de $g$ et $g'$.\\
+Formellement, soit $g$ et $g'$ deux groupes d'une instance $\mathcal{I}$, $M_g$ le masque du groupe $g$, $M_{g'}$ le masque du groupe $g'$, $M_g[i]$ la valeur du masque du groupe $g$ en position $i$,
+$$ \tau(g,g')= \frac{\sum_{i=1}^{|\mathcal{X}|}(\frac{M_g[i]+M_{g'}[i]}{2})}{|\mathcal{X}|}$$
+\end{definition}
+
+\begin{definition}
+Le \textbf{taux de similarité globale $\Gamma(g)$ d'un groupe $g$} correspond à la moyenne de ses taux de similarité locaux.\\
+Formellement, soit $g$ le groupe d'une instance $\mathcal{I}$,
+$$ \Gamma(g)=\frac{\sum_{g'=1}^{|\mathcal{G}|}\tau(g,g') /g \neq g'}{|\mathcal{G}|-1} $$
+\end{definition}
+
+Pour caractériser une instance, nous devons comparer chaque entité n'appartenant pas au même groupe entre elles. Notre idée est de placer les entités ayant le plus de chance de ne pas caractériser l'instance en premier car cela nous permettrait d'effectuer une coupure le plus haut possible dans notre arbre de recherche. Pour cela nous trions les groupes par ordre décroissant sur leurs taux de similarité globaux $\Gamma$.
+
+\subsubsection*{Résultats}
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+legend entries={rch10 sans heuristique,rch10 heuristique de trie par $\Gamma$},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
+xlabel={Caractérisation de taille k},
+ylabel={Nombre de comparaisons d'entités},
+xmin={25},
+xmax={40},
+%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+]
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_rch10.dat};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/gamma_rch10.dat};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Comparaison de la résolution de rch10 sans heuristique et avec heuristique de trie par $\Gamma$ : nombre de comparaisons}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+legend entries={rch10 sans heuristique,rch10 heuristique de trie par $\Gamma$},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
+xlabel={Caractérisation de taille k},
+ylabel={Temps d'éxécution en seconde},
+xmin={25},
+xmax={40}]
+
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_rch10.dat};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/gamma_rch10.dat};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Comparaison de la résolution de rch10 sans heuristique et avec heuristique de trie par $\Gamma$ : temps d'éxécution}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+legend entries={s3836-0 sans heuristique,s3836-0 heuristique de trie par $\Gamma$},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
+xlabel={Caractérisation de taille k},
+ylabel={Nombre de comparaisons d'entités},
+xmin={15},
+xmax={27},
+%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+]
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_s3836.dat};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/gamma_s3836.dat};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Comparaison de la résolution de s3836-0 sans heuristique et avec heuristique de trie par $\Gamma$ : nombre de comparaisons}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+legend entries={s3836-0 sans heuristique,s3836-0 heuristique de trie par $\Gamma$},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
+xlabel={Caractérisation de taille k},
+ylabel={Temps d'éxécution en seconde},
+xmin={15},
+xmax={27}]
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_s3836.dat};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/gamma_s3836.dat};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Comparaison de la résolution de s3836-0 sans heuristique et avec heuristique de trie par $\Gamma$ : temps d'éxécution}
+\end{figure}
+
+Nous constatons que notre heuristique permet de baisser significativement le nombre de comparaisons .
+
 \subsubsection{Heuristique des plus mauvais d'abord (pmda)}
 Lorsque nous parcourons une instance pour une caractérisation de taille $k$. On peut affecter un poids sur la paire d'entités comparés deux à deux sur les indices de la combinaison courante.
 
@@ -456,30 +651,60 @@ On constante que le nombre de comparaisons d'entités ainsi que le temps d'éxé
 
 Ce type de résultat ayant été observé systématiquement sur un jeu de 15 instances(aléatoire et réelle), on peut conclure que cette heuristique est efficace.
 
+\subsection{Heuristique des valeurs tabous}
 
-\subsubsection{Heuristique par trie de taux de similarité globale $\mathcal{T}$ }
-Les outils mis en place pour définir ce qu'est une instance difficile vont maintenant nous permettre d'obtenir de nouvelles heuristique. Dans cette section, nous ordonnons les gènes par ordre croissant sur leur taux de similarité globale $\mathcal{T}$. Dès lors, nous parcourons en priorité les gènes présentant un faible taux de similarité, ce qui a pour effet de caractériser au plus tôt l'instance.
+\subsection{Comparaisons entre heuristique}
 
-\subsubsection*{Résultats}
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.6]{./graphique/diff2_nbComp.png}
+\begin{tikzpicture}
+\begin{axis}[
+legend entries={rch10 trie par $\mathcal{T}$,rch10 pmda noMaj,rch10 pmda maj,rch10 tabou},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
+xlabel={Caractérisation de taille k},
+ylabel={Nombre de comparaisons d'entités},
+xmin={25},
+xmax={40},
+%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+]
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/tau_rch10.dat};
+%\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/gamma_rch10.dat};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/pmda_noMaj_rch10.dat};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/pmda_maj_rch10.dat};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/tabou_rch10.dat};
+%\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/ratio_rch10.dat};
+\end{axis}
+\end{tikzpicture}
 \end{center}
-\caption{Heuristique 2: Différence sur le nombre de comparaisons effectués}
+\caption{Comparaisons des heuristiques sur rch10: nombre de comparaisons}
 \end{figure}
+
+
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.6]{./graphique/diff2_temps.png}
+\begin{tikzpicture}
+\begin{axis}[
+legend entries={rch10 trie par $\mathcal{T}$,rch10 pmda noMaj,rch10 pmda maj,rch10 tabou},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
+xlabel={Caractérisation de taille k},
+ylabel={Nombre de comparaisons d'entités},
+xmin={25},
+xmax={40},
+%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+]
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/tau_rch10.dat};
+%\addplot +[mark=none] table[x=k,y=temps]{./resultats/gamma_rch10.dat};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/pmda_noMaj_rch10.dat};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/pmda_maj_rch10.dat};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/tabou_rch10.dat};
+%\addplot +[mark=none] table[x=k,y=temps]{./resultats/ratio_rch10.dat};
+\end{axis}
+\end{tikzpicture}
 \end{center}
-\caption{Heuristique 2: Différence de temps d'exécution}
+\caption{Comparaisons des heuristiques sur rch10: temps d'exécution}
 \end{figure}
 
-On constante que le nombre de comparaisons d'entités est considérablement diminué par l'heuristique. Sans surprise, le temps d'éxécution est également bien plus rapide, d'autant plus que cette heuristique ne coute rien en terme de calcul puisque celui est effectué une seul fois lancement de l'algorithme.
-
-\subsubsection{Heuristique par trie de taux de similarité locale $\tau$}
-\subsubsection{Heuristique par trie de ratio $r$}
-
-\subsubsection{Résultats}
+\subsection{Résultats}
 
 \subsection{Recherche incomplète}
 \subsubsection{Résultats}
