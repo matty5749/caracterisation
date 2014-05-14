@@ -33,17 +33,19 @@ int main ( int argc,char** argv )
 		else instance.parseDac ( argv[1] );
     
 		instance.preTraitement();
+		
+		
     instance.heuristiqueDesMasques();
 
-		RechercheApproche roulette( &instance );
-		roulette.roulette();
+		// sleep(5);
+// 		RechercheApproche roulette( &instance );
+// 		roulette.roulette();
 // 		roulette.rouletteAdaptative(0.02);
 		
-// 		Solveur solveur ( &instance );
-//     solveur.parcoursStandard();
+		Solveur solveur ( &instance );
+    solveur.parcoursStandard();
 
-// 		solveur.rechercheExacteEnProfondeurAPartirde_heuristique4 ( 20,false );
-//     solveur.rechercheExacteEnProfondeurAPartirde_heuristique4 ( instance._genes.size()-1,false );
+    solveur.rechercheExacteEnProfondeurAPartirde_heuristique4 ( instance._genes.size()-1,false );
 // 					solveur.rechercheExacteEnProfondeurAPartirde_heuristique3 ( instance._genes.size()-1,false );
 // 		solveur.rechercheExacteEnProfondeurAPartirde ( instance._genes.size()-1,false );
 

@@ -20,6 +20,7 @@ void Solveur::rechercheExacteEnProfondeurAPartirde ( unsigned int k, bool allSol
     assert ( _parcours.size() >0 );
     //On part de kMax vers kMin
     bool solution;
+		cout<<"k nbComp temps"<<endl;
     do
     {
         solution=false;
@@ -34,8 +35,8 @@ void Solveur::rechercheExacteEnProfondeurAPartirde ( unsigned int k, bool allSol
             if ( estCaracterisePar ( combinaison._combinaisonCourante ) )
             {
                 _endTime=clock();
-//                 cout<<"Résolu en "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<< " secondes"<<endl;
-// 								cout<<k<<" "<<( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl; //DATA
+								cout<<" "<<( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl; //DATA
+// 								cout<<"("<<k<<","<<( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<")"<<endl; //DATA TIKZ
 //                 nbSol++;
                 if ( solution==false ) solution=true;
                 if ( !allSolution ) break; //On passe à k-1
@@ -231,6 +232,8 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique4 ( unsigned int k
     assert ( _parcours.size() >0 );
     //On part de kMax vers kMin
     bool solution;
+		
+		cout<<"k nbComp temps"<<endl;
     do
     {
         solution=false;
@@ -250,7 +253,7 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique4 ( unsigned int k
             if ( estCaracterisePar_version4 ( combinaison._combinaisonCourante ) )
             {
                 _endTime=clock();
-                cout<<k<<" "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl<<endl; //DATA
+                cout<<" "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl; //DATA
 //                 cout<<"Résolu en "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<< " secondes"<<endl;
                 if ( solution==false ) solution=true;
                 if ( !allSolution ) break; //On passe à k-1

@@ -31,7 +31,7 @@ int Algo::calculNbComparaisonsMax()
             }//Fin parcours itGroupe2
         }//Fin parcours entiteIt
     }//Fin parcours itGroupe
-    
+
     return _nbComparaisonsMax;
 }
 
@@ -101,8 +101,7 @@ bool Algo::estCaracterisePar ( const vector< int > &indices )
 //         afficheVecteur ( indices );
 //         cout<<endl;
 
-        cout<<indices.size() <<" "<<_nbComparaisons<<endl;	//DATA
-
+        cout<<indices.size() <<" "<<_nbComparaisons;	//DATA
         return true;
     }
     return false;
@@ -113,7 +112,7 @@ bool Algo::estCaracterisePar ( const vector< int > &indices )
 // {
 //     _fitness=0;
 //     bool identique=false;//Vrai si deux entités sont identiques,faux sinon
-// 
+//
 //     //Parcours des groupes
 //     for ( vector<Groupe*>::const_iterator itGroupe=_instance->_groupes.begin(); itGroupe!=_instance->_groupes.end(); itGroupe++ )
 //     {
@@ -146,9 +145,9 @@ bool Algo::estCaracterisePar ( const vector< int > &indices )
 // //         cout<<"Nb comparaisons: "<<_nbComparaisons<<endl;
 // //         afficheVecteur ( indices );
 // //         cout<<endl;
-// 
+//
 //         cout<<indices.size() <<" "<<_nbComparaisons<<endl;	//DATA
-// 
+//
 //         return true;
 //     }
 //     return false;
@@ -350,10 +349,12 @@ bool Algo::estCaracterisePar_version3 ( const vector< int >& indices )
             {
                 if ( entiteIdentiqueSurIndicesGenes ( *itRef,*itComp,indices ) )
                 {
-                    if ( _poidCourant < k-1 )
-                        ( *itRef )->_entitesCritique.erase ( *itComp );
+//                     if ( _poidCourant < k-1 )
+//                         ( *itRef )->_entitesCritique.erase ( *itComp );
                     return false;
                 }
+//                 else if ( _poidCourant < k-1 )
+//                     ( *itRef )->_entitesCritique.erase ( *itComp );
             }
         }
     }
@@ -409,13 +410,13 @@ bool Algo::estCaracterisePar_version3 ( const vector< int >& indices )
 
 bool trieGroupeParTauLocal ( Groupe const * const g1,Groupe const * const g2 )
 {
-    return g1->_moyenneTauxDeSimilariteLocal>g2->_moyenneTauxDeSimilariteLocal;
+    return g1->_moyenneTauxDeSimilariteLocal<g2->_moyenneTauxDeSimilariteLocal;
 }
 
 //OUI
 bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
 {
-	_fitness=0;
+    _fitness=0;
     int k=indices.size();
     bool caracterise=true;//Vrai si deux entités sont identiques,faux sinon
 
@@ -423,23 +424,23 @@ bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
     //NOTE:peut etre garder en memoire ceux qui ont été parcouru afin d'éviter de les parcourir une seconde fois
     //FAIT: est trop couteux en temp de calcul par rapport à un parcours multiple
 
-    for ( vector<Entite*>::const_iterator itRef=_instance->_entites.begin(); itRef!=_instance->_entites.end(); itRef++ )
-    {
-        if ( ( *itRef )->_entitesCritique.size() >0 )
-        {
-            for ( set<Entite*>::const_iterator itComp= ( *itRef )->_entitesCritique.begin(); itComp!= ( *itRef )->_entitesCritique.end(); itComp++ )
-            {
-                if ( entiteIdentiqueSurIndicesGenes ( *itRef,*itComp,indices ) )
-                {
-//                     if ( _poidCourant < k-1 )
-//                         ( *itRef )->_entitesCritique.erase ( *itComp );
-                    return false;
-                }
+//     for ( vector<Entite*>::const_iterator itRef=_instance->_entites.begin(); itRef!=_instance->_entites.end(); itRef++ )
+//     {
+//         if ( ( *itRef )->_entitesCritique.size() >0 )
+//         {
+//             for ( set<Entite*>::const_iterator itComp= ( *itRef )->_entitesCritique.begin(); itComp!= ( *itRef )->_entitesCritique.end(); itComp++ )
+//             {
+//                 if ( entiteIdentiqueSurIndicesGenes ( *itRef,*itComp,indices ) )
+//                 {
+// //                     if ( _poidCourant < k-1 )
+// //                         ( *itRef )->_entitesCritique.erase ( *itComp );
+//                     return false;
+//                 }
 //                 else if ( _poidCourant < k-1 )											//TODO:regarder de plus pres			<--En commentaire car meilleur si l'on garde en memoire
 //                     ( *itRef )->_entitesCritique.erase ( *itComp );
-            }
-        }
-    }
+//             }
+//         }
+//     }
 
 
 //     //AJOUT ALGO DYNAMIQUE TRIE PAR PETIT TAU SUR INDICE DES COMBINAISONS
@@ -452,80 +453,96 @@ bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
 //         for ( vector<Groupe*>::iterator itComp=_instance->_groupes.begin(); itComp!=_instance->_groupes.end(); itComp++ )
 //         {
 //             if ( *itRef==*itComp ) continue;
-//             //Calcul du tauxDeSimilariteLocal entre *itRef et *itComp
-//             float moyTemp=0;
-//             for ( unsigned int i =0; i<indices.size(); i++ )
-//                 moyTemp+= ( ( *itRef )->_masque[indices[i]]+ ( *itComp )->_masque[indices[i]] ) /2;
-//             moyTemp/=indices.size();
-// 
-//             ( *itRef )->_moyenneTauxDeSimilariteLocal+=moyTemp;
+//             ( *itRef )->_moyenneTauxDeSimilariteLocal+=calculTauxDeSimilariteEntreLesDeuxGroupes ( **itRef,**itComp );
 //         }
 //         ( *itRef )->_moyenneTauxDeSimilariteLocal/=_instance->_groupes.size()-1;
 //     }
 // 
 //     //Trie des groupes par petit tau
 //     sort ( _instance->_groupes.begin(),_instance->_groupes.end(),trieGroupeParTauLocal );
-// 
-// // 		for ( vector<Groupe*>::const_iterator itRef=_instance->_groupes.begin(); itRef!=_instance->_groupes.end(); itRef++ )
-// // 			cout<<(*itRef)->_moyenneTauxDeSimilariteLocal<<endl;
-// // 		cout<<endl;
-//     //FIN (petit tau)
-// 
-//     //FIN AJOUT ALGO DYNAMIQUE TRIE PAR PETIT TAU SUR INDICE DES COMBINAISONS
 
+// 		for ( vector<Groupe*>::const_iterator itRef=_instance->_groupes.begin(); itRef!=_instance->_groupes.end(); itRef++ )
+// 			cout<<(*itRef)->_moyenneTauxDeSimilariteLocal<<endl;
+// 		cout<<endl;
+    //FIN (petit tau)
 
-    //Parcours des groupes
-    for ( vector<Groupe*>::const_iterator itGroupe=_instance->_groupes.begin(); itGroupe!=_instance->_groupes.end(); itGroupe++ )
+    //FIN AJOUT ALGO DYNAMIQUE TRIE PAR PETIT TAU SUR INDICE DES COMBINAISONS
+
+    //NOUVEAU PARCOURS DE GROUPE
+    for ( multimap<float,pair<const Groupe * const,const Groupe * const> >::const_reverse_iterator it=_instance->_parcoursGroupe.rbegin(); it!=_instance->_parcoursGroupe.rend(); it++ )
     {
-        //Nouveau parcours des groupes
-        for ( vector<Groupe*>::const_iterator itGroupe2=itGroupe+1; itGroupe2!=_instance->_groupes.end(); itGroupe2++ )
-        {
-            bool tabou=false;
-            map<Groupe*,set<int> >::const_iterator elementIt= ( *itGroupe )->_tabous.find ( *itGroupe2 );
-            //Si j'ai une liste d'indice tabous pour ce groupe de comparaison
-            if ( ( elementIt != ( *itGroupe )->_tabous.end() ) )
-            {
-//                         cout<< ( *itGroupe )->_id<<" / "<< ( *itGroupe2 )->_id<<endl;
-                //Je cherche si un des indices d'indices fait partie de cette liste
-                for ( unsigned int i=0; i<indices.size(); i++ )
-                {
-//                             cout<<i<<endl;
-                    if ( elementIt->second.find ( indices[i] ) !=elementIt->second.end() )
-                    {
-                        tabou=true;
-                        break;
-                    }
-                }
-//                         cout<<endl;
-                if ( tabou ) 
-								{
-									++_fitness;
-									continue;//On change de groupe de comparaisons car on est sur d'avoir une caractérisation entre les deux groupes courants
-								}
-            }
+        const Groupe * const itGroupe=it->second.first;
+        const Groupe * const itGroupe2=it->second.second;
 
-            if ( !tabou ) //Parcours standard
-            {
+
+//*     //Parcours des groupes
+//*     for ( vector<Groupe*>::const_iterator itGroupe=_instance->_groupes.begin(); itGroupe!=_instance->_groupes.end(); itGroupe++ )
+//*     {
+//*         //Nouveau parcours des groupes
+//**         for ( vector<Groupe*>::const_iterator itGroupe2=itGroupe+1; itGroupe2!=_instance->_groupes.end(); itGroupe2++ )
+//**         {
+
+        bool tabou=false;
+//             map<Groupe*,set<int> >::const_iterator elementIt= ( *itGroupe )->_tabous.find ( *itGroupe2 );
+//             //Si j'ai une liste d'indice tabous pour ce groupe de comparaison
+//             if ( ( elementIt != ( *itGroupe )->_tabous.end() ) )
+//             {
+// //                         cout<< ( *itGroupe )->_id<<" / "<< ( *itGroupe2 )->_id<<endl;
+//                 //Je cherche si un des indices d'indices fait partie de cette liste
+//                 for ( unsigned int i=0; i<indices.size(); i++ )
+//                 {
+// //                             cout<<i<<endl;
+//                     if ( elementIt->second.find ( indices[i] ) !=elementIt->second.end() )
+//                     {
+//                         tabou=true;
+//                         break;
+//                     }
+//                 }
+// //                         cout<<endl;
+//                 if ( tabou )
+//                 {
+//                     ++_fitness;
+//                     continue;//On change de groupe de comparaisons car on est sur d'avoir une caractérisation entre les deux groupes courants
+//                 }
+//             }
+
+//         if ( !tabou ) //Parcours standard
+//         {
+// // 							cout<<"Parcours standard"<<endl;
+//             if ( ( caracterise=caracteriseDeuxGroupe ( *itGroupe,*itGroupe2,indices ) ) )
+//             {
+//                 _fitness+= ( *itGroupe )->_entites.size() * ( *itGroupe2 )->_entites.size();
+//                 continue;
+//             }
+//             else break;
+//         }
+
+        //POUR NOUVEAU PARCOURS GROUPE
+        if ( !tabou ) //Parcours standard
+        {
 // 							cout<<"Parcours standard"<<endl;
-                if ( ( caracterise=caracteriseDeuxGroupe ( *itGroupe,*itGroupe2,indices ) ) ) 
-								{
-									_fitness+=(*itGroupe)->_entites.size()*(*itGroupe2)->_entites.size();
-									continue;
-								}
-                else break;
+            if ( ( caracterise=caracteriseDeuxGroupe ( itGroupe,itGroupe2,indices ) ) )
+            {
+                _fitness+=  itGroupe->_entites.size() * itGroupe2->_entites.size();
+                continue;
             }
+            else break;
         }
+
+
+//**         }
 //         cout<<"\t"<<caracterise<<endl;
         if ( !caracterise ) break;
+//*     }
     }
     if ( caracterise )
     {
 //         cout<<"Cette combinaison de taille "<< indices.size() <<" permet de caractériser l'instance"<<endl;
 //         cout<<"Nb comparaisons: "<<_nbComparaisons<<endl;
-        afficheVecteur ( indices );
+//         afficheVecteur ( indices );
 //         cout<<endl;
 
-        cout<<indices.size() <<" "<<_nbComparaisons<<endl;	//DATA
+        cout<<indices.size() <<" "<<_nbComparaisons;	//DATA
     }
 //     cout<<caracterise<<endl;
     return caracterise;

@@ -1,0 +1,16 @@
+\begin{tikzpicture}[scale=0.8]
+\begin{axis}[
+legend entries={s3836-0,s3836-0 pmda, s3836-0 pmda maj},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
+xlabel={Caractérisation de taille k},
+ylabel={Nombre de comparaisons d'entités},
+xmin={15},
+xmax={27},
+%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+]
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_s3836.dat};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/pmda_noMaj_s3836.dat};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/pmda_maj_s3836.dat};
+
+\end{axis}
+\end{tikzpicture}

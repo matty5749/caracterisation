@@ -19,6 +19,7 @@ public:
     unsigned int _borneMin;/*!<Partie entiere de log à base 2 de _groupes.size()*/
 		std::vector<std::vector<float> > _image; /*!<Tableau des masques de groupe*/
 		std::vector<float> _tauxDeSimilariteGlobale; /*!<Taux de similarité entre 0 et 1 pour chaque colonne de _image*/
+		std::multimap<float,std::pair<const Groupe * const,const Groupe * const> > _parcoursGroupe;
 
 
 
@@ -65,7 +66,10 @@ public:
     void afficheImage() const;
 		
 		void afficheInstance() const;
+		
+		void initialiseParcoursGroupe ();
 };
 
+float calculTauxDeSimilariteEntreLesDeuxGroupes (const Groupe & g1, const Groupe & g2);
 
 #endif // INSTANCE_H

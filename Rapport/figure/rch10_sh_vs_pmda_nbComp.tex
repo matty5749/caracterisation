@@ -1,0 +1,14 @@
+\begin{tikzpicture}[scale=0.8]
+\begin{axis}
+
+[legend entries={rch10, rch10 pmda, rch10 pmda maj},
+xlabel={Caractérisation de taille k},
+ylabel={Nombre de comparaisons d'entités},
+xmin={25},
+xmax={40}]
+
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_rch10.dat};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/pmda_noMaj_rch10.dat};
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/pmda_maj_rch10.dat};
+\end{axis}
+\end{tikzpicture}

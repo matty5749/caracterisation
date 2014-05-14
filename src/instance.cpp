@@ -228,13 +228,13 @@ void Instance::preTraitement()
     cout<<"Nb groupes:\t"<<_groupes.size() <<endl;
     cout<<"Nb entites:\t"<<_entites.size() <<endl;
     cout<<"Nb variables:\t"<<_genes.size() <<endl<<endl;
-		
+
     cout<<"Borne minimum;\t"<<_borneMin<<endl<<endl;
 }
 
 bool trieGroupeParTau ( Groupe const * const g1,Groupe const * const g2 )
 {
-    return g1->_moyenneTauxDeSimilariteLocal>g2->_moyenneTauxDeSimilariteLocal;
+    return g1->_moyenneTauxDeSimilariteLocal<g2->_moyenneTauxDeSimilariteLocal;
 }
 
 bool trieGroupeParRatio ( Groupe const * const g1,Groupe const * const g2 )
@@ -249,7 +249,7 @@ void Instance::heuristiqueDesMasques()
     cout<<endl<<"Image brute"<<endl;
     afficheImage();
 
-    trieSurLesGenesDApresLeursTauxDeSimilarite();
+//     trieSurLesGenesDApresLeursTauxDeSimilarite();
 
     calculMasqueDesGroupesEtMajImage();
     cout<<endl<<"Image triée par TAU"<<endl;
@@ -265,28 +265,29 @@ void Instance::heuristiqueDesMasques()
         for ( vector<Groupe*>::const_iterator itComp=_groupes.begin(); itComp!=_groupes.end(); itComp++ )
         {
             if ( *itRef==*itComp ) continue;
-            //Calcul du tauxDeSimilariteLocal entre *itRef et *itComp
-            float moyTemp=0;
-            for ( unsigned int i =0; i<_genes.size(); i++ )
-                moyTemp+= ( ( *itRef )->_masque[i]+ ( *itComp )->_masque[i] ) /2;
-            moyTemp/=_genes.size();
-
-            ( *itRef )->_moyenneTauxDeSimilariteLocal+=moyTemp;
+            ( *itRef )->_moyenneTauxDeSimilariteLocal+=calculTauxDeSimilariteEntreLesDeuxGroupes ( **itRef,**itComp );
         }
         ( *itRef )->_moyenneTauxDeSimilariteLocal/=_groupes.size()-1;
     }
 
     //Trie des groupes par petit tau
-    sort ( _groupes.begin(),_groupes.end(),trieGroupeParTau );
+//     sort ( _groupes.begin(),_groupes.end(),trieGroupeParTau );
     //FIN (petit tau)
+
+
+
+
 
 //     //AFFICHAGE
 //     for ( vector<Groupe*>::const_iterator itRef=_groupes.begin(); itRef!=_groupes.end(); itRef++ )
 //         cout<< ( *itRef )->_moyenneTauxDeSimilariteLocal<<endl;
 
 // 		//Heuristique de trie par ratio de masques
-// 		sort(_groupes.begin(),_groupes.end(),trieGroupeParRatio);
+//     sort ( _groupes.begin(),_groupes.end(),trieGroupeParRatio );
 // 		//Fin Heuristique de trie par ratio de masques
+
+initialiseParcoursGroupe();
+
 
     calculMasqueDesGroupesEtMajImage();
     cout<<endl<<"Image triée par TAU et tau"<<endl;
@@ -309,7 +310,7 @@ void Instance::heuristiqueDesMasques()
     cout<<endl<<"Coeficient de difficulté sigma de l'instance: "<<moy<<endl;
 
     //MAJ attribut _tabous dans chaque groupe
-    majListeTabousDansLesGroupes();
+//     majListeTabousDansLesGroupes();
 }
 
 
@@ -469,7 +470,44 @@ void Instance::afficheInstance() const
 }
 
 
+void Instance::initialiseParcoursGroupe()
+{
+		//Parcours des groupes
+    for ( vector<Groupe*>::const_iterator itGroupe=_groupes.begin(); itGroupe!=_groupes.end(); itGroupe++ )
+    {
+        //Nouveau parcours des groupes
+        for ( vector<Groupe*>::const_iterator itGroupe2=itGroupe+1; itGroupe2!=_groupes.end(); itGroupe2++ )
+        {
+            float taux=calculTauxDeSimilariteEntreLesDeuxGroupes ( **itGroupe,**itGroupe2 );
+						_parcoursGroupe.insert(make_pair(taux,make_pair(*itGroupe,*itGroupe2)));
+        }
+    }
+    
+//     //AFFICHAGE
+//     for (multimap<float,pair<const Groupe * const,const Groupe * const> >::const_reverse_iterator it=_parcoursGroupe.rbegin();it!=_parcoursGroupe.rend();it++)
+// 		{
+// 			cout<<"TAUX:\t"<<it->first<<"\t Groupes:\t"<<it->second.first->_id<<" X "<<it->second.second->_id<<endl;
+// 		}
+// 		sleep(5);
+}
 
+float calculTauxDeSimilariteEntreLesDeuxGroupes ( const Groupe & g1, const Groupe & g2 )
+{
+    assert ( g1._id!=g2._id );
+    float moyTemp=0;
+    for ( unsigned int i =0; i<g1._masque.size(); i++ )
+    {
+        float temp= ( g1._masque[i] + g2._masque[i] ) /2;
+        //Transformation entre 0 et 1
+        if ( temp<0.5 )
+            moyTemp+= ( 0.5-temp ) *2;
+        else
+            moyTemp+= ( 0.5 - ( 1 - temp ) ) *2;
+    }
+    moyTemp/=g1._masque.size();
+
+    return moyTemp;
+}
 
 
 
