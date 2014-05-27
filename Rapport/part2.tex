@@ -112,9 +112,15 @@ $$ \rho=\frac{\sum_{j=1}^{|\mathcal{X}|}\tau_j(I)}{|\mathcal{X}|} $$
 \end{definition}
 
 \begin{definition}
-Le \textbf{coefficient de difficulté $\sigma$ d'une instance}, correspond à la moyenne des ratios des masques d'une instance.\\
+Le \textbf{coefficient de difficulté $\sigma$ d'une instance}, correspond au complémentaire de la moyenne des ratios des masques d'une instance. Nous utilisons le complémentaire de façon à ce que l'échelle du coefficient $\sigma$ soit calqué sur celui de $\rho$.
 Formellement, soit $I$ l'image d'une instance $\mathcal{I}$, $i$ la $i$\up{ème} ligne de $I$, $r_i(I)$ le ratio du groupe $i$ dans l'image $I$,
-$$ \sigma=\frac{\sum_{i=1}^{|\mathcal{G}|}r_i(I)} {|\mathcal{G}|} $$
+$$ \sigma=1-\frac{\sum_{i=1}^{|\mathcal{G}|}r_i(I)} {|\mathcal{G}|} $$
+\end{definition}
+
+\begin{definition}
+Le coefficient $\Delta\cal{T}$ d'une instance correspond à l'écart type des taux de similarité $\cal{T}$ des gènes.
+Formellement, soit $I$ l'image d'une instance $\mathcal{I}$, $i$ la $i$\up{ème} ligne de $I$, $r_i(I)$ le ratio du groupe $i$ dans l'image $I$,
+$$\Delta\mathcal{T}=\sqrt{\frac{\sum_{j=1}^{|\mathcal{X}|} (moyenne-\mathcal{T}_j)^2}{|\mathcal{X}|}}$$
 \end{definition}
 
 Reprenons nos deux instances rch10 et s3836-0 et calculons leurs coefficients de difficultés:
@@ -138,12 +144,14 @@ Une instance dont le coefficient de difficulté $\rho$ est proche de 1 est une \
 \end{proposition}
 
 \begin{proposition}
-Une instance dont le coefficient de difficulté $\rho$ est proche de 1 et dont le coefficient de difficulté $\sigma$ est proche de 0 est une \textbf{instance très difficile} à résoudre.
+Une instance dont le coefficient de difficulté $\rho$ est proche de 1 et dont le coefficient de difficulté $\sigma$ est proche de 1 est une \textbf{instance très difficile} à résoudre.
 \end{proposition}
 
 \begin{proposition}
 La taille d'une instance (caractérisé par son nombre de gènes et d'entités mais pas son nombre de groupe) est une information sur la difficulté de sa résolution. On peut passer outre cette difficulté uniquement si l'instance à un coeficient $sigma$ proche de 1, dans le cas contraire, cette difficulté ne peut pas être réduite de façon significative par un algorithme.
 \end{proposition}
+
+TODO:Proposition$\Delta\cal{T}$
 
 %Les observations sur notre jeu de 15 instances nous permettent de conclure que $\sigma$ en particulier, et $\rho$ dans une moindre mesure, nous permettent de définir ce qu'est une instance difficile. 
 
@@ -151,39 +159,39 @@ La taille d'une instance (caractérisé par son nombre de gènes et d'entités m
 
 Nous présentons ici les instances avec leurs coefficients de difficultés respectifs:
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline 
-Instances & Entités(SR) & Groupes & Gènes(SR)& $\rho$ & $\sigma$ & PL & EPC & LSPC \\ 
+Instances & Entités(SR) & Groupes & Gènes(SR)& $\Delta\cal{T}$ & $\rho$ & $\sigma$ & PL & EPC & LSPC \\ 
 \hline 
-s301-0 & 500 & 30 & 400 & 0.034 & 0.00008 & - & 13 & 14 \\ 
+s301-0 & 500 & 30 & 400 & 0.0247583 & 0.034 & 0.999917 & - & 13 & 14 \\ 
 \hline 
-s326-0 & 500 & 10 & 500 & 0.033 & 0 & - & 13 & 14 \\ 
+s326-0 & 500 & 10 & 500 & 0.0264423 & 0.033 & 1 & - & 13 & 14 \\ 
 \hline 
-s413-30 & 500 & 20 & 600 & 0.035 & 0 & - & 13 & 13 \\ 
+s413-30 & 500 & 20 & 600 & 0.027368 & 0.035 & 1 & - & 13 & 13 \\ 
 \hline 
-s555-20 & 800 & 20 & 800 & 0.039 & 0.00016 & - & 13 & 13 \\ 
+s555-20 & 800 & 20 & 800 & 0.028946 & 0.039 & 0.999833 & - & 13 & 13 \\ 
 \hline 
-s625-20 & 500 & 5 & 1000 & 0.035 & 0 & - & 13 & 13 \\ 
+s625-20 & 500 & 5 & 1000 & 0.0270316 & 0.035 & 1 & - & 13 & 13 \\ 
 \hline 
-s754-10 & 600 & 10 & 200 & 0.034 & 0 & - & 13 & 14 \\ 
+s754-10 & 600 & 10 & 200 & 0.0266147 & 0.034 & 1 & - & 13 & 14 \\ 
 \hline 
-s882-20 & 600 & 10 & 400 & 0.032 & 0 & - & 13 & 14 \\ 
+s882-20 & 600 & 10 & 400 & 0.0240376 & 0.032 & 1 & - & 13 & 14 \\ 
 \hline 
-s2501-70 & 800 & 10 & 800 & 0.033 & 0 & - & 15 & 15 \\ 
+s2501-70 & 800 & 10 & 800 & 0.0243325 & 0.033 & 1 & - & 15 & 15 \\ 
 \hline 
-s31294-50 & 200 & 15 & 1000 & 0.065 & 0.072 & 10 & 10 & 11 \\ 
+s31294-50 & 200 & 15 & 1000 & 0.0493203 & 0.065 & 0.9928 & 10 & 10 & 11 \\ 
 \hline 
-s3836-0 & 1000 & 15 & 1000 & 0.024 & 0 & - & 16 & 16 \\ 
+s3836-0 & 1000 & 15 & 1000 & 0.0187905 & 0.024 & 1 & - & 16 & 16 \\ 
 \hline 
-raphv & 109 (108) & 8 & 155 (68) & 0.588 & 0.581 & \textbf{6} & \textbf{6} & 9 \\ 
+raphv & 109 (108) & 8 & 155 (68) & 0.301636 & 0.588 & 0.419118 & \textbf{6} & \textbf{6} & 9 \\ 
 \hline 
-raphy & 113 (112) & 4 & 155 (70) & 0.609 & 0.332 & \textbf{6} & \textbf{6} & 8 \\ 
+raphy & 113 (112) & 4 & 155 (70) & 0.293601 & 0.609 & 0.667857 & \textbf{6} & \textbf{6} & 8 \\ 
 \hline 
-rarep & 112 & 7 & 155 (72) & 0.651 & 0.498 & \textbf{12} & 39 & 14 \\ 
+rarep & 112 & 7 & 155 (72) & 0.295408 & 0.651 & 0.501984 & \textbf{12} & 39 & 14 \\ 
 \hline 
-rch8 & 132 (56) & 21 & 37 (27) & 0.569 & 0.933 & \textbf{9} & \textbf{9} & 9 \\ 
+rch8 & 132 (56) & 21 & 37 (27) & 0.339488 & 0.569 & 0.0670193 & \textbf{9} & \textbf{9} & 9 \\ 
 \hline 
-rch10 & 173 (112) & 27 & 98 (86) & 0.626 & 0.906 & \textbf{10} & 25 & 15 \\ 
+rch10 & 173 (112) & 27 & 98 (86) & 0.237992 & 0.626 & 0.0938845 & \textbf{10} & 25 & 15 \\ 
 \hline 
 \end{tabular} 
 \end{center}
@@ -202,31 +210,31 @@ Les outils mis en place pour définir ce qu'est une instance difficile vont main
 
 \subparagraph{Résultats}
 
-\begin{figure}[H]
-\centering
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/rch10_sh_vs_tau_nbComp.tex}
-	\end{minipage}
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/rch10_sh_vs_tau_temps.tex}
-	\end{minipage}
-\caption{Heuristique $\mathcal{T}$ sur rch10}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/s3836_sh_vs_tau_nbComp.tex}
-	\end{minipage}
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/s3836_sh_vs_tau_temps.tex}
-	\end{minipage}
-\caption{Heuristique $\mathcal{T}$ sur s3836-0}
-\end{figure}
+%\begin{figure}[H]
+%\centering
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/rch10_sh_vs_tau_nbComp.tex}
+%	\end{minipage}
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/rch10_sh_vs_tau_temps.tex}
+%	\end{minipage}
+%\caption{Heuristique $\mathcal{T}$ sur rch10}
+%\end{figure}
+%
+%\begin{figure}[H]
+%\centering
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/s3836_sh_vs_tau_nbComp.tex}
+%	\end{minipage}
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/s3836_sh_vs_tau_temps.tex}
+%	\end{minipage}
+%\caption{Heuristique $\mathcal{T}$ sur s3836-0}
+%\end{figure}
 
 Sur l'instance réelle rch10, on constante que le nombre de comparaisons d'entités  et le temps d'éxécution est considérablement diminué par l'heuristique. Cependant, on s'aperçoit que cette heuristique a peu d'influence (voir même une influence négative dans le cas présent) sur la résolution d'instance aléatoire car celles-ci ne disposent pas de variations significative entre les $\mathcal{T}$ des gènes. La possibilité que l'influence soit négative nous permet de conclure que le trie des gènes par $\mathcal{T}$ n'est pas un trie optimal. 
 
@@ -253,31 +261,44 @@ Pour caractériser une instance, nous devons comparer chaque entité n'appartena
 
 \subparagraph{Résultats}
 
-\begin{figure}[H]
-\centering
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/rch10_sh_vs_gamma_nbComp.tex}
-	\end{minipage}
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/rch10_sh_vs_gamma_temps.tex}
-	\end{minipage}
-\caption{Heuristique $\Gamma$ sur rch10}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/s3836_sh_vs_gamma_nbComp.tex}
-	\end{minipage}
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/s3836_sh_vs_gamma_temps.tex}
-	\end{minipage}
-\caption{Heuristique $\Gamma$ sur s3836-0}
-\end{figure}
+%\begin{figure}[H]
+%\centering
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/rch10_sh_vs_gamma_nbComp.tex}
+%	\end{minipage}
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/rch10_sh_vs_gamma_temps.tex}
+%	\end{minipage}
+%\caption{Heuristique $\Gamma$ sur rch10}
+%\end{figure}
+%
+%\begin{figure}[H]
+%\centering
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/s3836_sh_vs_gamma_nbComp.tex}
+%	\end{minipage}
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/s3836_sh_vs_gamma_temps.tex}
+%	\end{minipage}
+%\caption{Heuristique $\Gamma$ sur s3836-0}
+%\end{figure}
+%
+%\begin{figure}[H]
+%\centering
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/rch10_gamma_vs_gamma_dynamique_nbComp.tex}
+%	\end{minipage}
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/rch10_gamma_vs_gamma_dynamique_temps.tex}
+%	\end{minipage}
+%\caption{Comparaisons heuristique $\Gamma$ et heuristique $\Gamma$ dynamique}
+%\end{figure}
 
 Nous constatons que notre heuristique permet de baisser significativement le nombre de comparaisons .
 
@@ -318,31 +339,31 @@ Nous parcourons alors 126 : aucun effet, mais la paire \{e1,e400\} est toujours 
 Nous parcourons alors 134 : aucun effet, mais la paire  \{e1,e400\} n'est plus considéré comme critique car son poids $<k-1$.
 
 \subparagraph{Résultats}
-\begin{figure}[H]
-\centering
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/rch10_sh_vs_pmda_nbComp.tex}
-	\end{minipage}
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/rch10_sh_vs_pmda_temps.tex}
-	\end{minipage}
-\caption{Heuristiques pmda sur rch10}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/s3836_sh_vs_pmda_nbComp.tex}
-	\end{minipage}
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/s3836_sh_vs_pmda_temps.tex}
-	\end{minipage}
-\caption{Heuristiques pmda sur s3836-0}
-\end{figure}
+%\begin{figure}[H]
+%\centering
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/rch10_sh_vs_pmda_nbComp.tex}
+%	\end{minipage}
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/rch10_sh_vs_pmda_temps.tex}
+%	\end{minipage}
+%\caption{Heuristiques pmda sur rch10}
+%\end{figure}
+%
+%\begin{figure}[H]
+%\centering
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/s3836_sh_vs_pmda_nbComp.tex}
+%	\end{minipage}
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/s3836_sh_vs_pmda_temps.tex}
+%	\end{minipage}
+%\caption{Heuristiques pmda sur s3836-0}
+%\end{figure}
 
 On constante que le nombre de comparaisons d'entités ainsi que le temps d'éxécution sont considérablement diminué par l'heuristique.
 
@@ -351,31 +372,31 @@ Ce type de résultat ayant été observé systématiquement sur un jeu de 15 ins
 \paragraph{Heuristique des valeurs tabous}
 \subparagraph{Résultats}
 
-\begin{figure}[H]
-\centering
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/rch10_sh_vs_tabou_nbComp.tex}
-	\end{minipage}
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/rch10_sh_vs_tabou_temps.tex}
-	\end{minipage}
-\caption{Heuristique tabou sur rch10}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/s3836_sh_vs_tabou_nbComp.tex}
-	\end{minipage}
-	\begin{minipage}[c]{0.49\linewidth}
-	\centering
-	\input{./figure/s3836_sh_vs_tabou_temps.tex}
-	\end{minipage}
-\caption{Heuristique tabou sur s3836-0}
-\end{figure}
+%\begin{figure}[H]
+%\centering
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/rch10_sh_vs_tabou_nbComp.tex}
+%	\end{minipage}
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/rch10_sh_vs_tabou_temps.tex}
+%	\end{minipage}
+%\caption{Heuristique tabou sur rch10}
+%\end{figure}
+%
+%\begin{figure}[H]
+%\centering
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/s3836_sh_vs_tabou_nbComp.tex}
+%	\end{minipage}
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+%	\input{./figure/s3836_sh_vs_tabou_temps.tex}
+%	\end{minipage}
+%\caption{Heuristique tabou sur s3836-0}
+%\end{figure}
 
 
 
@@ -432,10 +453,98 @@ xmax={35},
 \caption{Comparaisons des heuristiques sur rch10: temps d'exécution}
 \end{figure}
 
-\subsection{Résultats}
+\subsubsection{Résultats}
+
+Nous présentons ici les résultats obtenus avec notre solveur \emph{Exact-Proj-Car2} (EPC2) qui fonctionne avec toute les meilleures heuristiques présentées dans cette section. Nous pouvons ainsi comparer nos résultats avec ceux obtenus par [CHHEL et al.,2013].
+
+La colonne \textit{temps} indique le temps cumulé depuis le début de la recherche à $k=|\cal{X}|$.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+\multirow{2}*{Instances} & \multirow{2}*{Entités(SR)} & \multirow{2}*{Gènes(SR)}& \multirow{2}*{$\Delta\cal{T}$}&  \multirow{2}*{$\rho$} & \multirow{2}*{$\sigma$} & \multirow{2}*{PL} & \multirow{2}*{EPC} & \multicolumn{2}{c|}{EPC2} \\
+\cline{9-10} 
+ & & & & & & & & k & temps \\
+\hline 
+s301-0 & 500 & 400 & 0.0247583 & 0.034 & 0.999917 & - & 13 & 13 & 2.07279\\ 
+\hline 
+s326-0 & 500 & 500 & 0.0264423 & 0.033 & 1 & - & 13 & 13 & 1.70796 \\ 
+\hline 
+s413-30 & 500 & 600 & 0.027368 & 0.035 & 1 & - & 13 & 13 & 1.05077\\ 
+\hline 
+s555-20 & 800 & 800 & 0.028946 & 0.039 & 0.999833 & - & 13 & 13 & 14.9249\\ 
+\hline 
+s625-20 & 500 & 1000 & 0.0270316 & 0.035 & 1 & - & 13 & 13 & 1.63653 \\ 
+\hline 
+s754-10 & 600 & 200 & 0.0266147 & 0.034 & 1 & - & 13 & \textcolor{red}{14} & 0.366073\\ 
+\hline 
+s882-20 & 600 & 400 & 0.0240376 & 0.032 & 1 & - & 13 & 13 & 543.176 \\ 
+\hline 
+s2501-70 & 800 & 800 & 0.0243325 & 0.033 & 1 & - & 15 & \textcolor{blue}{14} & \textcolor{cyan}{282.935} \\ 
+\hline 
+s31294-50 & 200 & 1000 & 0.0493203 & 0.065 & 0.9928 & 10 & 10 & 10 & 381.108 \\ 
+\hline 
+s3836-0 & 1000 & 1000 & 0.0187905 & 0.024 & 1 & - & 16 & \textcolor{blue}{15} & \textcolor{cyan}{13.072} \\ 
+\hline 
+rch8 & 132 (56) & 37 (27) & 0.339488 & 0.569 & 0.0670193 & \textbf{9} & \textbf{9} & \textbf{9} & 0.038407 \\ 
+\hline 
+raphv & 109 (108) & 155 (68) & 0.301636 & 0.588 & 0.419118 & \textbf{6} & \textbf{6} & \textbf{6} & 2.0551 \\ 
+\hline 
+raphy & 113 (112) & 155 (70) & 0.293601 & 0.609 & 0.667857 & \textbf{6} & \textbf{6} & \textbf{6} & 6.84672 \\ 
+\hline 
+rarep & 112 & 155 (72) & 0.295408 & 0.651 & 0.501984 & \textbf{12} & 39 & \textcolor{blue}{16} & 206.037 \\ 
+\hline 
+rch10 & 173 (112) & 98 (86) & 0.237992 & 0.626 & 0.0938845 & \textbf{10} & 25 & \textcolor{blue}{11} & 383.006\\ 
+\hline 
+\end{tabular} 
+\end{center}
+
+Nous avons placer en bleu les caractérisations de taille inférieur à EPC. Les temps de couleur cyan permettent de souligner la rapidité d'éxécution de EPC2 par rapport à EPC:  EPC2 caractérise l'instance s3836-0 en 13 secondes pour un k=15 alors que EPC ne réduit pas en dessous de k=16 en 10 minutes. Nous observons le même type de phénomène sur l'instance s2501-70. Notons toutefois que l'instance s754-10 est moins bien caractériser par EPC2, nous pensons que dans ce cas précis, l'influence du trie par $\cal{T}$ est négative, cela est du à $\Delta\cal{T}$ proche de 0. Notre solveur réduit de façon significative les caractérisations des instances réelles rarep et rch10. 
+
 
 \subsection{Recherche incomplète}
 \subsubsection{Résultats}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+\multirow{2}*{Instances} & \multirow{2}*{Entités(SR)} & \multirow{2}*{Gènes(SR)}&\multirow{2}*{$\Delta\cal{T}$} & \multirow{2}*{$\rho$} & \multirow{2}*{$\sigma$} & \multirow{2}*{PL} & \multirow{2}*{LSPC} & \multicolumn{3}{c|}{Roulette proportionelle} \\
+\cline{9-11} 
+ & & & & & & & & k & temps & itérations \\
+\hline 
+s301-0 & 500  & 400 & 0.0247583 & 0.034 & 0.999917 & - & 14 & \textcolor{blue}{13} & 421.005 & 1612515 \\ 
+\hline 
+s326-0 & 500 & 500 & 0.0264423 & 0.033 & 1 & - & 14 & \textcolor{blue}{13} & 93.2472 & 390166\\ 
+\hline 
+s413-30 & 500 & 600 & 0.027368 & 0.035 & 1 & - & 13 & 13 & 428.634 & 1388939 \\ 
+\hline 
+s555-20 & 800 & 800 & 0.028946 & 0.039 & 0.999833 & - & 13 & 13 & 395.024 & 1286275 \\ 
+\hline 
+s625-20 & 500 & 1000 & 0.0270316 & 0.035 & 1 & - & 13 & 13 & 415.878 & 1359740 \\ 
+\hline 
+s754-10 & 600 & 200 & 0.0266147 & 0.034 & 1 & - & 14 & 14 & 25.8758 & 84672\\ 
+\hline 
+s882-20 & 600 & 400 & 0.0240376 & 0.032 & 1 & - & 14 & 14 & 3.02248 & 9113\\ 
+\hline 
+s2501-70 & 800 & 800 & 0.0243325 & 0.033 & 1 & - & 15 & 15 & 4.24 & 4350 \\ 
+\hline 
+s31294-50 & 200 & 1000 & 0.0493203 & 0.065 & 0.9928 & 10 & 11 & 11 & 0.962858 & 5273\\ 
+\hline 
+s3836-0 & 1000 & 1000 & 0.0187905 & 0.024 & 1 & - & 16 & 16 & 5.26595 & 1006 \\ 
+\hline
+rch8 & 132 (56) & 37 (27) & 0.339488 & 0.569 & 0.0670193 & \textbf{9} & 9 & 9 & 0.031263 & 22440 \\ 
+\hline 
+raphv & 109 (108) & 155 (68) & 0.301636 & 0.588 & 0.419118 & \textbf{6} & 9 & \textcolor{blue}{6} & 0.656676 & 470528\\ 
+\hline 
+raphy & 113 (112) & 155 (70)& 0.293601 & 0.609 & 0.667857 & \textbf{6} & 8 & \textcolor{blue}{6} & 0.87275 & 524344\\ 
+\hline 
+rarep & 112 & 155 (72) & 0.295408 & 0.651 & 0.501984 & \textbf{12} & 14 & 14 & 36.6272 & 17793513
+\\ 
+\hline 
+rch10 & 173 (112) & 98 (86) & 0.237992 & 0.626 & 0.0938845 & \textbf{10} & 15 & \textcolor{blue}{12} & 65.6151 & 35676187\\ 
+\hline 
+\end{tabular} 
+\end{center}
+
 
 \subsection{Générateur d'instance difficile}
 \subsubsection{Résultats} 

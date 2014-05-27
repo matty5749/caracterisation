@@ -10,7 +10,7 @@
 \usepackage{ae}
 \usepackage{aeguill}
 \usepackage[bookmarks=true,colorlinks,linkcolor=blue]{hyperref}
-\usepackage{algorithmic}
+\usepackage[french, figure, boxed, onelanguage,]{algorithm2e}
 \usepackage{amsmath,amssymb,mathrsfs}
 \usepackage{makeidx}
 \usepackage{slashbox}
@@ -30,11 +30,9 @@
 % Pour faire déborder les cases d'un tableau sur plusieurs lignes.
 \usepackage{multirow}
 
-\usepackage{geometry}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 
 \usepackage[final]{pdfpages}
-
-\usepackage[french]{algorithme}
 
 %\geometry{top=3cm, bottom=3cm, left=2.5cm, right=2.5cm}
 
@@ -42,109 +40,90 @@
 \newtheorem{proposition}{Proposition}
 \newtheorem{exemple}{Exemple}
 
+\SetKwFor{PourTous}{pour tout}{faire}{fin~pour}
+
 \begin{document}
 %\input{part1.tex}
 %\newpage
-\input{part2.tex}
+%\input{part2.tex}
 %\newpage
 %\input{part3.tex}
+
+\begin{algorithm}[!h]
+	\textbf{booléen caractérise\_groupes ($combinaison$,$g1$,$g2$)}\\
+	\tcp{$e1$ et $e2$ sont les entités des groupes $g1$ et $g2$ }				
+	\PourTous {$e1 \in g1$ }
+	{
+		\PourTous {$e2 \in g2$}
+		{
+			$temp \leftarrow$ FAUX\\
+			\PourTous {$i \in combinaison$}
+			{
+				\Si {$e1[i] \neq e2[i]$} 
+					{
+						$temp \leftarrow$ VRAI\\
+						Sortir de la boucle
+					}
+			}
+			\Si {$temp = $FAUX \tcp{$g1$ et $g2$ ne sont pas caractérisable avec $combinaison$}} {\Retour {FAUX}}
+		}
+	}
+	\Retour {VRAI}
+	
+	\caption{Algorithme de caractérisation de groupes}
+\end{algorithm}
+
+\begin{algorithm}[!h]
+	\textbf{booléen caractérise\_instance ($Groupes$, $k$, $n$)}\\
+	\tcp
+	{
+		$Groupes$ est un ensemble contenant tous les groupes de l'instance\\
+		$k$ correspond à la taille de la caractérisation\\
+		$n$ correspond aux nombres de gènes de l'instance
+	}	
+	\PourTous {$combinaison$ de $C_n^k$}
+	{
+		$DejaVus \leftarrow \{ \}$\\
+		$temp \leftarrow$ VRAI\\
+		\PourTous {$gRef \in Groupes$ }
+		{
+			$DejaVus \leftarrow DejaVus \cup \{gRef\}$\\
+			\PourTous {$gComp \in Groupes \backslash DejaVus$}
+			{
+				\Si {$\neg$ caractérise\_groupes($combinaison$,$gRef$,$gComp$)}
+					{
+					$temp \leftarrow$ FAUX\\
+					Sortir de la boucle
+					}
+			}
+			\Si {$temp=$FAUX} {Sortir de la boucle}
+		}
+		\Si {$temp =$ VRAI} {\Retour {VRAI}}
+		\tcp{Sinon combinaison suivante}
+	}
+	afficher("Il n'existe pas de caractérisation de taille " $k$)\\
+	\Retour{FAUX}
+	\caption{Algorithme de caractérisation d'une instance MIN-PCM pour une taille $k$}
+\end{algorithm}
+
+
+\begin{algorithm}[!h]
+	\textbf{booléen minimise\_caractérisation\_instance ($Groupes$, $k$, $n$)}\\
+	\tcp
+	{
+		$Groupes$ est un ensemble contenant tous les groupes de l'instance\\
+		$k$ correspond à la taille de la caractérisation\\
+		$n$ correspond aux nombres de gènes de l'instance
+	}
+	$caracterise \leftarrow$ VRAI\\
+	$k \leftarrow n$\\
+	\Tq {$caracterise =$ VRAI}
+	{
+		$k \leftarrow k-1$\\
+		$caracterise \leftarrow $caractérise\_instance ($Groupes$, $k$, $n$)\\
+	}
+	afficher("La caractérisation minimale est de taille " $k+1$)\\
+	\caption{Algorithme de minimisation du problème de caractérisation multiple}
+\end{algorithm}
+
 \end{document}
-
-
-%\part{État de l'art}
-%\chapter{C.S.P. et Q.C.S.P.}
-%\par
-%C.S.P. signifie \texttt{constraint satisfaction problem}, soit problème de satisfaction de contrainte. Il s'agit en fait d'une formalisation d'un problème sous la forme d'un triplet $\langle X, D, C \rangle$ avec :\\ 
-%$X$ : l'ensemble des variables du problème\\
-%$D$ : le (les) domaine(s) contraint(s) aux variables de $X$\\ 
-%$C$ : l'ensemble des contraintes entre/sur les variables de $X$\\
-%
-%\par L'apparition de quantificateur universel dans le problème initial peut vite faire exploser ce type de représentation dès que la taille des domaines commence à devenir significative. Alors que, l'universalité est une donnée intrinsèque aux problèmes et que nous savons la gérer au sein même d'une machine de Turing\footnote{En effet, une contrainte sur une variable universelle est respectée si l'ensemble des valeurs du domaine de la variable convient pour la contrainte. Il ne s'agit donc là que d'une énumération classique de toute les valeurs possibles de la variable}. Comme la machine sait gérer ce problème de façon interne, nous nous sommes penchés sur une formalisation plus simple des problèmes pouvant contenir des quantificateurs universelle\footnote{Je rappelle que, bien que cela ne soit pas précisé, le quantificateur existentiel est présent de façon implicite dans les problèmes lorsque ceux-ci sont dépourvus de quantificateur universel}, les Q.C.S.P.\\
-% 
-%\par
-%Q.C.S.P. signifie donc \texttt{quantified constraint satisfaction problem}, soit problème de satisfaction de contraintes quantifiées. La formalisation est la même que pour un C.S.P., à ceci près que les variables sont associées au sigle $\forall$(universelle) ou $\exists$(existentielle)
-%
-%\chapter{Espace de recherche, paysage}
-%\par
-%Un espace de recherche est un ensemble contenant(potentiellement, virtuellement) toutes les configurations(combinaisons, individus) possibles des variables d'un problème. Parmi ces configurations figurent donc les solutions du problème et des combinaisons pour lesquelles il reste un certain nombre $N$ de conflits.
-%
-%\par 
-%On peut se faire une idée visuelle d'un tel espace de recherche en le modélisant sur un repère orthonormé avec en abscisse chaque élément de l'espace de recherche et en ordonnée le nombre de conflits $N$ de chaque combinaison. Une telle modélisation est appelée paysage de recherche. Nous pourrions par exemple obtenir:\\
-%%\includegraphics{paysage.png}\\
-%Source image: \href{http://www.tony-lambert.fr/these/sommaire.html}{Thèse Tony LAMBERT.}\\
-%
-%\par
-%Comme vous pouvez le constater sur l'image ci-dessus, un paysage de recherche peut être constitué de vallées et de collines, plus ou moins hautes et profondes. Nous appelons les creux de vallées les plus profondes les minimums globaux qui correspondent à des solutions du problème et le creux des autres vallées des minimums locaux. Nous reviendrons par la suite sur la signification de ces termes.
-%
-%\chapter{Solveurs de contraintes}
-%\par Un solveur de contrainte est un logiciel qui a pour but de trouver une solution à un C.S.P.. Plusieurs type de recherches sont possibles pour essayer d'obtenir cette solution. Ce sont ces différents type de recherche qui sont abordés dans ce chapitre.
-%\section{Recherche systématique}
-%\par Une recherche systématique va consister à évaluer chaque élément d'un espace de recherche jusqu'à trouver une solution. Ce type de démarche nous amène à deux types de résultats:
-%\begin{itemize}
-%\item Soit le problème n'a pas de solution.
-%\item Soit il a au moins une solution et nous savons quelle est celle-ci.
-%\end{itemize}
-%Nous pouvons éventuellement obtenir toutes les solutions afin de les comparer et en choisir une optimale.
-% 
-%\par Même si il existe différentes méthodes\footnote{Branch \& Bound , Forward Checking , Full Look Ahead, ...}, qui permettent de ne pas avoir besoin de parcourir l'intégralité des éléments de l'espace de recherche, afin de résoudre au plus vite le problème, la complexité, au pire, est
-%toujours \textbf{exponentielle}. Pour certains type de problème, nous savons donc à priori que cette méthode s’avérera trop coûteuse en temps. Pour cette raison, des 
-%méthodes de recherches incomplètes ont été créées.
-%
-%\section{Recherche incomplète}
-%Une recherche incomplète consiste à explorer certains "endroits" d'un espace de recherche. Contrairement aux recherches systématiques, ce type de démarche ne nous apporte donc pas la preuve de la non existentialité  d'une solution. Cependant le "champs" de combinaisons étudié étant restreint, nous pouvons faire en sorte de mettre en place des algorithmes de complexité \textbf{polynomiale}, qui ont pour but de trouver les meilleurs configurations possibles\footnote{Et une solution, si possible.}. Deux grandes stratégies de recherche se distinguent dans ce domaine: les recherches stochastiques et les recherches locales\footnote{Et ces deux stratégies peuvent se combiner l'une à l'autre.}.
-%
-%\subsection{Recherche stochastique}
-%Dans le cas des recherches stochastiques, la ``promenade'' dans le paysage de recherche se fait de manière aléatoire. De fait, la découverte d'une bonne combinaison
-% est totalement dépendante du hasard mais les individus obtenus seront très diversifier\footnote{La diversification a pour but de se déplacer dans des zones variées de l'espace de recherche.}.
-% 
-%\subsection{Recherche locale}
-%Dans le cas des recherches locales, nous choisissons des heuristiques(pour les cas particuliers) ou des méta-heuristiques(pour les cas généraux) qui nous permettent de nous ``promener'' dans le paysage du problème afin de trouver les vallées les plus profondes. C'est à dire les combinaisons dont le nombre de conflits $N$ est proche de $0$. Ce type de recherche, indispensable pour les problèmes grande taille nous permet d'obtenir des configurations intéressantes, qui elles même peuvent être combinées ensemble\footnote{Par le biais d'un algorithme génétique par exemple.} afin d'obtenir peut-être une solution. On parle alors d'\textbf{hybridation} de méta-heuristiques.\\
-%
-%\section{Le piège des minimums locaux}
-%L'enjeu le plus important lors d'une recherche locale est donc de ne pas rester bloqué dans un minimum local. Pour cela, on fait souvent appel à l'aléatoire afin de diversifier nos combinaisons et ainsi faire des ``sauts'' dans le paysage qui pourrait nous amener sur le flanc d'une vallée nous amenant à un minimum global. Nous pouvons alors, dans une certaine mesure, parler de méthode de recherche locale en ``partie stochastique''\footnote{Méta-heuristique pour l'optimisation difficile [Dréo et al.]}.
-%
-%\section{Combiner méthodes de recherche complètes et incomplètes}
-%Chacune de ces méthodes possède ses avantages et ses inconvénients, l'idée de ce stage consiste à tirer partie des avantages de chacune d'entre elles afin de réduire au maximum le temps de recherche. En pratique, un solveur de contrainte complet devra être aiguillé par une(des) méthode(s) de recherche incomplète qui lui indiquera les ``lieux'' à ne pas visiter, et donc par conséquent, à favoriser les éléments de l'espace de recherche les plus aptes à correspondre à un minimum global.\\
-%\par
-%Nous aboutissons donc à un nouveau type de recherche qui a pour caractéristique sur des problèmes de très grande taille de:
-%
-%\begin{itemize}
-%\item nous prouver la non existence d'une solution(aux termes d'une exécution qui peut s’avérer très longue)
-%\item nous apporter une solution (voir obtenir un ensemble de solutions) dans un temps raisonnable. 
-%\end{itemize}
-%
-%
-%\chapter{Méta-heuristiques}
-%\section{Introduction}
-%Les méta-heuristiques sont des méthodes de recherche généraliste, en partie stochastique, de résolutions de problèmes. Ce fonctionnement permet de faire face à la très forte cardinalité de certains espaces de recherche. En effet, il n'est pas rare de trouver des problèmes dont le nombre de combinaisons possible dépasse de loin le nombre d'atomes présent dans l'univers(soit environ $10^{80}$). Dans ce cas, même les plus gros super-calculateurs ne font pas le poids avec des méthodes de recherche systématique. On s'aperçoit que l'aléatoire nous est bénéfique pour ce type de problème, mais il ne se suffit pas à lui même. 
-
-%\begin{algorithme}
-%\Function{rechercheLocale}{$tailleClique$:\textbf{entier},$vSommets$: \textbf{vecteur<Sommet>}}{entier}
-%{
-%\Type {$noyeau$}{vecteur<Sommet>}\\
-%\Type {$enveloppe$}{vecteur<Sommet>}\\
-%\Type {$nbIteration$}{entier}\\
-%$noyeau \leftarrow vSommet$[1..$tailleClique$]\\
-%$enveloppe \leftarrow vSommet$[$tailleClique$..$vSommet$.taille()]\\
-%$nbIteration \leftarrow vSommet$.taille()/$param1$\\
-%\Repeat
-%{
-%	\Type {$alea$}{entier}\\
-%	$alea \leftarrow rand() \% enveloppe$.taille()/$param2$;\\
-%	$noyeau$.ajouter($enveloppe$[$alea$]);\\
-%	$enveloppe$.supprimer($enveloppe$[$alea$]);\\
-%	\IfThenElse {estUneClique($noyeau$)}
-%		{
-%			\Type {$cliqueTemp$}{vecteur<Sommet>};\\
-%			$cliqueTemp \leftarrow noyeau$\\
-%			$tailleClique \leftarrow cliqueTemp$.taille();
-%		}
-%		{
-%			$noyeau$.supprimerDernier();
-%		}
-%}
-%{$nbIteration >=0 $}
-%\Return $tailleClique$
-%}
-%\caption{Recherche locale. $param1$ et $param2$ sont des paramètres pouvant être réglés par l'utilisateur}
-%\end{algorithme}
