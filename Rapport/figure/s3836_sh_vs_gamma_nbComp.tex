@@ -1,6 +1,6 @@
 \begin{tikzpicture}[scale=0.8]
 \begin{axis}[
-legend entries={s3836-0,s3836-0 $\Gamma$},
+legend entries={rch10, rch10 $\Gamma$, rch10 $\Gamma$ dynamique},
 %legend style={at={(0.5,1.03)},anchor=south},legend columns=3
 xlabel={Caractérisation de taille k},
 ylabel={Nombre de comparaisons d'entités},
@@ -10,6 +10,6 @@ xmax={27},
 ]
 \addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_s3836.dat};
 \addplot +[mark=none] table[x=k,y=nbComp]{./resultats/gamma_s3836.dat};
-
+\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/gamma_dynamique_s3836.dat};
 \end{axis}
 \end{tikzpicture}

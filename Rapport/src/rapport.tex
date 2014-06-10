@@ -1,0 +1,64 @@
+
+% Le type de votre document
+\documentclass[a4paper,10pt]{article}
+
+% Quelques packages pour le francais, vous pouvez saisir du texte accentué.
+\usepackage[utf8]{inputenc}
+\usepackage[frenchb]{babel}
+\usepackage{verbatim}
+% Des trucs biens pour le pdf.
+\usepackage{ae}
+\usepackage{aeguill}
+\usepackage[bookmarks=true,colorlinks,linkcolor=blue]{hyperref}
+\usepackage[french, figure, boxed, onelanguage,]{algorithm2e}
+\usepackage{amsmath,amssymb,mathrsfs}
+\usepackage{makeidx}
+\usepackage{slashbox}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+\usepackage[table]{xcolor}
+
+
+% Pour inclure des graphiques.
+\usepackage{graphicx}
+
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+
+% Pour faire déborder les cases d'un tableau sur plusieurs lignes.
+\usepackage{multirow}
+
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+\usepackage[final]{pdfpages}
+
+\hypersetup{
+    colorlinks=true,                         
+    linkcolor=blue, % Couleur des liens internes
+    citecolor=red, % Couleur des numéros de la biblio dans le corps
+    urlcolor=blue  } % Couleur des url
+
+
+\newtheorem{definition}{Définition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{exemple}{Exemple}
+\newtheorem{remarque}{Remarque}
+\newtheorem{preuve}{Preuve}
+
+\SetKwFor{PourTous}{pour tout}{faire}{fin~pour}
+
+\begin{document}
+%\input{src/part1.tex}
+%\newpage
+\input{src/part2.tex}
+%\newpage
+%\input{src/part3.tex}
+
+
+\bibliography{src/bib}
+\bibliographystyle{alpha}
+
+\end{document}

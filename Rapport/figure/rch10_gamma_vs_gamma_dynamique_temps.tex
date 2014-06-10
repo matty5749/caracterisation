@@ -6,6 +6,7 @@ xlabel={Caractérisation de taille k},
 ylabel={Temps d'éxécution en seconde},
 xmin={24},
 xmax={40}]
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_rch10.dat};
 \addplot +[mark=none] table[x=k,y=temps]{./resultats/gamma_rch10.dat};
 \addplot +[mark=none] table[x=k,y=temps]{./resultats/gamma_dynamique_rch10.dat};
 
