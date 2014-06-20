@@ -1,27 +1,29 @@
-\section{Conclusions} 
+\section{Conclusions et perspectives} 
+Au cours de ce stage, nous avons défini  et démontré la pertinence de critères permettant de mesurer la difficulté d'une instance MIN-PCM. Nous avons proposé des heuristiques qui améliorent les temps de résolution et les caractérisations des instances, notamment lorsque celles-ci sont considérées comme étant difficile et ayant la possibilité d'être améliorées. 
 
-\subsection{Difficultés rencontrées}
+Nous avons montré que les résolutions des instances aléatoires ne peuvent être améliorées de façon significatives à cause de leurs structures. Cependant, nous sommes désormais en mesure d'outrepasser les difficultés dues à la structure des instances réelles, puisque les résultats obtenus lors de la résolution de celles-ci sont meilleurs que ce qui avait été trouvé jusqu' alors. 
 
-\subsection{Conclusions générales}
+Nous constatons qu'une recherche exacte guidée par de bonnes heuristiques ne peut pas prétendre à être utilisée sur des instances de grande taille. En effet, quelle que soit l'heuristique utilisée, nous serons toujours confrontés à l'exhaustivité d'un parcours de $C_n^k$ comparaisons pour prouver l'optimalité d'une solution, et le gain de temps obtenu par une résolution par transformation en problème MIN-ONE se paye par une occupation exponentielle de la mémoire. 
 
-\subsection{Évolutions possibles et perspective de recherche}
-\subsubsection{A court terme}
-\subsubsection{A long terme}
+Nous obtenons d'excellents résultats avec une recherche approchée. Ces résultats avoisinent la borne optimale des instances. Nous pensons donc qu'il faut privilégier l'axe de la recherche approchée dans nos futurs travaux. A l'avenir, nous aimerions également développer un générateur d'instance difficile qui correspondrait mieux aux structures des instances réelles que manipulent nos collègues en biologie. Ce générateur devra fournir la borne optimale d'une instance lors de sa création afin que nous puissions nous situer lors de leurs résolutions. A plus long terme, nous pourrions nous intéresser aux types de formules renvoyés par nos algorithmes afin que celles-ci puissent fournir des informations aux biologistes(par exemple, $a \lor \lnot b \equiv a \Rightarrow b$, ce qui nous indique que la présence du gène $a$ implique la présence du gène $b$), nous aurions alors un caractère sémantique pour les formules trouvées. 
+
+Enfin, il serait intéressant de poursuivre nos recherches avec des biologistes issus d'autres milieux que celui de l'agriculture(la médecine par exemple) afin d'être confrontés à de nouveaux modèles d'instances, présentant de nouvelles spécificités et/ou des difficultés de résolutions plus grandes.
+
 
 
 \listoffigures
 
-\listoftables
+%\listoftables
 
-\subsection*{\begin{center} Résumé \end{center}}
+\subsection*{\huge \begin{center} Résumé \end{center}}
 \addcontentsline{toc}{chapter}{Résumé / Abstract}
 
-\par Ce rapport porte sur la ....
+\par Ce rapport porte sur la minimisation du problème de caractérisation multiple (MIN-PCM). Nous dressons un état de l'art, puis nous définissons des éléments permettant de  définir qu'une instance est difficile à résoudre ou non. Ces éléments nous permettent aussi de proposer des heuristiques pour des résolutions par recherche exacte et par recherche approchée. Nous présentons les résultats obtenus et faisons la comparaison avec ceux de l'état de l'art.
 \\\\
-\textbf{Mots-clés:} azerty
+\textbf{Mots-clés:} MIN-PCM, PCR multiplex, pdbf, heuristiques. 
 
 \subsection*{\huge \begin{center} Abstract \end{center}}
 
-\par This report concerns the ....
+\par This report concerns the minimisation of problem of caracterisation multiple (MIN-PCM). We prepare a state of the art, then we propose elements which can be define the difficult of an instance. These elements also allow us to propose heuristics for resolutions by exact research and approach research. We present the results and make a comparaison with those of the state of art.
 \\\\
-\textbf{Keywords:} azerty 
+\textbf{Keywords:} MIN-PCM, PCR multiplex, pdbf, heuristics. 

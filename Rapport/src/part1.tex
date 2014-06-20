@@ -30,7 +30,7 @@ endémique en Europe mais pour limiter son introduction, il est inscrit sur la l
 pathogènes de quarantaine. Une approche possible pour l'identification des souches bactériennes
 consiste à utiliser un répertoire de gènes de virulence. Il s'agit ainsi de trouver la plus petite
 combinaison de gènes de virulence spécifiques. Cette combinaison peut ainsi être utilisée pour
-concevoir un test d'identification. Des travaux préliminaires[CHHEL et al.2013] montrent que la combinaison des
+concevoir un test d'identification. Des travaux préliminaires\cite{Chhel2013} montrent que la combinaison des
 tests moléculaires ainsi obtenus fournit une technique rapide pour l'identification de toutes les
 souches de Xanthomonas pathogènes sur les haricots.
 \par Avec les possibilités accrues d'acquisition de données génomiques – par exemple le séquençage à
@@ -80,7 +80,7 @@ Dans la première partie de ce mémoire, nous dressons un état de l'art concern
 
 
 
-\subsection{Présentation du problème}
+\subsection{Présentation générale du problème}
 La plupart des bactéries appartenant au genre Xanthomonas sont responsables de pathologies sur une large gamme de cultures économiquement importantes,  induisant notamment  des pertes de rendement et diminuant ainsi la valeur marchande des semences. Quelques graines contaminées sont suffisantes pour générer une source d'inoculation primaire et occasionner ainsi une dissémination ultérieure plus large. En particulier, le pathovar\footnote{La notion de pathovar correspond à une subdivision du genre ayant des caractéristiques pathologiques observées communes.} phaseoli de  Xanthomonas Axonopodis (Xap) qui regroupe toutes les souches identifiées comme pathogènes sur le haricot \cite{Vauterin1995}, n'est pas endémique en Europe mais pour limiter son introduction, il est inscrit sur la liste des agents pathogènes de quarantaine.
 
 La taxonomie du genre Xanthomonas n'est pas encore pleinement résolue, et la délimitation de certaines espèces dans ce genre fait encore débat \cite{Schaad2005}~; les approches phylogénétiques ne sont alors pas réellement applicables. Une approche possible pour l'identification des souches bactériennes consiste à utiliser un répertoire de gènes de virulence. Il s'agit ainsi de trouver la plus petite combinaison de gènes de virulence spécifiques au Xap. Cette combinaison peut être utilisée pour concevoir un test PCR multiplex pour l'identification de Xap \cite{Boureau2013,Boureau2012} dont le coût est directement lié au nombre de gènes à tester. Les résultats obtenus
@@ -96,7 +96,7 @@ multiple désigne le fait qu'il faut considéroer un ensemble de groupes dont le
 caractérisations sont dépendantes des entités contenues dans ceux-ci mais aussi
 des entités appartenant aux autres groupes.
 
-\begin{figure}[H]{Exemple de problème de caractérisation multiple}
+\begin{figure}[H]
 \begin{center}
 \begin{tabular}{|c||c|c|c|c|}
 \hline
@@ -119,11 +119,11 @@ $e_5$&&0&\cellcolor{lightgray}1&\cellcolor{lightgray}0\\
 \hline
 \end{tabular}
 \end{center}
-\caption{}
+\caption{Exemple de problème de caractérisation multiple}
 \label{CD}
 \end{figure}
 
-Dans la figure  il y a 5 entités réparties dans 3 groupes et dont
+Dans la figure \ref{CD} il y a 5 entités réparties dans 3 groupes et dont
 la description se base sur un ensemble de 4 caractères.
 Résoudre ce problème revient à caractériser chaque groupe. Il faut donc, pour
 chaque groupe, trouver une combinaison de  variables permettant de construire une formule vraie pour toutes les
