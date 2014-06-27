@@ -1,0 +1,15 @@
+Comparaisons de résolutions d'instance réelle et aléatoire:
+\begin{overprint}
+\only<1>
+{
+\begin{figure}
+\input{./figure/sh_rch10_s3836_nbComp.tex}
+\end{figure}
+}
+\only<2>
+{
+\begin{figure}
+\input{./figure/sh_rch10_s3836_temps.tex}
+\end{figure}
+}
+\end{overprint}

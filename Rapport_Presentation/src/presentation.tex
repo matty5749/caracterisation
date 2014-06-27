@@ -1,0 +1,359 @@
+\PassOptionsToPackage{table}{xcolor}
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[frenchb]{babel}
+\usetheme{Warsaw}
+\title{Minimisation du problème de caractérisation multiple}
+\author{
+J-M. Chantrein\\
+\and
+sous la direction de\\
+F.Lardeux
+\and
+F.Saubion
+}
+
+\institute{LERIA}
+\date{04 Juillet 2014 \\ \vspace{0.5cm}\large{Master 2 Intelligence décisionnelle}}
+%\today
+\setbeamercovered{invisible}
+
+\setbeamertemplate{navigation symbols}{}
+\addtobeamertemplate{footline}{\hfill\insertframenumber/\inserttotalframenumber\hspace{2em}\null}
+
+%\usepackage[frenchb]{babel}
+%\usepackage[utf8]{inputenc}
+
+\usepackage{array,multirow,rotating,hhline,subfig}
+\usepackage{amsmath,amssymb,mathrsfs}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{fit,decorations.pathmorphing,arrows,shapes}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+\usepackage{pgfplots}
+\usepackage{slashbox}
+
+
+\tikzset{
+  invisible/.style={opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+
+\tikzset{
+  visible/.style={alt={#1{}{opacity=0.05}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+
+%\setbeameroption{show notes}
+
+\begin{document}
+
+\begin{frame}
+\titlepage 
+\end{frame}
+
+%\AtBeginSection[]
+%{
+%  \begin{frame}<beamer>
+%    \frametitle{Plan}
+%    \tableofcontents[currentsection]
+%  \end{frame}
+%}
+
+
+%\begin{frame}{Plan}
+%	\tableofcontents[hideothersubsections]
+%\end{frame}
+
+\section*{Introduction}
+\subsection*{Prérequis}
+\begin{frame}{}
+
+\begin{block}{}
+	\begin{itemize}
+		\item Certaines bactéries sont responsables de pathologies sur une large gammme de culture économiquement importante.
+		\pause
+		\item Ces pathologies induisent des pertes de rendement et diminuent la valeur marchande des semences. 
+	\end{itemize}
+\end{block}
+
+\pause
+\begin{exampleblock}{Pathovar phaseoli de Xanthomonas Axonopodis (Xap)}
+	\begin{itemize}
+		\item Il regroupe toutes les souches pathogènes sur le haricot.
+		\pause
+		\item Il n'est pas endémique en Europe.
+		\pause
+		\item Mais pour limiter son introduction, il est inscrit sur la liste des agents pathogènes de quarantaine.
+		\pause
+		\item La mise en quarantaine des containers de haricots induit de forts coûts de stockage.
+	\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}{}
+\begin{block}{Identification des souches bactériennes}
+	\begin{itemize}
+		\item Obtenir un répertoire de gènes de virulence auprès de biologistes.
+		\pause
+		\item Chercher la plus petite combinaison de gène de virulence spécifique aux souches bactériennes.
+		\pause
+		\item Utiliser cette combinaison pour la mise au point d'un test PCR\footnote{Polymerase Chain Reaction} Multiplex (Micropuce ADN).
+	\end{itemize}
+\end{block}
+
+
+\end{frame}
+
+\begin{frame}{PCR Multiplex}
+\begin{center}
+	\begin{tikzpicture}
+		\tikzstyle{spot}=[circle,draw,thick]
+		\draw (0,0) rectangle (2,2);
+		\node[visible=<2->][spot,fill=yellow!90] at (0.5,0.5) {};
+		\node[visible=<2->][spot,fill=blue!70] at (1,0.5) {};
+		\node[visible=<2->][spot,fill=red!50] at (1.5,0.5) {};
+		
+		\node[visible=<2->][spot,fill=yellow!70] at (0.5,1) {};
+		\node[visible=<2->][spot,fill=blue!50] at (1,1) {};
+		\node[visible=<2->][spot,fill=red!80] at (1.5,1) {};
+		
+		\node[spot,fill=yellow!50] at (0.5,1.5) {};
+		\node[spot,fill=blue!90] at (1,1.5) {};
+		\node[spot,fill=red!60] at (1.5,1.5) {};
+	\end{tikzpicture}
+\end{center}
+
+\begin{block}{Remarque}<3>
+	\begin{itemize}
+		\item Nous cherchons la plus petite combinaison de gène de virulence afin de minimiser la taille de la puce et donc son coût.
+	\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Problème de caractérisation multiple (PCM)}
+	\begin{block}{Données du PCM}
+		\begin{itemize}
+			\item Nous disposons d'un ensemble d'entités (souches bactériennes) regroupées en groupes (pathovars).
+			\pause
+			\item Chaque entité est définie par la présence/absence de gènes (représentation booléenne).
+			\pause
+			\item Une entité peut être vue comme étant une interprétation booléenne sur les gènes.
+			\pause
+			\item Les gènes sont donc considérés comme les variables du problème.
+			\pause
+			\item Chaque groupe fournit une table de vérité partielle d'une fonction booléenne dont l'interprétation est vraie pour le groupe en question et fausse pour tous les autres.  
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}{Représentation et résolution d'une instance PCM}
+%	\begin{itemize}
+%		\item Nous pouvons représenter une instance PCM sous la forme d'une matrice à 2 dimensions. 
+%	\end{itemize}
+	\vspace{0.5cm}
+	\input{src/resolution.tex}
+\end{frame}
+
+\begin{frame}{}
+	\begin{block}{Minimisation du problème de caractérisation multiple(MIN-PCM)}
+		\begin{itemize}
+			\item Consiste à chercher la caractérisation de taille $k$ contenant le moins de variables.
+			\pause
+			\item Permet de minimiser la taille du PCR-Multiplex et donc son coût.
+			\pause
+			\item Lors de la recherche, nous essayons de caractériser à partir de $k=n-1$ jusqu'à ce qu' il n 'y ai plus de caractérisation possible.
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\begin{alertblock}{Complexité}
+			\begin{itemize}
+				\item Le PCM appartient à la classe de complexité W[2]-complet.
+				\pause
+				\item MIN-PCM appartient à la classe de complexité W[2]-difficile.
+				\pause
+				\item La seule possibilité d'améliorer significativement la résolution complète est d'utiliser des heuristiques sur les choix de variables(i.e.: Quels sont les gènes à examiner en priorités?)
+			\end{itemize}
+	\end{alertblock}
+\end{frame}
+
+\begin{frame}{Plan}
+	\tableofcontents
+\end{frame}
+
+\section*{Contributions}
+
+\subsection{Définition d'une instance difficile}
+\begin{frame}{}%{Comparaisons de résolutions d'instance réelle et aléatoire}
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+		\hline 
+		Instances & Entités & Gènes & Borne min connu \\ 
+		\hline 
+		s3836-0 & 1000 & 1000 & 16\\ 
+		\hline
+		rch10 & 173 & 98 & \textbf{10} \\ 
+		\hline
+		\end{tabular} 
+	\end{center}
+	
+	\begin{overprint}
+		\only<2>
+		{
+			\begin{figure}
+				\input{./figure/sh_rch10_s3836_nbComp.tex}
+			\end{figure}
+		}
+		\only<3>
+		{
+			\begin{figure}
+				\input{./figure/sh_rch10_s3836_temps.tex}
+			\end{figure}
+		}
+	\end{overprint} 
+\end{frame}
+
+\begin{frame}
+	\begin{exampleblock}{Masque et ratio d'un groupe}
+	Soit le groupe suivant:
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|}
+			\hline 
+			\backslashbox{Entités}{Gènes} & g0 & g1 & g2 & g3 \\ 
+			\hline 
+			e1 & 1 & 0 & 1 & 1 \\
+			\hline 
+			e2 & 1 & 0 & 1 & 0 \\ 
+			\hline 
+			e3 & 1 & 0 & 0 & 0 \\ 
+			\hline 
+			e4 & 1 & 0 & 1 & 0 \\ 
+			\hline 
+			e5 & 1 & 0 & 1 & 1 \\ 
+			\hline 
+			\hline
+			Masque & 1 & 0 & 0.8 & 0.4 \\
+			\hline
+			\end{tabular}
+		\end{center}
+	\pause
+	Le ratio $r$ de ce groupe est $r=2/4$ soit $r=0.5$
+	\end{exampleblock}
+	
+	\pause
+		\begin{itemize}
+			\item Les instances réelles(resp. aléatoire) sont constituées de groupes ayant un fort(resp. faible) ratio.
+		\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\begin{exampleblock}{Image d'une instance et taux de similarité $\cal{T}$ des gènes}
+	Soit l'image suivante:
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|}
+			\hline 
+			\backslashbox{Groupes}{Gènes} & g0 & g1 & g2 & g3 \\ 
+			\hline 
+			Masque de $g1$ & 0.9 & 0.1 & 0.5 & 0.6 \\ 
+			\hline 
+			Masque de $g2$ & 0.9 & 0.1 & 0.5 & 0.6 \\
+			\hline 
+			Masque de $g3$ & 0.9 & 0.1 & 0.5 & 0.6 \\
+			\hline 
+			\hline
+			$\cal{T}$ & 0.8 & 0.8 & 0 & 0.2 \\ 
+			\hline
+			\end{tabular}
+		\end{center}
+	\end{exampleblock}
+	
+	\pause
+		\begin{itemize}
+			\item Plus la moyenne des taux $\cal{T}$ est élevée, plus l'instance sera difficile à résoudre.
+			\pause			
+			\item Les instances réelles présentent une moyenne de taux $\cal{T}$ beaucoup plus élevée que les instances aléatoires(i.e: les groupes sont fortement similaires).
+%			\pause
+%			\item Nous disposons d'un critère permettant de différencier les gènes et las groupes ($\cal{T}$).
+		\end{itemize}
+\end{frame}
+
+\subsection{Heuristiques pour une recherche exacte}
+\begin{frame}{Heuristiques mises en \oe uvre sur une instance réelle}
+	\input{./src/compHeuristique.tex}
+\end{frame}
+
+%\begin{frame}{Heuristiques mises en \oe uvre sur une instance aléatoire}
+%	\input{./src/compHeuristique2.tex}
+%\end{frame}
+
+\subsection{Recherche approchée}
+\begin{frame}{Recherche approchée}
+	\begin{itemize}
+		\item Roulette proportionelle (non adaptative) favorisant la sélection des gènes présentant de faible taux de similarité $\cal{T}$
+	\end{itemize}
+	
+	\pause
+	\begin{block}{Résultats sur instance réels}
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|c|}
+			\hline 
+			\multirow{2}*{Instances} & \multirow{2}*{Entités} & \multirow{2}*{Gènes}& \multirow{2}*{B. Min} & \multicolumn{2}{c|}{Roulette proportionelle} \\
+			\cline{5-6} 
+			 & & & & k & temps \\
+			\hline 
+			rch8 & 56 & 27 & \textbf{9} & \textcolor{blue}9 & 0.031 \\ 
+			\hline 
+			raphv & 108 & 68 & \textbf{6} & \textcolor{blue}{6} & 0.657 \\ 
+			\hline 
+			raphy & 112 & 70 & \textbf{6} & \textcolor{blue}{6} & 0.873 \\ 
+			\hline 
+			rarep & 112 & 72 & \textbf{12} & 14 & 36.627 \\ 
+			\hline 
+			rch10 & 112 & 86 & \textbf{10} & 12 & 65.615 \\ 
+			\hline 
+			\end{tabular} 
+		\end{center}
+	\end{block}
+\end{frame}
+
+\subsection{Conclusions  et perspective}
+\begin{frame}{Conclusions}
+	\begin{itemize}
+		\item Définitions de critères permettant de déterminer la difficulté d'une instance.
+		\pause
+		\item Mise en place d'heuristiques permettant des résolutions beaucoup plus efficaces sur des instances réelles.
+%		\pause
+%		\item Preuve d'absence d' heuristique utilsant le critère $\cal{T}$ permettant d'améliorer significativement la résolution d'une instance aléatoire.
+		\pause
+		\item Mise en place d'une recherche approchée fournissant d'excellents résultats.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Perspectives}
+	\begin{itemize}
+		\item Améliorer la recherche approchée.
+		\pause
+		\item Développer un générateur d'instance simulant des instances réelles.
+		\pause 
+		\item Travailler sur des instances réelles issues d'autres disciplines que celle de la biologie végétale (médecine, ...).
+%		\pause
+%		\item Chercher des formules à caractères sémantique ($a \lor \lnot b \equiv a \Rightarrow b$).
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{}
+\centering
+Merci pour votre attention.
+\end{frame}
+
+\end{document} 

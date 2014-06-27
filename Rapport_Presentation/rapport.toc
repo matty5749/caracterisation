@@ -1,0 +1,38 @@
+\select@language {french}
+\contentsline {section}{\numberline {1}\IeC {\'E}tat de l'art}{5}{section.1}
+\contentsline {subsection}{\numberline {1.1}Pr\IeC {\'e}sentation g\IeC {\'e}n\IeC {\'e}rale du probl\IeC {\`e}me}{5}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Probl\IeC {\`e}me de caract\IeC {\'e}risation multiple}{6}{subsection.1.2}
+\contentsline {subsubsection}{\numberline {1.2.1}Pr\IeC {\'e}sentation du probl\IeC {\`e}me}{6}{subsubsection.1.2.1}
+\contentsline {subsection}{\numberline {1.3}Complexit\IeC {\'e}}{7}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.4}M\IeC {\'e}thode de r\IeC {\'e}solution}{7}{subsection.1.4}
+\contentsline {subsubsection}{\numberline {1.4.1}Une r\IeC {\'e}solution bas\IeC {\'e}s sur les fonctions bool\IeC {\'e}enes partiellement d\IeC {\'e}finis}{7}{subsubsection.1.4.1}
+\contentsline {subsubsection}{\numberline {1.4.2}R\IeC {\'e}solutions compl\IeC {\`e}tes}{8}{subsubsection.1.4.2}
+\contentsline {paragraph}{\emph {Exact-Proj-Car}}{8}{section*.6}
+\contentsline {paragraph}{Reformulation en programmation lin\IeC {\'e}aire}{8}{section*.7}
+\contentsline {subsubsection}{\numberline {1.4.3}R\IeC {\'e}solution par recherche locale }{8}{subsubsection.1.4.3}
+\contentsline {paragraph}{\emph {LS-Proj-Car}}{8}{section*.8}
+\contentsline {subsection}{\numberline {1.5}R\IeC {\'e}sultats exp\IeC {\'e}rimentaux}{9}{subsection.1.5}
+\contentsline {section}{\numberline {2}Contributions}{11}{section.2}
+\contentsline {subsection}{\numberline {2.1}Introduction}{11}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}D\IeC {\'e}finition d'une instance difficile}{11}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Observations}{14}{subsubsection.2.2.1}
+\contentsline {subsection}{\numberline {2.3}Recherche exacte}{14}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.3.1}Introduction}{14}{subsubsection.2.3.1}
+\contentsline {subsubsection}{\numberline {2.3.2}Algorithmes g\IeC {\'e}n\IeC {\'e}raux de r\IeC {\'e}solution}{15}{subsubsection.2.3.2}
+\contentsline {subsubsection}{\numberline {2.3.3}Heuristique de tri sur les g\IeC {\`e}nes }{16}{subsubsection.2.3.3}
+\contentsline {paragraph}{Tri des g\IeC {\`e}nes par taux de similarit\IeC {\'e} $\mathcal {T}$}{16}{section*.9}
+\contentsline {subparagraph}{R\IeC {\'e}sultats}{16}{figure.7}
+\contentsline {subsubsection}{\numberline {2.3.4}Heuristique de tri sur les groupes}{18}{subsubsection.2.3.4}
+\contentsline {paragraph}{Tri des groupes par taux de similarit\IeC {\'e} $\Gamma $}{18}{section*.11}
+\contentsline {subparagraph}{R\IeC {\'e}sultats}{18}{figure.12}
+\contentsline {subsubsection}{\numberline {2.3.5}Autres heuristiques }{20}{subsubsection.2.3.5}
+\contentsline {paragraph}{Heuristique des plus mauvais d'abord (pmda)}{20}{section*.13}
+\contentsline {subparagraph}{R\IeC {\'e}sultats}{21}{figure.14}
+\contentsline {paragraph}{Heuristique des valeurs taboues}{21}{section*.15}
+\contentsline {subparagraph}{R\IeC {\'e}sultats}{22}{figure.16}
+\contentsline {subsubsection}{\numberline {2.3.6}Comparaisons entre heuristique}{22}{subsubsection.2.3.6}
+\contentsline {subsubsection}{\numberline {2.3.7}R\IeC {\'e}sultats}{23}{subsubsection.2.3.7}
+\contentsline {subsection}{\numberline {2.4}Recherche incompl\IeC {\`e}te}{24}{subsection.2.4}
+\contentsline {subsubsection}{\numberline {2.4.1}R\IeC {\'e}sultats}{26}{subsubsection.2.4.1}
+\contentsline {section}{\numberline {3}Conclusions et perspectives}{27}{section.3}
+\contentsline {chapter}{R\IeC {\'e}sum\IeC {\'e} / Abstract}{28}{section*.18}

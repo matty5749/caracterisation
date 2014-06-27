@@ -1,0 +1,808 @@
+\section{Contributions}
+
+\subsection{Introduction} 
+Cette section présente les démarches de recherche qui ont été effectuées durant le stage.\\
+Dans un premier temps, nous proposerons et définirons des critères qui permettent d'identifier si une instance est difficile ou non.\\
+Ensuite, nous aborderons la résolution du MIN-PCM avec deux approches différentes :
+\begin{itemize}
+\item Une recherche exacte qui a la possibilité de prouver la borne minimum du MIN-PCM sur des instances de tailles raisonnables.
+\item Une recherche approchée qui à la possibilité de trouver des solutions de bonne qualité mais non nécessairement optimales, en un temps polynômial sur des instances de grandes tailles.
+\end{itemize} 
+%\textit{TODO: Enfin, nous générons des instances pseudo-aléatoire de différents degrés de difficultés que nous soumettons à nos algorithmes.}
+
+\subsection{Définition d'une instance difficile}
+\label{subsectionInstanceDifficile}
+Prenons deux instances: une réelle (rch10) et une aléatoire (s3836-0), voici leurs caractéristiques:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 
+Instances & Entités & Groupes & Gènes & Résolution PL & Résolution EPC\footnote{[Exact-Proj-Car CHHEL et al]} \\ 
+\hline 
+s3836-0 & 1000 & 15 & 1000 & - & 16 \\ 
+\hline
+rch10 & 173 & 27 & 98 & \textbf{10}\footnote{En gras = solution optimal} & 14 \\ 
+\hline
+\end{tabular} 
+\end{center}
+\vspace{7mm}
+
+A priori, on peut supposer que l'instance aléatoire est plus difficile à résoudre: elle est bien plus volumineuse que l'instance réelle à tel point qu'elle nécessite plus de 32 Go de RAM pour une résolution en programmation linéaire.
+
+Observons leurs résolutions avec notre algorithme sans heuristique présenté dans la figure \ref{algoMinPCM} page \pageref{algoMinPCM}
+\begin{figure}[H]
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/sh_rch10_s3836_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/sh_rch10_s3836_temps.tex}
+	\end{minipage}
+\caption{Résolution sans heuristique de rch10 et s3836-0}
+\end{figure} 
+
+Nous apercevons que l'instance aléatoire est facilement résolue jusqu'à une caractérisation de taille 15. Ce n'est pas le cas de l'instance réelle qui ne peut plus caractériser en un temps raisonnable à partir d'une caractérisation de taille 25. Ce type d'observation étant \textbf{systématique} quelque soit les caractéristiques des instances réelles ou aléatoires comparées, nous pouvons alors affirmer que la taille d'une instance ne suffit pas à elle seule pour définir sa difficulté. Dès lors, nous nous posons les deux questions suivantes:\\
+
+\begin{itemize}
+\item \textbf{Qu'est ce qui peut bien être à l'origine de cette différence de résolution entre une instance aléatoire et une instance réelle?}
+\item \textbf{Existe il une méthode permettant de définir si une instance est difficile à résoudre ou non ?}\\
+\end{itemize}
+Afin de répondre à ces questions, nous définissons les notions suivantes:
+
+\begin{definition}
+Le \textbf{masque $M$ d'un groupe $g$} correspond à la moyenne des présences/absences des gènes pour chaque entité du groupe.\\
+Formellement, soit $M_g$ le masque d'un groupe $g$, $g \in \mathcal{G}$, $M_g[i]$ la valeur du masque $g$ en position $i$, $i \in [1,|\mathcal{X}|]$,
+% $|\mathcal{X}|$ étant le nombre de gènes de l'instance après la suppression des redondances,
+$$\forall i \in  [1, |\mathcal{X}|], M_g[i]= \frac{\sum_{i=1}^{|\mathcal{G}|}e_i}{|\mathcal{G}|} $$
+\end{definition}
+
+\begin{definition}
+Le \textbf{ratio $r$ d'un masque $M$} correspond au pourcentage de valeur entière (0/1) présente dans le masque.\\
+Formellement, soit $M_g$ le masque d'un groupe $g$, $r_g(I)$ le ratio du groupe $g$ dans l'image $I$, $g \in \mathcal{G}$,
+\begin{center}
+$$ r_g(I)=\frac{|{i / M_g[i] \in \{0,1\}}|}{|\mathcal{X}|},\forall i \in [1,|\mathcal{X}|]$$
+\end{center}
+\end{definition}
+
+%\subsubsection*{Exemple :}
+\begin{exemple}{Masque et ratio d'un groupe\\}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+\backslashbox{Entités}{Gènes} & g0 & g1 & g2 & g3 & g4 & g5 & g6 & g7 & g8 & g9 \\ 
+\hline 
+e1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 1 \\ 
+\hline 
+e2 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 1 \\ 
+\hline 
+e3 & 1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ 
+\hline 
+e4 & 1 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\ 
+\hline 
+e5 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 0 \\ 
+\hline 
+\hline
+Masque & 1 & 1 & 0 & 0.8 & 0.6 & 1 & 0 & 0.4 & 0 & 0.4 \\
+\hline
+\end{tabular}
+\end{center}
+Le ratio $r$ de ce groupe est : \\
+$r=6/10$\\
+soit  $r=0.6$
+\end{exemple}
+
+\begin{definition}
+L'\textbf{image $I$ d'une instance} est une matrice en deux dimensions de taille $|\mathcal{G}|*|\mathcal{X}|$ où chaque ligne correspond au masque de chacun des groupes de l'instance.\\
+Formellement, soit $I_g$ la ligne g de la matrice $I$ correspondant à l'image de l'instance $\mathcal{I}$, $M_g$ le masque du groupe $g$ de l'instance $\mathcal{I}$,
+$$\forall g \in [1,|\mathcal{G}|], I_g=M_g$$
+\end{definition}
+
+
+\begin{definition}
+Le \textbf{taux de similarité $\mathcal{T}_j$ d'un gène $j$} correspond à la moyenne des valeurs de la colonne $j$ sur l'image $I$ d'une instance $\mathcal{I}$.\\
+Formellement, soit $I$ l'image d'une instance $\mathcal{I}$, $i$ la $i$\up{ème} ligne de $I$, $j$ la $j$\up{ème} colonne de $I$, $I_{ij}$ est la valeur dans $I$ en ligne $i$ et en colonne $j$, $\mathcal{T}_j(I)$ le taux de similarité du gène $j$ dans l'image $I$,
+$$ \text{Soit } X=\frac{\sum_{i=1}^{|\mathcal{G}|} I_{ij}}{\mathcal{G}} $$ 
+$$\text{Si } X<0.5 \text{ alors } \mathcal{T}_j(I)=(0.5-X)*2 $$
+$$\text{sinon }\mathcal{T}_j(I)=(0.5-(1-X))*2$$ 
+\end{definition}
+Ainsi formulé, $\mathcal{T}_j(I) \in [0,1]$, et, plus le taux de similarité d'un gène est élevé, plus sa présence(resp. abscence) dans l'instance est redondante.
+
+\begin{definition}
+Le \textbf{coefficient de difficulté $\rho$ d'une instance}, correspond à la moyenne des taux de similarité $\mathcal{T}$ d'une instance.\\
+Formellement, soit $I$ l'image d'une instance $\mathcal{I}$, $j$ la $j$\up{ème} colonne de $I$, $\mathcal{T}_j(I)$ le taux de similarité globale du gène $j$ dans l'image $I$,
+$$ \rho=\frac{\sum_{j=1}^{|\mathcal{X}|}\tau_j(I)}{|\mathcal{X}|} $$
+\end{definition}
+
+\begin{definition}
+Le \textbf{coefficient de difficulté $\sigma$ d'une instance}, correspond au complémentaire de la moyenne des ratios des masques d'une instance\footnote{La moyenne des ratios des masques d'une instance $\in [0,1]$ }. Nous utilisons le complémentaire de façon à ce que l'interprétation du coefficient $\sigma$ soit calqué sur celui de $\rho$.
+Formellement, soit $I$ l'image d'une instance $\mathcal{I}$, $i$ la $i$\up{ème} ligne de $I$, $r_i(I)$ le ratio du groupe $i$ dans l'image $I$,
+$$ \sigma=1-\frac{\sum_{i=1}^{|\mathcal{G}|}r_i(I)} {|\mathcal{G}|} $$
+\end{definition}
+
+\begin{definition}
+\textbf{Le coefficient $\Delta\cal{T}$ d'une instance} correspond à l'écart type des taux de similarité $\cal{T}$ des gènes.
+Formellement, soit $I$ l'image d'une instance $\mathcal{I}$, $i$ la $i$\up{ème} ligne de $I$, $r_i(I)$ le ratio du groupe $i$ dans l'image $I$, le coefficient de difficulté $\rho$ de l'instance $\cal{I}$, 
+$$\Delta\mathcal{T}=\sqrt{\frac{\sum_{j=1}^{|\mathcal{X}|} (\rho-\mathcal{T}_j)^2}{|\mathcal{X}|}}$$
+$$\Delta\mathcal{T} \in [0,\frac{1}{2}]$$
+\end{definition}
+
+\begin{remarque}
+	Si $\rho \simeq 0$ (resp. 1) alors $\Delta\cal{T} \simeq $ 0 car $\rho$ est la moyenne des taux de similarité $\cal{T}$ d'une instance et si cette moyenne est proche de 0 (resp. 1), cela signifie que la majorité des $\cal{T}$ sont proches de 0 (resp. 1) et donc que leur écart type ($\Delta\cal{T}$) est proche de 0.
+	\label{remDeltaTau}
+\end{remarque}
+
+
+Reprenons nos deux instances rch10 et s3836-0 et calculons leurs coefficients de difficultés:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline 
+Instances & $\Delta\cal{T} $ & $\rho$ & $\sigma$ \\ 
+\hline 
+s3836-0 & 0.019 & 0 & 0.024 \\ 
+\hline
+rch10 & 0.238 & 0.626 & 0.906 \\ 
+\hline
+\end{tabular} 
+\end{center}
+
+Nous observons que le coefficient de difficulté $\rho$ semble plus significatif que $\sigma$ pour déterminer la difficulté d'une instance, mais nous ne sommes pas en mesure d'indiquer dans quel proportion. Cependant les travaux de \cite{Chhel2013} nous indiquent que seule une heuristique sur le choix des variables est en mesure de pouvoir améliorer un algorithme de recherche exacte. Cela nous conforte dans l'idée que $\rho$ a plus d'influence que $\sigma$ sur la difficulté d'une instance. Nous pouvons ainsi formuler les deux propositions suivantes:
+
+\begin{proposition}
+Une instance dont le coefficient de difficulté $\rho$ est proche de 1 est une \textbf{instance difficile} à résoudre.
+\end{proposition}
+
+\begin{proposition}
+Une instance dont le coefficient de difficulté $\rho$ est proche de 1 et dont le coefficient de difficulté $\sigma$ est proche de 1 est une \textbf{instance très difficile} à résoudre.
+\end{proposition}
+
+Dès lors, nous pourrions penser qu'il suffit de trouver une heuristique basée sur le choix des gènes en fonction de leurs taux de similarité $\cal{T}$ pour outrepasser la difficulté émise par le coefficient $\rho$. Ce n'est pas le cas. En effet, si l'écart type entre les différents taux $\cal{T}$ d'une instance est faible, alors le critere $\cal{T}$ ne permet pas de différencier significativement les gènes. Nous faisons donc la proposition suivante: 
+
+\begin{proposition}
+Une heuristique basée sur le choix des gènes en fonction de leurs taux de similarité $\cal{T}$ n'a aucune influence sur des instances dont le coefficient $\Delta\cal{T}$ est proche de 0.
+\label{propDelta}
+\end{proposition}
+
+Il y a encore au moins un indicateur sur la difficulté des instances: il s'agit de la taille de celles-ci. Nous rejoignons l'idée émise dans \cite{Chhel2013}, selon laquelle la taille d'une instance est caractérisée par son nombre de gènes et d'entités mais pas par son nombre de groupe. Cependant, lorsque le coefficient de difficulté $\sigma$ est proche de 0, nous devrions pouvoir être en mesure d'outrepasser cette difficulté puisque nous pouvons réduire le parcours d'un très grand nombre d'entités par l'utilisation des masques, nous présentons ce cas de figure dans l'exemple \ref{exempleDifficulté}. Nous faisons donc la proposition suivante:
+
+
+
+\begin{proposition}
+La taille d'une instance est une information sur la difficulté de sa résolution. Il n'existe pas d'heuristique permettant d'outrepasser cette difficulté lorsque le coefficient $\sigma$ de l'instance est proche de 1.
+\end{proposition}
+
+\begin{exemple}[Difficultés d'une instance]
+\label{exempleDifficulté}
+Supposons qu'il existe une instance composé de 3 groupes de 100 entités que l'on souhaite caractériser avec un ensemble de $n$ gènes. Supposons également que cette instance ait pour coefficients de difficulté $\sigma \simeq 0$, $\rho \simeq 0.7$ et $\Delta\cal{T} \simeq$ 0. D'après notre proposition \ref{propDelta}, il n'existe pas d'heuristique efficace pour outrepasser la difficulté émise par $\rho$.
+
+Une recherche standard pour une caractérisation de taille $k$ effectue au maximum environ $ (100*200 + 100*100) * C_n^k * k$ comparaisons. Comme $sigma \simeq 0$ , nous pouvons exploiter les masques(voir paragraphe \ref{heuristiqueTabou} page \pageref{heuristiqueTabou}). En les utilisant, nous effectuons au maximum environ $ (1\up{+} * 2\up{+} + 1\up{+}*1\up{+}) * C_n^k * k $ comparaisons.
+
+On remarque que dans ce cas précis, l'utilisation des masques à une influence sur la résolution du problème.
+
+Supposons maintenant que $\Delta\cal{T} \simeq $ 0.5, nous présumons dès lors que l'efficacité d'une heuristique basée sur l'utilisation des masques serait bien dérisoire face à une heuristique basée sur le choix des gènes en fonction de leurs taux de similarité $\cal{T}$\footnote{Quoique cette assertion dépend de la valeur de $n$}. En effet, une heuristique basée sur le choix des gènes en fonction de leurs taux de similarité $\cal{T}$ travaille à réduire le facteur à caractère exponentiel $C_n^k$ alors que l'utilisation des masques vise à réduire un facteur à caractère polynômial. Cela confirme une fois de plus que $\rho$ à plus d'influence que $\sigma$ pour caractériser une instance.
+\end{exemple}
+
+
+%Les observations sur notre jeu de 15 instances nous permettent de conclure que $\sigma$ en particulier, et $\rho$ dans une moindre mesure, nous permettent de définir ce qu'est une instance difficile. 
+
+\subsubsection{Observations}
+
+Nous présentons ici les instances avec leurs coefficients de difficultés respectifs:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline 
+Instances & Entités & Gènes & $\Delta\cal{T}$ & $\rho$ & $\sigma$ & PL & EPC & LSPC \\ 
+\hline 
+s301-0 & 500 & 400 & 0.025 & 0.034 & 0.999 & - & 13 & 14 \\ 
+\hline 
+s326-0 & 500 & 500 & 0.026 & 0.033 & 1 & - & 13 & 14 \\ 
+\hline 
+s413-30 & 500 & 600 & 0.027 & 0.035 & 1 & - & 13 & 13 \\ 
+\hline 
+s555-20 & 800 & 800 & 0.029 & 0.039 & 0.999 & - & 13 & 13 \\ 
+\hline 
+s625-20 & 500 & 1000 & 0.027 & 0.035 & 1 & - & 13 & 13 \\ 
+\hline 
+s754-10 & 600 & 200 & 0.027 & 0.034 & 1 & - & 13 & 14 \\ 
+\hline 
+s882-20 & 600 & 400 & 0.024 & 0.032 & 1 & - & 13 & 14 \\ 
+\hline 
+s2501-70 & 800 & 800 & 0.024 & 0.033 & 1 & - & 15 & 15 \\ 
+\hline 
+s31294-50 & 200 & 1000 & 0.049 & 0.065 & 0.993 & 10 & 10 & 11 \\ 
+\hline 
+s3836-0 & 1000 & 1000 & 0.019 & 0.024 & 1 & - & 16 & 16 \\ 
+\hline 
+raphv & 108 & 68 & 0.302 & 0.588 & 0.419 & \textbf{6} & \textbf{6} & 9 \\ 
+\hline 
+raphy & 112 & 70 & 0.294 & 0.609 & 0.668 & \textbf{6} & \textbf{6} & 8 \\ 
+\hline 
+rarep & 112 & 72 & 0.295 & 0.651 & 0.502 & \textbf{12} & 39 & 14 \\ 
+\hline 
+rch8 & 56 & 27 & 0.339 & 0.569 & 0.067 & \textbf{9} & \textbf{9} & 9 \\ 
+\hline 
+rch10 & 112 & 86 & 0.238 & 0.626 & 0.094 & \textbf{10} & 25 & 15 \\ 
+\hline 
+\end{tabular} 
+\end{center}
+
+Toute les instances aléatoires ont un coefficient $\rho$ proche de 0 et donc un coefficient $\Delta\cal{T}$ proche de 0 (voir remarque \ref{remDeltaTau}). Mais elles ont pour difficulté leurs coefficients $\sigma$ qui est proche de 1, cela signifie que nous ne pourrons pas réduire de façon significative leurs temps de résolution. L'instance rch8 a un coefficient $\sigma$ proche de 0 ainsi qu'un coefficient $\rho$ moyennement élevé, de plus, elle est de faible taille, c'est l'instance qui semble la plus facile à résoudre. L'instance raphv et raphy ont un ordre de difficulté similaire,  L'instance rch10 a un très faible coefficient $\sigma$, elle doit être plus facile à résoudre que l'instance rarep pour qui le coefficient sigma est moyennement élevé. Ces deux dernières semblent être les instances les plus difficiles à résoudre. Cette série d'observations et de raisonnement est corroborée par les résultats obtenus par \cite{Chhel2013}.
+
+\subsection{Recherche exacte}
+\label{rechercheExacte}
+\subsubsection{Introduction}
+Nous présentons les heuristiques ayant été mises en place pour la résolution d'instance MIN-PCM. Chaque heuristique est abordée de façon indépendante. Une comparaison entre toutes les heuristiques est présentée dans la sous section \ref{sectCompar}. Les comparaisons se font sur l'instance réelle rch10 et l'instance pseudo-aléatoire s3836-0.
+
+Une comparaison entre la meilleure combinaison d'heuristique obtenue et l'heuristique "CCD" proposée par \cite{Chhel2013} avec le solveur \textit{Exact-Proj-Car} est présentée à la fin de la cette section.
+\subsubsection{Algorithmes généraux de résolution}
+
+Dans cette sous section, nous présentons une méthode générale qui permet de résoudre le MIN-PCM.
+
+\begin{algorithm}
+	\textbf{booléen minimise\_caractérisation\_instance ($Groupes$, $n$)}\\
+	\tcp
+	{
+		$Groupes$ est un ensemble contenant tous les groupes de l'instance\\
+		$n$ correspond aux nombres de gènes de l'instance
+	}
+	$caracterise \leftarrow$ VRAI\\
+	$k \leftarrow n$ \tcp{k correspond au nombre de gènes pouvant caractériser l'instance}
+	\Tq {$caracterise =$ VRAI}
+	{
+		$k \leftarrow k-1$\\
+		$caracterise \leftarrow $caractérise\_instance ($Groupes$, $k$, $n$)\\
+	}
+	afficher("La caractérisation minimale est de taille " $k+1$)\\
+	\caption{Algorithme de minimisation du problème de caractérisation multiple}
+	\label{algoMinPCM}
+\end{algorithm}
+
+\begin{algorithm}
+	\textbf{booléen caractérise\_instance ($Groupes$, $k$, $n$)}\\
+	\tcp
+	{
+		$Groupes$ est un ensemble contenant tous les groupes de l'instance\\
+		$k$ correspond au nombre de gène souhaité pour la caractérisation\\
+		$n$ correspond aux nombres de gènes de l'instance
+	}	
+	\PourTous {$combinaison$ de $C_n^k$}
+	{
+		$DejaVus \leftarrow \{ \}$\\
+		$caracteriseTemp \leftarrow$ VRAI\\
+		\PourTous {$gRef \in Groupes$ }
+		{
+			$DejaVus \leftarrow DejaVus \cup \{gRef\}$\\
+			\PourTous {$gComp \in Groupes \backslash DejaVus$}
+			{
+				\Si {$\neg$ caractérise\_groupes($combinaison$,$gRef$,$gComp$)}
+					{
+					$caracteriseTemp \leftarrow$ FAUX\\
+					Sortir de la boucle
+					}
+			}
+			\Si {$caracteriseTemp=$FAUX} {Sortir de la boucle}
+		}
+		\Si {$caracteriseTemp=$ VRAI} {\Retour {VRAI}}
+		\tcp{Sinon combinaison suivante}
+	}
+	afficher("Il n'existe pas de caractérisation de taille " $k$)\\
+	\Retour{FAUX}
+	\caption{Algorithme de caractérisation d'une instance MIN-PCM pour une taille $k$}
+	\label{algoCaractInstance}
+\end{algorithm}
+
+\begin{algorithm}
+	\textbf{booléen caractérise\_groupes ($combinaison$,$g1$,$g2$)}\\
+	\tcp{$e1$ et $e2$ sont les entités des groupes $g1$ et $g2$ }				
+	\PourTous {$e1 \in g1$ }
+	{
+		\PourTous {$e2 \in g2$}
+		{
+			$temp \leftarrow$ FAUX\\
+			\PourTous {$i \in combinaison$}
+			{
+				\Si {$e1[i] \neq e2[i]$} 
+					{
+						$temp \leftarrow$ VRAI\\
+						Sortir de la boucle
+					}
+			}
+			\Si {$temp = $FAUX \tcp{$g1$ et $g2$ ne sont pas caractérisable avec $combinaison$}} {\Retour {FAUX}}
+		}
+	}
+	\Retour {VRAI}	
+	\caption{Algorithme de caractérisation de groupes}
+	\label{algoCaractGroupes}
+\end{algorithm}
+
+L'algorithme présenté dans la figure \ref{algoMinPCM} cherche la plus petite caractérisation possible pour une instance donnée. Il prend en entrée un ensemble de groupe $Groupes$ qui contient tous les groupes de l'instance et un entier $n$ qui correspond aux nombres de gènes de l'instance. Au début de l'algorithme, une variable booléenne $caracterise$ est instanciée à $VRAI$ et un entier $k$, qui correspondra au nombre de gènes pouvant caractériser une instance, est instancié à $n$. En effet, la caractérisation la plus évidente et immédiate est la caractérisation de taille $n$. Nous entrons ensuite dans une boucle qui va avoir pour rôle de minimiser le plus possible la variable $k$. On sort de cette boucle lorsque plus aucune caractérisation n'est possible, c'est à dire lorsque nous avons trouvé la borne minimale du MIN-PCM. Pour cela, il faut que la variable $caracterise$ soit instanciée à faux, ceci ne peut se faire que par l'appel à l'algorithme \emph{caractérise\_instance} présenté dans la figure \ref{algoCaractInstance}.
+
+
+Cet algorithme prend en entrée un ensemble de groupe $Groupes$ qui contient tous les groupes de l'instance, un entier $k$, qui correspond au nombre de gènes souhaités pour la caractérisation et un entier $n$ qui correspond au nombre de gènes de l'instance. Nous entrons dans une première boucle (niveau 1) qui génère les combinaisons $combinaison$ de $C_n^k$. La variable $DejaVus$ est instanciée comme étant un ensemble vide de groupe. Une variable booléenne $caracteriseTemp$ est initialisée à $VRAI$. Nous entrons alors dans une seconde boucle (niveau 2), qui va ouvrir une nouvelle boucle (niveau 3) afin de tester si tous les groupes de $Groupes$ peuvent caractériser les groupes de $Groupes \backslash DejaVus$, auquel cas, nous avons une caractérisation de taille $k$ avec la combinaison $combinaison$. La mise à jour de $DejaVus$ au niveau 2 a pour effet de ne pas tester plusieurs fois des groupes ayant déjà été testés. Dès lors que la variable $caracteriseTemp$ est instanciée à $FAUX$, un mécanisme de sortie de boucle permet de tester directement la prochaine combinaison de $C_n^k$. Si en sortie de boucle de niveau 2, la variable $caracteriseTemp$ est toujours instanciée à $VRAI$, cela signifie que la combinaison courante caractérise l'instance, l'algorithme s'arrête alors en retournant la valeur booléenne $VRAI$. Si nous arrivons en sortie de boucle de niveau 1, cela signifie que toutes les combinaisons de $C_n^k$ ont été testées et que aucune d'entre elles n'a pu caractériser l'instance. Dans ce cas, l'algorithme s'arrête en retournant la valeur booléenne $FAUX$. Dans cet algorithme, nous faisons appel à la fonction \emph{caractérise\_groupes} pour savoir si deux groupes différents peuvent être caractérisés avec une combinaison $combinaison$. Nous présentons cette fonction dans la figure \ref{algoCaractGroupes}.
+
+
+Cette fonction permet de savoir si deux groupes $g1$ et $g2$ sont caractérisables avec une combinaison $combinaison$ donnée. Nous notons $e1$(resp.$e2$) la variable qui va contenir une après l'autre les entités du groupe $g1$(resp.$g2$). Les entités de chacun des groupes ($e1$ et $e2$) sont comparées deux à deux sur la présence/absence des gènes définit par la combinaison $combinaison$. Si deux entités sont identiques sur ces gènes alors on ne peut pas caractériser les deux groupes avec cette combinaison(et a fortiori, on ne peut pas non plus caractériser l'instance avec cette combinaison). Dès lors, l'algorithme s'arrête immédiatement en retournant la valeur boolénne $FAUX$. Si toutes les comparaisons possibles entre $e1$ et $e2$ ont été faites, cela signifie que les deux groupes $g1$ et $g2$ sont caractérisables avec la combinaison $combinaison$. L'algorithme s'arrête alors en retournant la valeur booléenne $VRAI$.
+
+
+
+\subsubsection{Heuristique de tri sur les gènes }
+\paragraph{Tri des gènes par taux de similarité $\mathcal{T}$}
+Les outils mis en place dans la sous-section \ref{subsectionInstanceDifficile} nous permettent de mettre en place une heuristique basée sur le trie des gènes: nous ordonnons les gènes par ordre croissant sur leur taux de similarité $\mathcal{T}$. Dès lors, nous parcourons en priorité les gènes présentants un faible taux de similarité. Ce trie par $\mathcal{T}$ permet d'explorer en priorité les gènes susceptible de caractériser une instance. Le coût de calcul de ce trie est insignifiant et est effectué de façon unique avant le lancement de l'algorithme de résolution.
+
+\subparagraph{Résultats}
+
+\begin{figure}
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_sh_vs_tau_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_sh_vs_tau_temps.tex}
+	\end{minipage}
+\caption{Heuristique $\mathcal{T}$ sur rch10}
+\label{tauRch10}
+\end{figure}
+
+\begin{figure}
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/s3836_sh_vs_tau_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/s3836_sh_vs_tau_temps.tex}
+	\end{minipage}
+\caption{Heuristique $\mathcal{T}$ sur s3836-0}
+\label{taus3836}
+\end{figure}
+
+Sur l'instance réelle rch10, nous constatons que le nombre de comparaisons d'entités  et le temps d'éxécution \textbf{sont considérablement diminuées} par l'heuristique(figure \ref{tauRch10}). Sur l'instance aléatoire, nous obervons que cette heuristique a une faible influence négative(figure \ref{taus3836}). Ce phénomène s'explique par un coefficient $\Delta\cal{T}$ très bas (0.019). Il résulte de cette observation que \textbf{toute instance ayant un coefficient $\Delta\cal{T} \simeq $ 0 ne pourra pas bénéficier, lors de sa résolution, des avantages d'une heuristique de tri sur les gènes}.
+ 
+La possibilité que l'influence soit négative nous permet de déduire que \textbf{le tri des gènes par $\mathcal{T}$ n'est pas un tri optimal}. 
+
+
+\subsubsection{Heuristique de tri sur les groupes}
+\paragraph{Tri des groupes par taux de similarité $\Gamma$}
+Lors de la précédente sous-section, nous avons ordonnés statiquement les gènes d'après leurs $\mathcal{T}$. Ici, nous souhaitons ordonner les entités d'une instance. Nous définissons alors le concept de taux de similarité entre deux groupes.
+
+\begin{definition}
+Le \textbf{taux de similarite $\Gamma(g,g')$ entre deux groupes $g$ et $g'$ } correspond à la moyenne des sommes des moyennes des valeurs du masque de $g$ et $g'$.\\
+Formellement, soit $g$ et $g'$ deux groupes d'une instance $\mathcal{I}$, $M_g$(resp. $M_{g'}$) le masque du groupe $g$(resp. $g'$), $M_g[i]$(resp. $M_{g'}[i]$) la valeur du masque du groupe $g$(resp. $g'$) en position $i$,
+$$ \Gamma(g,g')= \frac{\sum_{i=1}^{|\mathcal{X}|}(\frac{M_g[i]+M_{g'}[i]}{2})}{|\mathcal{X}|}$$
+\end{definition}
+
+%\begin{definition}
+%Le \textbf{taux de similarité globale $\Gamma(g)$ d'un groupe $g$} correspond à la moyenne de ses taux de similarité locaux.\\
+%Formellement, soit $g$ le groupe d'une instance $\mathcal{I}$,
+%$$ \Gamma(g)=\frac{\sum_{g'=1}^{|\mathcal{G}|}\tau(g,g') /g \neq g'}{|\mathcal{G}|-1} $$
+%\end{definition}
+
+Une instance est caractérisable si tous les groupes qui la composent sont caractérisables entre eux. Nous proposons de regarder en priorité les groupes ayant le plus de chance de ne pas caractériser l'instance car dès lors que deux groupes ne sont pas caractérisables entre eux, nous pouvons arrêter la recherche sur la combinaison courante et tester la suivante, nous faisons ainsi l'économie de tester les groupes facilement caractérisables entre eux(qui sont de toute manière testés lorsque la combinaison courante est une caractérisation valide). Nous construisons alors une liste de paire de groupe $[g,g']$ de tel manière que la liste soit triée par ordre décroissant de $\Gamma(g,g')$ et qu'elle contienne tous les groupes qu'il faut caractériser entre eux pour caractériser une instance. En effet, plus deux groupes sont similaires entre eux, plus leur chance de ne pas caractériser l'instance est forte.
+
+Nous proposons cette heuristique de façon statique (tout les gènes sont pris en compte, la liste est créée de façon unique avant le lancement de l'algorithme) et de façon dynamique(à chaque combinaison, seuls les gènes concernés par la combinaison sont pris en compte pour le calcul de $\Gamma(g,g')$, nous construisons donc autant de liste qu'il y a de combinaisons testées)
+
+
+
+\subparagraph{Résultats}
+
+
+\begin{figure}
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_sh_vs_gamma_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_sh_vs_gamma_temps.tex}
+	\end{minipage}
+\caption{Heuristique $\Gamma$ statique sur rch10}
+\label{GammaStatiqueRch10}
+\end{figure}
+
+\begin{figure}
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_sh_vs_gamma_dynamique_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_sh_vs_gamma_dynamique_temps.tex}
+	\end{minipage}
+\caption{Heuristique $\Gamma$ dynamique sur rch10}
+\label{GammaDynamiqueRch10}
+\end{figure}
+
+\begin{figure}
+\centering
+%	\begin{minipage}[c]{0.49\linewidth}
+%	\centering
+	\input{./figure/rch10_gamma_vs_gamma_dynamique_nbComp_zoom.tex}
+%	\end{minipage}
+\caption{Zoom sur comparaisons heuristique $\Gamma$ statique et heuristique $\Gamma$ dynamique}
+\label{compGammaZoom}
+\end{figure}
+
+\begin{figure}
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_gamma_vs_gamma_dynamique_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_gamma_vs_gamma_dynamique_temps.tex}
+	\end{minipage}
+\caption{Comparaisons heuristique $\Gamma$ statique et heuristique $\Gamma$ dynamique sur rch10}
+\label{compGamma}
+\end{figure}
+
+\begin{figure}
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/s3836_sh_vs_gamma_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/s3836_sh_vs_gamma_temps.tex}
+	\end{minipage}
+\caption{Comparaisons heuristique $\Gamma$ statique et heuristique $\Gamma$ dynamique sur s3836-0}
+\label{compGammaS3836}
+\end{figure}
+
+Sur la figure \ref{GammaStatiqueRch10}, nous observons que l'heuristique $\Gamma$ statique permet de réduire considérablement le nombre de comparaisons d'entité. Le temps de résolution est également amélioré. Lorsque nous traitons cette instance avec l'heuristique $\Gamma$ dynamique(figure \ref{GammaDynamiqueRch10}), nous apercevons que le nombre de comparaisons d'entité est également plus faible, mais nous payons le caractère dynamique de l'heuristique puisque le temps de résolution est beaucoup plus élevé que la résolution standard. La borne inférieure est par voie de conséquence très élevée ($k=32$ contre $k=25$ en résolution standard). Nous nous intéressons dès lors à comparer les deux heuristiques sur l'instance. nous constatons que $\Gamma$ dynamique est meilleure que $\Gamma$ statique sur le nombre de comparaisons d'entité jusque $k=35$ (figure \ref{compGammaZoom}), mais que passé cette borne, $\Gamma$ statique est bien plus performante(figure \ref{compGamma}) aussi bien en terme de nombre de comparaison d'entité que en terme de temps de résolution. Les observations sur l'instance aléatoire n'étant pas beaucoup plus fructueuse pour l'heuristique $\Gamma$ dynamique (figure \ref{compGammaS3836}), nous concluons que cette dernière n'est pas à retenir pour les résolutions à venir, au contraire de l'heuristique $\Gamma$ statique qui, pour un coût de calcul insignifiant, nous réduit le temps de résolution de manière conséquente.
+
+La figure \ref{compGammaZoom} nous prouve également que aucune des deux heuristiques n'effectue un tri optimal.
+
+\subsubsection{Autres heuristiques }
+\paragraph{Heuristique des plus mauvais d'abord (pmda)}
+Lorsque nous parcourons une instance pour une caractérisation de taille $k$, nous affectons un poids sur la paire d'entités comparées deux à deux sur les indices de la combinaison courante.
+
+
+
+\begin{definition}[Poids $P$ d'une paire d'entités]
+Formellement, soit $e_a$, $e_z$ deux entités n'appartenant pas au même groupe, $\mathcal{C}$ une combinaison de $\mathcal{C}_{|\mathcal{X}|}^k$, $P$ le poids de la paire $\{e_a,e_z\}$.
+$$ P = |\{i / e_a(i)=e_z(i), \forall i \in \mathcal{C}\}| $$
+Si $P>=k-1$ alors la \textbf{paire d'entités $\{e_a,e_z\}$ est critique} car lors du parcours de la prochaine combinaison, cette paire a la plus forte probabilité d'être identique sur les nouveaux indices.
+\end{definition}
+
+L'idée est donc de traiter au plus vite ce type d'entités afin d'examiner au plus vite d'autres combinaisons.
+
+\begin{exemple}
+Soit les 2 entités suivantes:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline 
+Groupe & \backslashbox{Entités}{Gènes} & g1 & g2 & g3 & g4 & g5 & g6 \\ 
+\hline 
+1 & e1 & 1 & 0 & 1 & 0 & 0 & 0 \\ 
+\hline 
+20 & e400 & 1 & 0 & 0 & 0 & 0 & 1 \\ 
+\hline 
+\end{tabular}
+\end{center}
+Supposons que nous sommes dans le cas d'une caractérisation de taille 3, nous parcourons les combinaisons de $\mathcal{C}_6^3 $. Supposons que le groupe 1 soit de taille 1, si nous sommes à la comparaison entre e1 et e400, cela signifie que nous avons déjà effectué 399 comparaisons d'entités. 
+Observons la résolution de cet exemple:
+\begin{itemize}
+\item Regardons alors la combinaison courante $\mathcal{C}=\{123\}$ : nous apercevons que seul g3 permet la caractérisation. Comme plusieurs des combinaisons suivantes ne différeront que d'un élément, cet paire d'entités \{e1,e400\} a la plus forte probabilité d'être similiraire lors de la prochaine combinaison, nous gardons donc en mémoire cet ensemble qui a un poids égale à $k-1$.
+\item Supposons que $\mathcal{C}=\{123\}$ n'ai pas caractérisé notre instance, nous parcourons alors $\mathcal{C}=\{124\}$ : nous commençons par parcourir les ensembles critiques obtenus lors du parcours précédent, soit la comparaison entre e1 et e400. Le poids est alors égal à $k$, ce qui signifie que nous pouvons arrêter notre recherche sur cette combinaison (car celle ci ne pourra en aucun cas caractériser l'instance). Cependant nous gardons en mémoire cet ensemble critique. Notons que nous avons fait là l'économie de 399 comparaisons d'entités.
+\item Nous parcourons alors $\mathcal{C}=\{125\}$ : même constat , de nouveau une économie de 399 comparaisons d'entités. 
+\item Nous parcourons alors $\mathcal{C}=\{126\}$ : aucun effet, mais la paire \{e1,e400\} est toujours considérée comme critique.
+\item Nous parcourons alors $\mathcal{C}=\{134\}$ : aucun effet, mais la paire  \{e1,e400\} n'est plus considérée comme critique car son poids $<k-1$.
+\end{itemize}
+\label{exemplePmda}
+\end{exemple}
+
+Nous proposons une variante à cette heuristique pour laquelle dans le dernier point de l'exemple \ref{exemplePmda}, nous continuons de considérer la paire d'entité comme critique(i.e.: une paire d'entité qui a été définit comme étant critique ne peut plus changer de statut). Nous appelons cette variante pmdaNoMaj\footnote{Plus mauvais d'abord sans mise à jour}.
+
+\subparagraph{Résultats}
+\begin{figure}
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_sh_vs_pmda_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_sh_vs_pmda_temps.tex}
+	\end{minipage}
+\caption{Heuristiques pmda sur rch10}
+\label{pmdaRch10}
+\end{figure}
+
+\begin{figure}
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/s3836_sh_vs_pmda_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/s3836_sh_vs_pmda_temps.tex}
+	\end{minipage}
+\caption{Heuristiques pmda sur s3836-0}
+\label{pmdaS3836}
+\end{figure}
+
+Nous constatons que les deux heuristiques sont efficaces sur les deux instances(figure \ref{pmdaRch10} et \ref{pmdaS3836}). L'heuristique pmdaNoMaj est légèrement plus efficace que pmda sur l'instance rch10(cela se confirme sur d'autres instances).
+
+\paragraph{Heuristique des valeurs taboues}
+\label{heuristiqueTabou}
+
+Nous avons vu dans l'exemple \ref{exempleDifficulté} page \pageref{exempleDifficulté} qu'il est possible d'utiliser les propriétés des masques pour améliorer le temps de résolution d'une instance MIN-PCM. L'heuristique des valeurs taboues permet justement de tirer partie de ces propriétés. Cette heuristique ne pourra fonctionner que sur des instances dont le coefficient $\sigma \simeq 0$.
+
+\begin{exemple}{Heuristique des valeurs taboues}
+{
+	Considérons les masques des deux groupes suivants:\\
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|}
+		\hline 
+		\backslashbox{Groupe}{Gènes} & g0 & g1 & g2 & g3 & g4 \\ 
+		\hline 
+		Gr1 & 1 & 0.8 & 1 & 0 & 1 \\ 
+		\hline 
+		Gr2 & 1 & 1 & 0.7 & 0 & 0 \\  
+		\hline 
+		\end{tabular}
+	\end{center}
+	
+Lorsque nous essayons de caractériser le groupe Gr1 et Gr2 avec une combinaison de gènes, nous sommes obligés de comparer chaque entité avec les gènes présent dans la combinaison dont les valeurs dans les masques de Gr1 et Gr2 ne correspondent pas à des valeurs entières(0 ou 1). Mais dans le cas où ces valeurs correspondent à des valeurs entières, nous pouvons considérer les deux masques comme des entités propres puisque toutes les entités des groupes présenteront la même valeur sur les gènes en question. Nous pouvons ainsi faire l'économie du parcours des combinaisons des différentes entités du groupe Gr1 et Gr2, ces valeurs n'ayant pas besoin d'être observées, nous considérons qu'elles sont taboues. Dans notre exemple, nous devrons parcourir de façon exhaustive les colonnes des gènes g1 et g2 lorsque celles-ci feront partie d'une combinaison à tester. Mais ce ne sera pas le cas pour les colonnes des autres gènes (g0, g3 et g4) pour lesquelles nous avons une comparaisons directe.
+}
+\end{exemple}
+
+
+
+\subparagraph{Résultats}
+
+\begin{figure}
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_sh_vs_tabou_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_sh_vs_tabou_temps.tex}
+	\end{minipage}
+\caption{Heuristique des valeurs taboues sur rch10}
+\label{tabourch10}
+\end{figure}
+
+\begin{figure}
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/s3836_sh_vs_tabou_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/s3836_sh_vs_tabou_temps.tex}
+	\end{minipage}
+\caption{Heuristique des valeurs taboues sur s3836-0}
+\label{tabou3836}
+\end{figure}
+
+Nous observons sur la figure \ref{tabourch10} que l'heuristique permet de réduire le nombre de comparaisons d'entités ainsi que le temps de résolution sur l'instance réelle dont le coefficient $\sigma = 0.093$. Ce n'est pas le cas pour l'instance aléatoire (figure \ref{tabou3836}) dont le coefficient $\sigma = 1$.
+
+\subsubsection{Comparaisons entre heuristique}
+\label{sectCompar}
+
+Nous comparons ici les meilleures heuristiques retenues dans cette sous section afin d'identifier lesquelles sont les plus influentes lors de la résolution d'une instance MIN-PCM. Nous ajoutons également une heuristique qui combine les heuristiques retenues(all).
+
+\begin{figure}
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_compare_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/rch10_compare_temps.tex}
+	\end{minipage}
+\caption{Comparaisons des heuristiques sur rch10}
+\label{compareRch10}
+\end{figure}
+
+Nous observons sur la figure \ref{compareRch10} que l'heuristique de tri par taux de similarité $\cal{T}$ (en bleu) est la plus influente des heuristiques. Vient ensuite l'heuristique de tri des groupes par $\Gamma$ (en rouge), celle-ci a une influence quasi similaire avec l'heuristique des plus mauvais d'abord sans mise à jour (pmdaNoMaj, en vert). L'heuristique des valeurs taboues(en noir) est la moins influente. Nous constatons que la combinaison de ces heuristiques (en violet) permet d'obtenir une excellente heuristique.
+
+\begin{figure}
+\centering
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/s3836_compare_nbComp.tex}
+	\end{minipage}
+	\begin{minipage}[c]{0.49\linewidth}
+	\centering
+	\input{./figure/s3836_compare_temps.tex}
+	\end{minipage}
+\caption{Comparaisons des heuristiques sur s3836-0}
+\label{compares3836}
+\end{figure}
+
+Sur la figure \ref{compares3836}, l'heuristique de tri par taux de similarité $\cal{T}$ (en bleu) est la moins influente, cela est dû au coefficient $\Delta\mathcal{T} \simeq 0$. L'heuristique des plus mauvais d'abord sans mise à jour (pmdaNoMaj, en vert) surpasse toutes les heuristiques, y compris l'heuristique combinant toutes les autres (en violet), nous pensons qu'il s'agit là du coût de calcul de l'heuristique des valeurs taboues (en noir) et qui n'a pas beaucoup d'influence du fait que le coefficient de difficulté $\sigma = 1$. L'heuristique de tri des groupes par $\Gamma$ (en rouge) apporte une amélioration significative.
+
+Nous concluons que les heuristiques choisies pour la résolution d'une instance MIN-PCM doivent l'être en fonction des différents coefficients ($\Delta\mathcal{T}$, $\sigma$, $\rho$) de l'instance.
+
+\subsubsection{Résultats}
+
+Nous présentons ici les résultats obtenus avec notre solveur \emph{Exact-Proj-Car2} (EPC2) qui fonctionne avec toutes les meilleures heuristiques présentées dans cette sous section. Nous pouvons ainsi comparer nos résultats avec ceux obtenus par \cite{Chhel2013}.
+
+La colonne \textit{temps} indique le temps cumulé depuis le début de la recherche à $k=|\cal{X}|$.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+\multirow{2}*{Instances} & \multirow{2}*{Entités} & \multirow{2}*{Gènes}& \multirow{2}*{$\Delta\cal{T}$}&  \multirow{2}*{$\rho$} & \multirow{2}*{$\sigma$} & \multirow{2}*{PL} & \multirow{2}*{EPC} & \multicolumn{2}{c|}{EPC2} \\
+\cline{9-10} 
+ & & & & & & & & k & temps \\
+\hline 
+s301-0 & 500 & 400 & 0.025 & 0.034 & 0.999 & - & 13 & 13 & 2.072\\ 
+\hline 
+s326-0 & 500 & 500 & 0.026 & 0.033 & 1 & - & 13 & 13 & 1.707 \\ 
+\hline 
+s413-30 & 500 & 600 & 0.027 & 0.035 & 1 & - & 13 & 13 & 1.050\\ 
+\hline 
+s555-20 & 800 & 800 & 0.029 & 0.039 & 0.999 & - & 13 & 13 & 14.924\\ 
+\hline 
+s625-20 & 500 & 1000 & 0.027 & 0.035 & 1 & - & 13 & 13 & 1.636 \\ 
+\hline 
+s754-10 & 600 & 200 & 0.027 & 0.034 & 1 & - & 13 & \textcolor{red}{14} & 0.366\\ 
+\hline 
+s882-20 & 600 & 400 & 0.024 & 0.032 & 1 & - & 13 & 13 & 543.176 \\ 
+\hline 
+s2501-70 & 800 & 800 & 0.024 & 0.033 & 1 & - & 15 & \textcolor{blue}{14} & \textcolor{cyan}{282.935} \\ 
+\hline 
+s31294-50 & 200 & 1000 & 0.049 & 0.065 & 0.993 & 10 & 10 & 10 & 381.108 \\ 
+\hline 
+s3836-0 & 1000 & 1000 & 0.019 & 0.024 & 1 & - & 16 & \textcolor{blue}{15} & \textcolor{cyan}{13.072} \\ 
+\hline 
+rch8 & 56 & 27 & 0.339 & 0.569 & 0.067 & \textbf{9} & \textbf{9} & \textbf{9} & 0.038 \\ 
+\hline 
+raphv & 108 & 68 & 0.301 & 0.588 & 0.419 & \textbf{6} & \textbf{6} & \textbf{6} & 2.055 \\ 
+\hline 
+raphy & 112 & 70 & 0.293 & 0.609 & 0.668 & \textbf{6} & \textbf{6} & \textbf{6} & 6.846 \\ 
+\hline 
+rarep & 112 & 72 & 0.295 & 0.651 & 0.502 & \textbf{12} & 39 & \textcolor{blue}{16} & 206.037 \\ 
+\hline 
+rch10 & 112 & 86 & 0.237 & 0.626 & 0.094 & \textbf{10} & 25 & \textcolor{blue}{11} & 383.006\\ 
+\hline 
+\end{tabular} 
+\end{center}
+
+Nous avons placé en bleu les caractérisations de taille inférieure à EPC. Les temps de couleur cyan permettent de souligner la rapidité d'éxécution de EPC2 par rapport à EPC:  EPC2 caractérise l'instance s3836-0 en 13 secondes pour un k=15 alors que EPC ne réduit pas en dessous de k=16 en 10 minutes. Nous observons le même type de phénomène sur l'instance s2501-70. Notons toutefois que l'instance s754-10 est moins bien caractérisée par EPC2, nous pensons que dans ce cas précis, l'influence du tri par $\cal{T}$ est négative, cela est du à $\Delta\cal{T}$ proche de 0. Notre solveur réduit de façon significative les caractérisations des instances réelles rarep et rch10. 
+
+
+\subsection{Recherche incomplète}
+
+Nous nous intéressons ici à obtenir une méthode de recherche incomplète qui se sert des propriétés révélées dans la sous section \ref{subsectionInstanceDifficile}. Nous mettons un mécanisme de roulette proportionnelle (non adaptative) sur les gènes en fonction de leur taux de similarité $\mathcal{T}$: lors d'un tirage, chaque gène a une probabilité inversement proportionelle à son taux de similarité d'être sélectionné.
+
+\begin{definition}{}
+\label{defProbaGene}
+La probabilité $P(i)$ du gène i d'être sélectionné lors d'un tirage se calcule de la façon suivante:\\
+Soit $i \in [1,\ldots,|\mathcal{X}|]$ , les gènes $i$ sont ordonnées par ordre croissant de similarité $\mathcal{T}$,
+$$ P(i)=\frac{1-\mathcal{T}(i)}{\sum_{i=1}^{|\mathcal{X}|} (1-\mathcal{T}(i))} $$
+$$ \sum_{i=1}^{|\mathcal{X}|} P(i) = 1$$
+\end{definition}
+
+\begin{algorithm}
+	\textbf{Réel $proba[]$ initialisation\_proba (Réel $taux[]$)}\\
+	\tcp{$taux[i]$ est le taux de similarité $\mathcal{T}$ du gène $i$, $taux$ est ordonné par ordre croissant de $\mathcal{T}$ }				
+	Réel $sommeTauxInverse \leftarrow 0$\\
+	Réel $proba[]$\\
+	
+	\tcp{Boucle 1}
+	\PourTous {$i \in [1,\ldots,|\mathcal{X}|$ } 
+	{
+		$sommeTauxInverse \leftarrow sommeTauxInverse + taux[i]$
+	}	
+	\tcp{Boucle 2}
+	\PourTous {$i \in [1,\ldots,|\mathcal{X}|$ } 
+	{
+		$proba[i] \leftarrow \frac{1-taux[i]}{sommeTauxInverse}$
+	}
+	\tcp{Boucle 3}
+	\PourTous {$i \in [2,\ldots,|\mathcal{X}|$ } 
+	{
+		$proba[i] \leftarrow proba[i]+proba[i-1]$
+	}
+	\caption{Algorithme d'initialisation des probabilités de sélection des gènes d'une instance}
+	\label{algoInitialiseProba}
+\end{algorithm}
+
+\begin{algorithm}
+	\textbf{ roulette ($taux$, $Groupes$, $k$, $n$)}\\
+	\tcp
+	{
+		$taux[i]$ est le taux de similarité $\mathcal{T}$ du gène $i$, $taux$ est ordonné par ordre croissant de $\mathcal{T}$\\
+		$Groupes$ est un ensemble contenant tous les groupes de l'instance\\
+		$k$ correspond au nombre de gène souhaité pour la caractérisation\\
+		$n$ correspond aux nombres de gènes de l'instance
+	}
+	Réel $proba[] \leftarrow$ initialisation\_proba($taux$)\\
+	\tcp{Boucle 1}	
+	\Tq{$VRAI$}
+	{
+		Entier $combinaison\{\}$ \tcp{un ensemble d'entier qui correspondra aux indices des gènes dont on souhaite la caractérisation}
+		\tcp{Boucle 2}		
+		\Tq{$|combinaison| < k $}
+		{
+			Réel $alea \leftarrow $ nombre aléatoire entre 0 et 1 \\
+			\tcp{Boucle 3}
+			\PourTous{$i \in [1,\ldots,I \rightarrow n]$}
+			{
+				\Si{$proba[i] \geq alea$}
+				{
+					$combinaison \leftarrow combinaison \cup i$\\
+					Sortir de la boucle 3
+				}
+			}
+		}
+		\Si{caractérise\_instance($I$,$combinaison$)}
+		{
+			afficher("La combinaison ",$combinaison$," permet de caractériser l'instance.")\\
+			$k \leftarrow k-1$\\
+			$combinaison \leftarrow \{\}$		
+		}
+	}
+	\caption{Algorithme de recherche approchée par roulette proportionelle}
+	\label{algoRoulette}
+\end{algorithm}
+		
+En pratique, nous utilisons l'algorithme \ref{algoInitialiseProba}: nous instancions un tableau  de réel $proba$ qui contient les probabilités de chaque gène, ainsi, $proba[i]$ contient la probabilité du gène $i$ tel qui a été calculé dans la définition \ref{defProbaGene}(Boucle 1 et 2). La somme des éléments du tableau $proba = 1$. Nous transformons ce tableau afin de répartir ces probabilités sur une échelle de 0 à 1 dans la boucle 3. Nous pourrons ainsi faire un tirage par roulette proportionnelle tel qui est définit par l'algorithme \ref{algoRoulette}.
+
+L'algorithme roulette décrit notre recherche approchée, nous initialisons le tableau $proba$ des probabilités de sélection des gènes. Nous créons une combinaison $combinaison$ en fonction de ces probabilités dans la boucle 2 . Si la combinaison caractérise l'instance, nous décrémentons la taille $k$ de la caractérisation souhaitée et nous réinitialisons l'ensemble $combinaison$ à l'ensemble vide. Nous réitérons ce processus dans une boucle infinie, nous demandons au programme de s'arrêter à l'issu d'un temps déterminé par l'utilisateur. Notons que la méthode caractérise\_instance nous permet de savoir si la combinaison $combinaison$ caractérise l'instance est qu'elle bénéficie des heuristiques définit dans la sous-section \ref{rechercheExacte}.
+
+\begin{remarque}[Améliorations de la méthode]
+Cette méthode de recherche peut être améliorée: lorsque nous caractérisons une instance avec $k$ gènes, nous pourrions tester les combinaisons possibles de $C_k^{k-1}$ dans la combinaison courante jusqu'à caractériser de nouveau à $k-1$ si cela est possible, et dans le cas contraire uniquement, relancer un tirage. Par manque de temps, nous ne testerons pas cette variante, l'objectif de notre démarche étant de démontrer la pertinence d'utilisation du coefficient $\mathcal{T}$ pour une recherche approchée.
+\end{remarque}
+
+\subsubsection{Résultats}
+Nous présentons ici les résultats de notre méthode. Nous faisons la comparaison avec l'heuristique du programme LSPC (Local Search Proj Car) proposée dans \cite{Chhel2013}. La colonne itération correspond aux nombres d'itérations de la boucle infinie (boucle 1) présentée dans l'algorithme \ref{algoRoulette}.
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+\multirow{2}*{Instances} & \multirow{2}*{Entités} & \multirow{2}*{Gènes}&\multirow{2}*{$\Delta\cal{T}$} & \multirow{2}*{$\rho$} & \multirow{2}*{$\sigma$} & \multirow{2}*{PL} & \multirow{2}*{LSPC} & \multicolumn{3}{c|}{Roulette proportionelle} \\
+\cline{9-11} 
+ & & & & & & & & k & temps & itérations \\
+\hline 
+s301-0 & 500  & 400 & 0.025 & 0.034 & 0.999 & - & 14 & \textcolor{blue}{13} & 421.005 & 1612515 \\ 
+\hline 
+s326-0 & 500 & 500 & 0.026 & 0.033 & 1 & - & 14 & \textcolor{blue}{13} & 93.247 & 390166\\ 
+\hline 
+s413-30 & 500 & 600 & 0.027 & 0.035 & 1 & - & 13 & 13 & 428.634 & 1388939 \\ 
+\hline 
+s555-20 & 800 & 800 & 0.029 & 0.039 & 0.999 & - & 13 & 13 & 395.024 & 1286275 \\ 
+\hline 
+s625-20 & 500 & 1000 & 0.027 & 0.035 & 1 & - & 13 & 13 & 415.878 & 1359740 \\ 
+\hline 
+s754-10 & 600 & 200 & 0.027 & 0.034 & 1 & - & 14 & 14 & 25.876 & 84672\\ 
+\hline 
+s882-20 & 600 & 400 & 0.024 & 0.032 & 1 & - & 14 & 14 & 3.023 & 9113\\ 
+\hline 
+s2501-70 & 800 & 800 & 0.024 & 0.033 & 1 & - & 15 & 15 & 4.24 & 4350 \\ 
+\hline 
+s31294-50 & 200 & 1000 & 0.049 & 0.065 & 0.993 & 10 & 11 & 11 & 0.963 & 5273\\ 
+\hline 
+s3836-0 & 1000 & 1000 & 0.019 & 0.024 & 1 & - & 16 & 16 & 5.266 & 1006 \\ 
+\hline
+rch8 & 56 & 27 & 0.339 & 0.569 & 0.067 & \textbf{9} & 9 & 9 & 0.031 & 22440 \\ 
+\hline 
+raphv & 108 & 68 & 0.302 & 0.588 & 0.419 & \textbf{6} & 9 & \textcolor{blue}{6} & 0.657 & 470528\\ 
+\hline 
+raphy & 112 & 70 & 0.294 & 0.609 & 0.667 & \textbf{6} & 8 & \textcolor{blue}{6} & 0.873 & 524344\\ 
+\hline 
+rarep & 112 & 72 & 0.295 & 0.651 & 0.502 & \textbf{12} & 14 & 14 & 36.627 & 17793513
+\\ 
+\hline 
+rch10 & 112 & 86 & 0.238 & 0.626 & 0.094 & \textbf{10} & 15 & \textcolor{blue}{12} & 65.615 & 35676187\\ 
+\hline 
+\end{tabular} 
+\end{center}
+
+Nous remarquons que notre méthode, bien que grandement améliorable, est sensiblement plus efficace que LSPC sur les instances aléatoires et est beaucoup plus efficace sur les instances réelles: nous trouvons la borne optimale sur les instances rch8, raphv et raphy , et nous l'approchons pour les instances rarep et rch10. Ces résultats démontrent la pertinence de l'utilisation des taux de similarité $\mathcal{T}$ pour les instances réelles.

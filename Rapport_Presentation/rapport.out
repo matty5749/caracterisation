@@ -1,0 +1,26 @@
+\BOOKMARK [1][-]{section.1}{\311tat de l'art}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Pr\351sentation g\351n\351rale du probl\350me}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Probl\350me de caract\351risation multiple}{section.1}% 3
+\BOOKMARK [3][-]{subsubsection.1.2.1}{Pr\351sentation du probl\350me}{subsection.1.2}% 4
+\BOOKMARK [2][-]{subsection.1.3}{Complexit\351}{section.1}% 5
+\BOOKMARK [2][-]{subsection.1.4}{M\351thode de r\351solution}{section.1}% 6
+\BOOKMARK [3][-]{subsubsection.1.4.1}{Une r\351solution bas\351s sur les fonctions bool\351enes partiellement d\351finis}{subsection.1.4}% 7
+\BOOKMARK [3][-]{subsubsection.1.4.2}{R\351solutions compl\350tes}{subsection.1.4}% 8
+\BOOKMARK [3][-]{subsubsection.1.4.3}{R\351solution par recherche locale }{subsection.1.4}% 9
+\BOOKMARK [2][-]{subsection.1.5}{R\351sultats exp\351rimentaux}{section.1}% 10
+\BOOKMARK [1][-]{section.2}{Contributions}{}% 11
+\BOOKMARK [2][-]{subsection.2.1}{Introduction}{section.2}% 12
+\BOOKMARK [2][-]{subsection.2.2}{D\351finition d'une instance difficile}{section.2}% 13
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Observations}{subsection.2.2}% 14
+\BOOKMARK [2][-]{subsection.2.3}{Recherche exacte}{section.2}% 15
+\BOOKMARK [3][-]{subsubsection.2.3.1}{Introduction}{subsection.2.3}% 16
+\BOOKMARK [3][-]{subsubsection.2.3.2}{Algorithmes g\351n\351raux de r\351solution}{subsection.2.3}% 17
+\BOOKMARK [3][-]{subsubsection.2.3.3}{Heuristique de tri sur les g\350nes }{subsection.2.3}% 18
+\BOOKMARK [3][-]{subsubsection.2.3.4}{Heuristique de tri sur les groupes}{subsection.2.3}% 19
+\BOOKMARK [3][-]{subsubsection.2.3.5}{Autres heuristiques }{subsection.2.3}% 20
+\BOOKMARK [3][-]{subsubsection.2.3.6}{Comparaisons entre heuristique}{subsection.2.3}% 21
+\BOOKMARK [3][-]{subsubsection.2.3.7}{R\351sultats}{subsection.2.3}% 22
+\BOOKMARK [2][-]{subsection.2.4}{Recherche incompl\350te}{section.2}% 23
+\BOOKMARK [3][-]{subsubsection.2.4.1}{R\351sultats}{subsection.2.4}% 24
+\BOOKMARK [1][-]{section.3}{Conclusions et perspectives}{}% 25
+\BOOKMARK [0][-]{section*.18}{R\351sum\351 / Abstract}{}% 26

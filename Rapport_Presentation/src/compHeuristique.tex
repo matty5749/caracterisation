@@ -1,0 +1,240 @@
+ 
+	\begin{overprint}
+	\only<1>
+	{
+		\centering
+		\begin{tikzpicture}[scale=0.8]
+			\begin{axis}[
+			legend entries={rch10 standard, rch10 pmdaNoMaj, rch10 tabou, rch10 trie par $\Gamma$, rch10 trie par $\mathcal{T}$,rch10 all},
+			legend style={at={(1.3,1)},anchor=north},legend columns=1
+			xlabel={Caractérisation de taille k},
+			ylabel={Nombre de comparaisons d'entités},
+			xmin={11},
+			xmax={35},
+			%ymax={1000000000}
+			%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+			]
+			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_rch10.dat};
+%			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/tau_rch10.dat};
+%			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/gamma_rch10.dat};
+%			\addplot +[mark=none, color=green] table[x=k,y=nbComp]{./resultats/pmda_noMaj_rch10.dat};
+%			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/tabou_rch10.dat};
+%			\addplot +[mark=none, color=violet] table[x=k,y=nbComp]{./resultats/all_rch10.dat};
+			\end{axis}
+			\end{tikzpicture}
+	}
+	\only<2>
+	{
+		\centering
+		\begin{tikzpicture}[scale=0.8]
+			\begin{axis}[
+			legend entries={rch10 standard, rch10 pmdaNoMaj, rch10 tabou, rch10 trie par $\Gamma$, rch10 trie par $\mathcal{T}$,rch10 all},
+			legend style={at={(1.3,1)},anchor=north},legend columns=1
+			xlabel={Caractérisation de taille k},
+			ylabel={Nombre de comparaisons d'entités},
+			xmin={11},
+			xmax={35},
+			%ymax={1000000000}
+			%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+			]
+			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_rch10.dat};
+			\addplot +[mark=none, color=green] table[x=k,y=nbComp]{./resultats/pmda_noMaj_rch10.dat};
+			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/tabou_rch10.dat};
+%			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/gamma_rch10.dat};
+%			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/tau_rch10.dat};
+%			\addplot +[mark=none, color=violet] table[x=k,y=nbComp]{./resultats/all_rch10.dat};
+			\end{axis}
+			\end{tikzpicture}
+	}
+	\only<3>
+	{
+		\centering
+		\begin{tikzpicture}[scale=0.8]
+			\begin{axis}[
+			legend entries={rch10 standard, rch10 pmdaNoMaj, rch10 tabou, rch10 trie par $\Gamma$, rch10 trie par $\mathcal{T}$,rch10 all},
+			legend style={at={(1.3,1)},anchor=north},legend columns=1
+			xlabel={Caractérisation de taille k},
+			ylabel={Nombre de comparaisons d'entités},
+			xmin={11},
+			xmax={35},
+			%ymax={1000000000}
+			%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+			]
+			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_rch10.dat};
+			\addplot +[mark=none, color=green] table[x=k,y=nbComp]{./resultats/pmda_noMaj_rch10.dat};
+			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/tabou_rch10.dat};
+			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/gamma_rch10.dat};
+%			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/tau_rch10.dat};
+%			\addplot +[mark=none, color=violet] table[x=k,y=nbComp]{./resultats/all_rch10.dat};
+			\end{axis}
+			\end{tikzpicture}
+	}
+	\only<4>
+	{
+		\centering
+		\begin{tikzpicture}[scale=0.8]
+			\begin{axis}[
+			legend entries={rch10 standard, rch10 pmdaNoMaj, rch10 tabou, rch10 trie par $\Gamma$, rch10 trie par $\mathcal{T}$,rch10 all},
+			legend style={at={(1.3,1)},anchor=north},legend columns=1
+			xlabel={Caractérisation de taille k},
+			ylabel={Nombre de comparaisons d'entités},
+			xmin={11},
+			xmax={35},
+			%ymax={1000000000}
+			%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+			]
+			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_rch10.dat};
+			\addplot +[mark=none, color=green] table[x=k,y=nbComp]{./resultats/pmda_noMaj_rch10.dat};
+			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/tabou_rch10.dat};
+			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/gamma_rch10.dat};
+			\addplot +[mark=none, color=red] table[x=k,y=nbComp]{./resultats/tau_rch10.dat};
+%			\addplot +[mark=none, color=violet] table[x=k,y=nbComp]{./resultats/all_rch10.dat};
+			\end{axis}
+			\end{tikzpicture}
+	}
+	\only<5>
+	{
+		\centering
+		\begin{tikzpicture}[scale=0.8]
+			\begin{axis}[
+			legend entries={rch10 standard, rch10 pmdaNoMaj, rch10 tabou, rch10 trie par $\Gamma$, rch10 trie par $\mathcal{T}$,rch10 all},
+			legend style={at={(1.3,1)},anchor=north},legend columns=1
+			xlabel={Caractérisation de taille k},
+			ylabel={Nombre de comparaisons d'entités},
+			xmin={11},
+			xmax={35},
+			%ymax={1000000000}
+			%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+			]
+			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/sh_rch10.dat};
+			\addplot +[mark=none, color=green] table[x=k,y=nbComp]{./resultats/pmda_noMaj_rch10.dat};
+			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/tabou_rch10.dat};
+			\addplot +[mark=none] table[x=k,y=nbComp]{./resultats/gamma_rch10.dat};
+			\addplot +[mark=none, color=red] table[x=k,y=nbComp]{./resultats/tau_rch10.dat};
+			\addplot +[mark=none, color=violet] table[x=k,y=nbComp]{./resultats/all_rch10.dat};
+			\end{axis}
+			\end{tikzpicture}
+	}
+	\only<6>
+	{
+		\begin{itemize}
+			\item Observons maintenant les temps d'éxécutions.
+		\end{itemize}
+	}
+% 	\only<7>
+% 	{
+% 		\centering
+% 		\begin{tikzpicture}[scale=0.8]
+% 			\begin{axis}[
+% 			legend entries={rch10 standard, rch10 pmdaNoMaj, rch10 tabou, rch10 trie par $\Gamma$, rch10 trie par $\mathcal{T}$,rch10 all},
+% 			legend style={at={(1.3,1)},anchor=north},legend columns=1
+% 			xlabel={Caractérisation de taille k},
+% 			ylabel={Nombre de comparaisons d'entités},
+% 			xmin={11},
+% 			xmax={35},
+% 			%ymax={1000000000}
+% 			%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+% 			]
+% 			\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_rch10.dat};
+% %			\addplot +[mark=none] table[x=k,y=temps]{./resultats/tau_rch10.dat};
+% %			\addplot +[mark=none] table[x=k,y=temps]{./resultats/gamma_rch10.dat};
+% %			\addplot +[mark=none, color=green] table[x=k,y=temps]{./resultats/pmda_noMaj_rch10.dat};
+% %			\addplot +[mark=none] table[x=k,y=temps]{./resultats/tabou_rch10.dat};
+% %			\addplot +[mark=none, color=violet] table[x=k,y=temps]{./resultats/all_rch10.dat};
+% 			\end{axis}
+% 			\end{tikzpicture}
+% 	}
+% 	\only<8>
+% 	{
+% 		\centering
+% 		\begin{tikzpicture}[scale=0.8]
+% 			\begin{axis}[
+% 			legend entries={rch10 standard, rch10 pmdaNoMaj, rch10 tabou, rch10 trie par $\Gamma$, rch10 trie par $\mathcal{T}$,rch10 all},
+% 			legend style={at={(1.3,1)},anchor=north},legend columns=1
+% 			xlabel={Caractérisation de taille k},
+% 			ylabel={Nombre de comparaisons d'entités},
+% 			xmin={11},
+% 			xmax={35},
+% 			%ymax={1000000000}
+% 			%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+% 			]
+% 			\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_rch10.dat};
+% 			\addplot +[mark=none, color=green] table[x=k,y=temps]{./resultats/pmda_noMaj_rch10.dat};
+% 			\addplot +[mark=none] table[x=k,y=temps]{./resultats/tabou_rch10.dat};
+% %			\addplot +[mark=none] table[x=k,y=temps]{./resultats/gamma_rch10.dat};
+% %			\addplot +[mark=none] table[x=k,y=temps]{./resultats/tau_rch10.dat};
+% %			\addplot +[mark=none, color=violet] table[x=k,y=temps]{./resultats/all_rch10.dat};
+% 			\end{axis}
+% 			\end{tikzpicture}
+% 	}
+% 	\only<9>
+% 	{
+% 		\centering
+% 		\begin{tikzpicture}[scale=0.8]
+% 			\begin{axis}[
+% 			legend entries={rch10 standard, rch10 pmdaNoMaj, rch10 tabou, rch10 trie par $\Gamma$, rch10 trie par $\mathcal{T}$,rch10 all},
+% 			legend style={at={(1.3,1)},anchor=north},legend columns=1
+% 			xlabel={Caractérisation de taille k},
+% 			ylabel={Nombre de comparaisons d'entités},
+% 			xmin={11},
+% 			xmax={35},
+% 			%ymax={1000000000}
+% 			%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+% 			]
+% 			\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_rch10.dat};
+% 			\addplot +[mark=none, color=green] table[x=k,y=temps]{./resultats/pmda_noMaj_rch10.dat};
+% 			\addplot +[mark=none] table[x=k,y=temps]{./resultats/tabou_rch10.dat};
+% 			\addplot +[mark=none] table[x=k,y=temps]{./resultats/gamma_rch10.dat};
+% %			\addplot +[mark=none] table[x=k,y=temps]{./resultats/tau_rch10.dat};
+% %			\addplot +[mark=none, color=violet] table[x=k,y=temps]{./resultats/all_rch10.dat};
+% 			\end{axis}
+% 			\end{tikzpicture}
+% 	}
+% 	\only<10>
+% 	{
+% 		\centering
+% 		\begin{tikzpicture}[scale=0.8]
+% 			\begin{axis}[
+% 			legend entries={rch10 standard, rch10 pmdaNoMaj, rch10 tabou, rch10 trie par $\Gamma$, rch10 trie par $\mathcal{T}$,rch10 all},
+% 			legend style={at={(1.3,1)},anchor=north},legend columns=1
+% 			xlabel={Caractérisation de taille k},
+% 			ylabel={Nombre de comparaisons d'entités},
+% 			xmin={11},
+% 			xmax={35},
+% 			%ymax={1000000000}
+% 			%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+% 			]
+% 			\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_rch10.dat};
+% 			\addplot +[mark=none, color=green] table[x=k,y=temps]{./resultats/pmda_noMaj_rch10.dat};
+% 			\addplot +[mark=none] table[x=k,y=temps]{./resultats/tabou_rch10.dat};
+% 			\addplot +[mark=none] table[x=k,y=temps]{./resultats/gamma_rch10.dat};
+% 			\addplot +[mark=none, color=red] table[x=k,y=temps]{./resultats/tau_rch10.dat};
+% %			\addplot +[mark=none, color=violet] table[x=k,y=temps]{./resultats/all_rch10.dat};
+% 			\end{axis}
+% 			\end{tikzpicture}
+% 	}
+	\only<7>
+	{
+		\centering
+		\begin{tikzpicture}[scale=0.8]
+			\begin{axis}[
+			legend entries={rch10 standard, rch10 pmdaNoMaj, rch10 tabou, rch10 trie par $\Gamma$, rch10 trie par $\mathcal{T}$,rch10 all},
+			legend style={at={(1.3,1)},anchor=north},legend columns=1
+			xlabel={Caractérisation de taille k},
+			ylabel={Temps d'éxécution en seconde},
+			xmin={11},
+			xmax={35},
+			%ymax={1000000000}
+			%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+			]
+			\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_rch10.dat};
+			\addplot +[mark=none, color=green] table[x=k,y=temps]{./resultats/pmda_noMaj_rch10.dat};
+			\addplot +[mark=none] table[x=k,y=temps]{./resultats/tabou_rch10.dat};
+			\addplot +[mark=none] table[x=k,y=temps]{./resultats/gamma_rch10.dat};
+			\addplot +[mark=none, color=red] table[x=k,y=temps]{./resultats/tau_rch10.dat};
+			\addplot +[mark=none, color=violet] table[x=k,y=temps]{./resultats/all_rch10.dat};
+			\end{axis}
+			\end{tikzpicture}
+	}
+	
+	\end{overprint}

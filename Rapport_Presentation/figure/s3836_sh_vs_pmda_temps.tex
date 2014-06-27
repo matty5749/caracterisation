@@ -1,0 +1,14 @@
+\begin{tikzpicture}[scale=0.8]
+\begin{axis}[
+legend entries={s3836-0,s3836-0 pmda, s3836-0 pmdaNoMaj},
+%legend style={at={(0.5,1.03)},anchor=south},legend columns=3
+xlabel={Caractérisation de taille k},
+ylabel={Temps d'éxécution en seconde},
+xmin={15},
+xmax={27}]
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/sh_s3836.dat};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/pmda_maj_s3836.dat};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/pmda_noMaj_s3836.dat};
+
+\end{axis}
+\end{tikzpicture}

@@ -1,0 +1,78 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{BKC{\etalchar{+}}13}
+
+\bibitem[BCH{\etalchar{+}}12]{Boureau2012}
+Tristan Boureau, Fabien Chhel, Gilles Hunault, Mohamed Kerkoud, Frédéric
+  Lardeux, Charles Manceau, Stéphane Poussier, and Frédéric Saubion.
+\newblock Procédé de depistage de xanthomonas axonopodis pv. phaseoli.
+\newblock Brevet INRA Depose INPI : FR 2970480 (A1), 2012.
+
+\bibitem[BKC{\etalchar{+}}13]{Boureau2013}
+Tristan Boureau, M.~Kerkoud, F.~Chhel, G.~Hunault, A.~Darrasse, C.~Brin,
+  K.~Durand, A.~Hajri, S.~Poussier, C.~Manceau, F.~Lardeux, F.~Saubion, and
+  M.A. Jacques.
+\newblock A {multiplex-PCR} assay for identification of the quarantine plant
+  pathogen {X}anthomonas axonopodis pv. phaseoli.
+\newblock {\em Journal of Microbiological Methods}, 92(1):42--50, 2013.
+
+\bibitem[CGLS12]{Chhel2012}
+Fabien Chhel, A.~Goëffon, F.~Lardeux, and F.~Saubion.
+\newblock Caractérisation multiples minimales utilisant les formules
+  booléennes partiellement définies.
+\newblock {\em GDRI3IAF}, 2012.
+
+\bibitem[CLGS12]{sac12}
+Fabien Chhel, Frédéric Lardeux, Adrien Go{\"e}ffon, and Frédéric Saubion.
+\newblock Minimum multiple characterization of biological data using partially
+  defined boolean formulas.
+\newblock In {\em {SAC}}, pages 1399--1405. ACM, 2012.
+
+\bibitem[CLSZ13]{Chhel2013}
+Fabien Chhel, F.~Lardeux, F.~Saubion, and B.~Zanuttini.
+\newblock Application du problème de caractérisation multiple à la
+  conception de test de diagnostic pour la biologie végétale.
+\newblock {\em Revue d'intelligence artificielle}, 27(4-5):1--20, 2013.
+
+\bibitem[DV81]{DesVer81}
+P.~Descamps and M.~V\'{e}ron.
+\newblock Une m\'{e}thode de choix des caract\`{e}res d'identification
+  bas\'{e}e sur le th\'{e}or\`{e}me de bayes et la mesure de l'information.
+\newblock {\em Annal Microbiologie (Paris)}, 132B, 1981.
+
+\bibitem[GL97]{Glover1997}
+Fred Glover and Manuel Laguna.
+\newblock {\em Tabu Search}.
+\newblock Kluwer Academic Publishers, 1997.
+
+\bibitem[HS04]{Hoos2004}
+Holger Hoos and Thomas Stützle.
+\newblock {\em Stochastic {L}ocal {S}earch: Foundations \& Applications}.
+\newblock Morgan Kaufmann Publishers Inc., 2004.
+
+\bibitem[MiHI99]{Iba99}
+Kazuhisa Makino, Ken ichi Hatanaka, and Toshihide Ibaraki.
+\newblock Horn extensions of a partially defined {B}oolean function.
+\newblock {\em SIAM Journal on Computing}, 28(6):2168--2186, 1999.
+
+\bibitem[SPL{\etalchar{+}}05]{Schaad2005}
+N.W. Schaad, E.~Postnikova, G.H. Lacy, A.~Sechler, I.~Agarkova, P.E. Stromberg,
+  V.K. Stromberg, and A.K. Vidaver.
+\newblock Reclassification of xanthomonas campestris pv. citri (ex hasse 1915)
+  dye 1978 forms a, b/c/d, and e as x. smithii subsp. citri (ex hasse) sp. nov.
+  nom. rev. comb. nov., x. fuscans subsp. aurantifolii (ex gabriel 1989) sp.
+  nov. nom. rev. comb. nov., and x. alfalfae subsp. citrumelo (ex riker and
+  jones) gabriel et al., 1989 sp. nov. nom. rev. comb. nov.; x. campestris pv
+  malvacearum (ex smith 1901) dye 1978 as x. smithii subsp. smithii nov. comb.
+  nov. nom. nov.; x. campestris pv. alfalfae (ex riker and jones, 1935) dye
+  1978 as x. alfalfae subsp. alfalfae (ex riker et al., 1935) sp. nov. nom.
+  rev.; and "var. fuscans" of x. campestris pv. phaseoli (ex smith, 1987) dye
+  1978 as x. fuscans subsp. fuscans sp. nov.
+\newblock {\em Systematic Applied Microbiology}, 28(6):494--518, 2005.
+
+\bibitem[VHKS95]{Vauterin1995}
+L.~Vauterin, B.~Hoste, K.~Kersters, and J.~Swings.
+\newblock Reclassification of {X}anthomonas.
+\newblock {\em International Journal of Systematic and Evolutionary
+  Microbiology}, 45:472--489, 1995.
+
+\end{thebibliography}

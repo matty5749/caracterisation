@@ -1,0 +1,18 @@
+\begin{tikzpicture}[scale=0.8]
+\begin{axis}[
+legend entries={s3836-0 trie par $\mathcal{T}$,s3836-0 par $\Gamma$,s3836-0 pmdaNoMaj,s3836-0 tabou, s3836-0 all},
+legend style={at={(0.5,1.03)},anchor=south},legend columns=1
+xlabel={Caractérisation de taille k},
+ylabel={Temps d'éxécution en seconde},
+xmin={14},
+xmax={26},
+%ymax={1000000000}
+%title={Résolution sans heuristique de rch10 et s3836-0 sur les comparaisons}
+]
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/tau_s3836.dat};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/gamma_s3836.dat};
+\addplot +[mark=none , color=green] table[x=k,y=temps]{./resultats/pmda_noMaj_s3836.dat};
+\addplot +[mark=none] table[x=k,y=temps]{./resultats/tabou_s3836.dat};
+\addplot +[mark=none, color=violet] table[x=k,y=temps]{./resultats/all_s3836.dat};
+\end{axis}
+\end{tikzpicture}

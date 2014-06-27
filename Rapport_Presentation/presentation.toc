@@ -1,0 +1,6 @@
+\beamer@endinputifotherversion {3.33pt}
+\select@language {french}
+\beamer@subsectionintoc {2}{1}{D\IeC {\'e}finition d'une instance difficile}{60}{0}{0}
+\beamer@subsectionintoc {2}{2}{Heuristiques pour une recherche exacte}{69}{0}{0}
+\beamer@subsectionintoc {2}{3}{Recherche approch\IeC {\'e}e}{76}{0}{0}
+\beamer@subsectionintoc {2}{4}{Conclusions et perspective}{78}{0}{0}

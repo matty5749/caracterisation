@@ -1,0 +1,21 @@
+\select@language {french}
+\contentsline {figure}{\numberline {1}{\ignorespaces Exemple de probl\IeC {\`e}me de caract\IeC {\'e}risation multiple}}{5}{figure.1}
+\contentsline {figure}{\numberline {2}{\ignorespaces R\IeC {\'e}solution sans heuristique de rch10 et s3836-0}}{11}{figure.2}
+\contentsline {figure}{\numberline {3}{\ignorespaces Algorithme de minimisation du probl\IeC {\`e}me de caract\IeC {\'e}risation multiple}}{15}{figure.3}
+\contentsline {figure}{\numberline {4}{\ignorespaces Algorithme de caract\IeC {\'e}risation d'une instance MIN-PCM pour une taille $k$}}{15}{figure.4}
+\contentsline {figure}{\numberline {5}{\ignorespaces Algorithme de caract\IeC {\'e}risation de groupes}}{16}{figure.5}
+\contentsline {figure}{\numberline {6}{\ignorespaces Heuristique $\mathcal {T}$ sur rch10}}{17}{figure.6}
+\contentsline {figure}{\numberline {7}{\ignorespaces Heuristique $\mathcal {T}$ sur s3836-0}}{17}{figure.7}
+\contentsline {figure}{\numberline {8}{\ignorespaces Heuristique $\Gamma $ statique sur rch10}}{18}{figure.8}
+\contentsline {figure}{\numberline {9}{\ignorespaces Heuristique $\Gamma $ dynamique sur rch10}}{19}{figure.9}
+\contentsline {figure}{\numberline {10}{\ignorespaces Zoom sur comparaisons heuristique $\Gamma $ statique et heuristique $\Gamma $ dynamique}}{19}{figure.10}
+\contentsline {figure}{\numberline {11}{\ignorespaces Comparaisons heuristique $\Gamma $ statique et heuristique $\Gamma $ dynamique sur rch10}}{19}{figure.11}
+\contentsline {figure}{\numberline {12}{\ignorespaces Comparaisons heuristique $\Gamma $ statique et heuristique $\Gamma $ dynamique sur s3836-0}}{20}{figure.12}
+\contentsline {figure}{\numberline {13}{\ignorespaces Heuristiques pmda sur rch10}}{21}{figure.13}
+\contentsline {figure}{\numberline {14}{\ignorespaces Heuristiques pmda sur s3836-0}}{21}{figure.14}
+\contentsline {figure}{\numberline {15}{\ignorespaces Heuristique des valeurs taboues sur rch10}}{22}{figure.15}
+\contentsline {figure}{\numberline {16}{\ignorespaces Heuristique des valeurs taboues sur s3836-0}}{22}{figure.16}
+\contentsline {figure}{\numberline {17}{\ignorespaces Comparaisons des heuristiques sur rch10}}{23}{figure.17}
+\contentsline {figure}{\numberline {18}{\ignorespaces Comparaisons des heuristiques sur s3836-0}}{23}{figure.18}
+\contentsline {figure}{\numberline {19}{\ignorespaces Algorithme d'initialisation des probabilit\IeC {\'e}s de s\IeC {\'e}lection des g\IeC {\`e}nes d'une instance}}{25}{figure.19}
+\contentsline {figure}{\numberline {20}{\ignorespaces Algorithme de recherche approch\IeC {\'e}e par roulette proportionelle}}{25}{figure.20}

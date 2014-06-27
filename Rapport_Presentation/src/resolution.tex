@@ -1,0 +1,867 @@
+ 
+	\begin{overprint}%{11.2cm}{20cm}
+		\only<1>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 &  1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.4cm}
+			\begin{minipage}[r]{0.46\linewidth}
+			\end{minipage}
+		}
+		\only<2-4>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 &  1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.4cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				Une caractérisation de taille $k=n$ est trivial:
+				\begin{itemize}
+					\item $g_1: (\lnot a \land \lnot b \land \lnot c) \lor (\lnot a \land \lnot b \land c)$
+					\item<3-4> $g_2: a \land b \land c$
+					\item<4> $g_3: (a \land b \land \lnot c) \lor (\lnot a \land b \land \lnot c)$ 
+				\end{itemize}			
+			\end{minipage}
+		}
+		\only<5-7>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 &  1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Il nous faut parcourir au maximum $C_3^2$ combinaisons:
+					\begin{itemize}
+						\item $\{a,b\}$
+						\item<6-7> $\{b,c\}$
+						\item<7> $\{a,c\}$ 
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<8>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&\cellcolor{blue!75}$a$&\cellcolor{blue!75}$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& \cellcolor{cyan}0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& \cellcolor{cyan}1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaisons $\{a,b\}$:
+					\begin{itemize}
+						\item $e1(a) \not = e3(a) $ \\ $\Rightarrow$ On passe à l'entité suivante.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<9>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&\cellcolor{blue!75}$a$&\cellcolor{blue!75}$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& \cellcolor{cyan}0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& \cellcolor{cyan}1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{a,b\}$:
+					\begin{itemize}
+						\item $e1(a) \not = e4(a) $ \\ $\Rightarrow$ On passe à l'entité suivante.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<10>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&\cellcolor{blue!75}$a$&\cellcolor{blue!75}$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& \cellcolor{cyan}0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& \cellcolor{cyan}0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{a,b\}$:
+					\begin{itemize}
+						\item $e1(a) = e5(a) $ \\ $\Rightarrow$ Identique sur le gène $a$, on doit observer le gène $b$.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<11>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&\cellcolor{blue!75}$a$&\cellcolor{blue!75}$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & \cellcolor{cyan}0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & \cellcolor{cyan}1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{a,b\}$:
+					\begin{itemize}
+						\item $e1(b) \not = e5(b) $ \\ $\Rightarrow$ Nous devons maintenant observer $e2$.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<12>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&\cellcolor{blue!75}$a$&\cellcolor{blue!75}$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& \cellcolor{cyan}0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& \cellcolor{cyan}1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{a,b\}$:
+					\begin{itemize}
+						\item $e2(a) \not = e3(a) $ \\ $\Rightarrow$ On passe à l'entité suivante.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<13>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&\cellcolor{blue!75}$a$&\cellcolor{blue!75}$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& \cellcolor{cyan}0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& \cellcolor{cyan}1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{a,b\}$:
+					\begin{itemize}
+						\item $e2(a) \not = e4(a) $ \\ $\Rightarrow$ On passe à l'entité suivante.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<14>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&\cellcolor{blue!75}$a$&\cellcolor{blue!75}$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& \cellcolor{cyan}0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& \cellcolor{cyan}0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{a,b\}$:
+					\begin{itemize}
+						\item $e2(a) = e5(a) $ \\ $\Rightarrow$ Identique sur le gène $a$, on doit observer le gène $b$.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<15-16>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&\cellcolor{blue!75}$a$&\cellcolor{blue!75}$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & \cellcolor{cyan}0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & \cellcolor{cyan}1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{a,b\}$:
+					\begin{itemize}
+						\item $e2(b) \not = e5(b) $ \\ $\Rightarrow$ La combinaison $\{a,b\}$ permet de caractériser $g1$ des autres groupes.
+						\item<16> Nous devons maintenant observer $g2$ vis à vis des autres groupes.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<17>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&\cellcolor{blue!75}$a$&\cellcolor{blue!75}$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& \cellcolor{cyan}1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& \cellcolor{cyan}1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{a,b\}$:
+					\begin{itemize}
+						\item $e3(a) = e4(a) $ \\ $\Rightarrow$ Identique sur le gène $a$, on doit observer le gène $b$.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<18-19>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&\cellcolor{blue!75}$a$&\cellcolor{blue!75}$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & \cellcolor{cyan}1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & \cellcolor{cyan}1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{a,b\}$:
+					\begin{itemize}
+						\item $e3(b) = e4(b) $ \\ $\Rightarrow$ Identique sur le gène $b$
+						\item<19> Échec de la caractérisation avec la combinaison $\{a,b\}$.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<20>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&\cellcolor{blue!75}$b$&\cellcolor{blue!75}$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & \cellcolor{cyan}0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & \cellcolor{cyan}1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{b,c\}$:
+					\begin{itemize}
+						\item $e1(b) \not = e3(b) $ \\ $\Rightarrow$ On passe à l'entité suivante.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<21>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&\cellcolor{blue!75}$b$&\cellcolor{blue!75}$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & \cellcolor{cyan}0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & \cellcolor{cyan}1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{b,c\}$:
+					\begin{itemize}
+						\item $e1(b) \not = e4(b) $ \\ $\Rightarrow$ On passe à l'entité suivante.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<22>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&\cellcolor{blue!75}$b$&\cellcolor{blue!75}$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & \cellcolor{cyan}0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & \cellcolor{cyan}1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{b,c\}$:
+					\begin{itemize}
+						\item $e1(b) \not = e5(b) $ \\ $\Rightarrow$ Nous devons maintenant observer $e2$.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<23>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&\cellcolor{blue!75}$b$&\cellcolor{blue!75}$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & \cellcolor{cyan}0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & \cellcolor{cyan}1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{b,c\}$:
+					\begin{itemize}
+						\item $e2(b) \not = e3(b) $ \\ $\Rightarrow$ On passe à l'entité suivante.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<24>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&\cellcolor{blue!75}$b$&\cellcolor{blue!75}$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & \cellcolor{cyan}0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & \cellcolor{cyan}1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{b,c\}$:
+					\begin{itemize}
+						\item $e2(b) \not = e4(b) $ \\ $\Rightarrow$ On passe à l'entité suivante.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<25-26>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&\cellcolor{blue!75}$b$&\cellcolor{blue!75}$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & \cellcolor{cyan}0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & 1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & \cellcolor{cyan}1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{b,c\}$:
+					\begin{itemize}
+						\item $e2(b) \not = e5(b) $ \\ $\Rightarrow$ La combinaison $\{b,c\}$ permet de caractériser $g1$ des autres groupes.
+						\item<26> Nous devons maintenant observer $g2$ vis à vis des autres groupes.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<27>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&\cellcolor{blue!75}$b$&\cellcolor{blue!75}$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & \cellcolor{cyan}1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & \cellcolor{cyan}1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{b,c\}$:
+					\begin{itemize}
+						\item $e3(b) = e4(b) $ \\ $\Rightarrow$ Identique sur le gène $b$, on doit observer le gène $c$.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<28>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&\cellcolor{blue!75}$b$&\cellcolor{blue!75}$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & 1 & \cellcolor{cyan}1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & \cellcolor{cyan}0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{b,c\}$:
+					\begin{itemize}
+						\item $e3(c) \not = e4(c) $ \\ $\Rightarrow$ On passe à l'entité suivante.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<29>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&\cellcolor{blue!75}$b$&\cellcolor{blue!75}$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & \cellcolor{cyan}1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & \cellcolor{cyan}1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{b,c\}$:
+					\begin{itemize}
+						\item $e3(b) = e5(b) $ \\ $\Rightarrow$ Identique sur le gène $b$, on doit observer le gène $c$.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<30-31>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&\cellcolor{blue!75}$b$&\cellcolor{blue!75}$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 & 1 & \cellcolor{cyan}1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & \cellcolor{cyan}0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.6cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				\begin{block}{Résolution pour k=2}
+					Combinaison $\{b,c\}$:
+					\begin{itemize}
+						\item $e3(c) \not = e5(c) $ \\ $\Rightarrow$ La combinaison $\{b,c\}$ permet de caractériser $g2$ des autres groupes.
+						\item<31> $\Rightarrow$ La combinaison $\{b,c\}$ permet de caractériser cette instance.
+					\end{itemize}
+				\end{block}
+			\end{minipage}
+		}
+		\only<32-34>
+		{
+			\begin{minipage}[l]{0.46\linewidth}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 &  1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\end{minipage}
+			\hspace{0.4cm}
+			\begin{minipage}[r]{0.46\linewidth}
+				Formules de caractérisation de l'instance:
+				\begin{itemize}
+					\item $g_1:(\lnot b \land \lnot c) \lor (\lnot b \land c)$
+					\item<33-34> $g_2: b \land c$
+					\item<34> $g_3: b \land \lnot c$ 
+				\end{itemize}			
+			\end{minipage}
+		}
+	\end{overprint}
