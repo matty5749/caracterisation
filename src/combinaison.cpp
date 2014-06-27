@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Combinaison::Combinaison ( const std::vector< int >& elements ) :_n ( elements.size() ),_k ( 0 ),_elements ( elements ),_decalage(0)
+Combinaison::Combinaison ( const std::vector< int >& elements ) :_n ( elements.size() ),_k ( 0 ),_elements ( elements ),_decalage ( 0 ),_nbCombEffectue ( 0 ),_nbCombTotal ( 0 )
 {
     _iterElements.resize ( _n );
 }
@@ -45,11 +45,24 @@ Combinaison::Combinaison ( const std::vector< int >& elements ) :_n ( elements.s
 
 const std::vector< int >& Combinaison::next ( unsigned int k )
 {
+    _nbCombEffectue++;
+
     if ( k!=_k ) //Changement de k, on entame un nouveau cycle
     {
+        _nbCombEffectue=0;
         _k=k;
+
+        //Calcul de nbCompTotal
+        unsigned int i,j;
+        for ( i=_n,j=1, _nbCombTotal=1; i>_n-_k; i--,j++ ) // calcul de Cnp
+        {
+            _nbCombTotal *= i;
+            _nbCombTotal /= j;
+        }
+        //Fin calcul
+
         //Initialisation de _iterElements
-        unsigned int i=0;
+        i=0;
         for ( vector<int>::const_iterator it=_elements.begin(); it!=_elements.end(); it++,i++ )
             _iterElements[i]=it;
 
@@ -60,7 +73,6 @@ const std::vector< int >& Combinaison::next ( unsigned int k )
     }
     else
     {
-
         std::size_t comb_size = k;
 
         bool enCoursDeCycle=next_combination ( _iterElements.begin(),_iterElements.begin() +comb_size,_iterElements.end() );
@@ -84,7 +96,7 @@ const std::vector< int >& Combinaison::next ( unsigned int k )
 template <typename Iterator>
 bool Combinaison::next_combination ( const Iterator first, Iterator k, const Iterator last )
 {
-	_decalage=0;
+    _decalage=0;
     /* Credits: Mark Nelson http://marknelson.us */
     if ( ( first == last ) || ( first == k ) || ( last == k ) )
         return false;
@@ -92,7 +104,7 @@ bool Combinaison::next_combination ( const Iterator first, Iterator k, const Ite
     Iterator i2 = last;
     ++i1;
     if ( last == i1 )
-		return false;
+        return false;
 //     i1 = last;
 //     --i1;
     i1 = k;
@@ -120,4 +132,9 @@ bool Combinaison::next_combination ( const Iterator first, Iterator k, const Ite
     }
     std::rotate ( first,k,last );
     return false;
+}
+
+double Combinaison::getPourcentage() const
+{
+ return (double) _nbCombEffectue*100/_nbCombTotal;
 }

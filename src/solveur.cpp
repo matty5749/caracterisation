@@ -20,7 +20,7 @@ void Solveur::rechercheExacteEnProfondeurAPartirde ( unsigned int k, bool allSol
     assert ( _parcours.size() >0 );
     //On part de kMax vers kMin
     bool solution;
-		cout<<"k nbComp temps"<<endl;
+    cout<<"k nbComp temps"<<endl;
     do
     {
         solution=false;
@@ -35,7 +35,7 @@ void Solveur::rechercheExacteEnProfondeurAPartirde ( unsigned int k, bool allSol
             if ( estCaracterisePar ( combinaison._combinaisonCourante ) )
             {
                 _endTime=clock();
-								cout<<" "<<( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl; //DATA
+                cout<<" "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl; //DATA
 // 								cout<<"("<<k<<","<<( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<")"<<endl; //DATA TIKZ
 //                 nbSol++;
                 if ( solution==false ) solution=true;
@@ -232,15 +232,16 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique4 ( unsigned int k
     assert ( _parcours.size() >0 );
     //On part de kMax vers kMin
     bool solution;
-		
-		cout<<"k nbComp temps"<<endl;
+
+    cout<<"k\tnbComp\t\ttemps\t\ttemps_cumulé\t\tPourcentageExploration"<<endl;
     do
     {
+
+        //Parcours des combinaisons de taille k
+        Combinaison combinaison ( _parcours );
         solution=false;
         _startTime=clock();
         _nbComparaisons=0;
-        //Parcours des combinaisons de taille k
-        Combinaison combinaison ( _parcours );
 //         cout<<endl<<"\t\t****** Parcours des combinaisons de taille "<< k <<" ******"<<endl;
         while ( combinaison.next ( k ).size() >0 )
         {
@@ -249,11 +250,16 @@ void Solveur::rechercheExacteEnProfondeurAPartirde_heuristique4 ( unsigned int k
 // 						for ( vector<Entite*>::const_iterator itRef=_instance->_entites.begin(); itRef!=_instance->_entites.end(); itRef++ )
 //                     ( *itRef )->_entitesCritique.clear();
 // 					}
+					
+            //Si temps d'éxécution supérieur à 10 min arret.
+						double overTime=(double)(clock()-_startTime)/CLOCKS_PER_SEC;
+            if (  overTime >= 10*60 ) exit ( EXIT_SUCCESS );
 
             if ( estCaracterisePar_version4 ( combinaison._combinaisonCourante ) )
             {
                 _endTime=clock();
-                cout<<" "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<<endl; //DATA
+                _cumulTime+=  _endTime-_startTime ;
+                cout<<"\t\t"<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<< "\t\t" << ( double ) _cumulTime/CLOCKS_PER_SEC<<"\t\t"<<combinaison.getPourcentage() <<endl; //DATA
 //                 cout<<"Résolu en "<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<< " secondes"<<endl;
                 if ( solution==false ) solution=true;
                 if ( !allSolution ) break; //On passe à k-1

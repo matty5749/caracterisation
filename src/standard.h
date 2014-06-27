@@ -21,7 +21,12 @@
 #include <cmath>
 #include <ctime>
 
-void afficheVecteur ( std::vector<int> vecteur );
+
+
 int toInt(std::string str);
+float ecartType(const std::vector<float> & donnees);
+
+#include "standard.hpp" // <-- void afficheVecteur( const std::vector<T> & vecteur );
 
 #endif //STANDARD_H
+

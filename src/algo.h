@@ -17,6 +17,9 @@ protected:
 		unsigned int _nbComparaisons;
 		bool _debut;
 		int _nbComparaisonsMax;/*<!Le nombre de comparaisons max est le nombre de comparaisons qu'il faut effectuer pour caractériser une instance*/
+		clock_t _startTime;
+		clock_t _endTime;
+		clock_t _cumulTime;
 public:
 
 

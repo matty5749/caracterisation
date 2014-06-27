@@ -68,8 +68,10 @@ public:
 		void afficheInstance() const;
 		
 		void initialiseParcoursGroupe ();
+		void majParcoursGroupePourCombinaison (const std::vector<int> & combinaison);
 };
 
 float calculTauxDeSimilariteEntreLesDeuxGroupes (const Groupe & g1, const Groupe & g2);
+float calculTauxDeSimilariteEntreLesDeuxGroupesSurCombinaison (const Groupe & g1, const Groupe & g2, const std::vector<int> & combinaison);
 
 #endif // INSTANCE_H

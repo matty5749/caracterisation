@@ -12,6 +12,8 @@ private:
     std::vector<int> _elements;	/*!<Les éléments qui vont être combiné via iterElements*/
     std::vector<std::vector<int>::const_iterator> _iterElements;	/*!<Les itérateurs vers les éléments qui sont combinés,cela afin de pouvoir traiter
 		un vecteur d'éléments non triés (ex: [3,4,5,2,3,1]), les combinaisons se feront sur les itérateurs qui eux sont triés par ordre croissant*/
+		unsigned long long int _nbCombEffectue;
+		unsigned long long int _nbCombTotal;
 public:
     std::vector<int> _combinaisonCourante;
 		unsigned int _decalage;/*!<Nb de décalage lors de la combinaison suivante généré par next: 3 parmi 5 : 125 --> 234 = décalage de 2*/
@@ -26,6 +28,9 @@ public:
      * \warning Si le k change d'un appel à l'autre, c'est toute les combinaisons qui sont reprises depuis le début.
      */
     const std::vector<int>& next ( unsigned int k );
+		
+		///!\return le pourcentage de combinaisons ayant déjà été analysé
+		double getPourcentage () const;
 
 
 private:

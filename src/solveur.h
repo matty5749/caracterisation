@@ -6,9 +6,6 @@
 class Solveur : public Algo
 {
     //ATTRIBUTS
-private:
-		clock_t _startTime;
-		clock_t _endTime;
 public:
     //METHODES
     Solveur ( Instance* instance );
@@ -66,3 +63,4 @@ public:
 };
 
 #endif //SOLVEUR_H
+

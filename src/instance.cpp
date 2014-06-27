@@ -246,29 +246,29 @@ void Instance::heuristiqueDesMasques()
 {
     //Calcul des masques de groupes
     calculMasqueDesGroupesEtMajImage();
-    cout<<endl<<"Image brute"<<endl;
-    afficheImage();
+//     cout<<endl<<"Image brute"<<endl;
+//     afficheImage();
 
-//     trieSurLesGenesDApresLeursTauxDeSimilarite();
+    trieSurLesGenesDApresLeursTauxDeSimilarite();
 
     calculMasqueDesGroupesEtMajImage();
-    cout<<endl<<"Image triée par TAU"<<endl;
-    afficheImage();
+//     cout<<endl<<"Image triée par TAU"<<endl;
+//     afficheImage();
 
 
-    //Heuristique sur les taux de similarite locale (petit tau)
-    //Parcours exhaustif des groupe
-    for ( vector<Groupe*>::const_iterator itRef=_groupes.begin(); itRef!=_groupes.end(); itRef++ )
-    {
-        //Initialisation _moyenneTauxDeSimilariteLocal
-        ( *itRef )->_moyenneTauxDeSimilariteLocal=0;
-        for ( vector<Groupe*>::const_iterator itComp=_groupes.begin(); itComp!=_groupes.end(); itComp++ )
-        {
-            if ( *itRef==*itComp ) continue;
-            ( *itRef )->_moyenneTauxDeSimilariteLocal+=calculTauxDeSimilariteEntreLesDeuxGroupes ( **itRef,**itComp );
-        }
-        ( *itRef )->_moyenneTauxDeSimilariteLocal/=_groupes.size()-1;
-    }
+//     //Heuristique sur les taux de similarite locale (petit tau) <-- NE FONCTIONNE PAS BIEN
+//     //Parcours exhaustif des groupe
+//     for ( vector<Groupe*>::const_iterator itRef=_groupes.begin(); itRef!=_groupes.end(); itRef++ )
+//     {
+//         //Initialisation _moyenneTauxDeSimilariteLocal
+//         ( *itRef )->_moyenneTauxDeSimilariteLocal=0;
+//         for ( vector<Groupe*>::const_iterator itComp=_groupes.begin(); itComp!=_groupes.end(); itComp++ )
+//         {
+//             if ( *itRef==*itComp ) continue;
+//             ( *itRef )->_moyenneTauxDeSimilariteLocal+=calculTauxDeSimilariteEntreLesDeuxGroupes ( **itRef,**itComp );
+//         }
+//         ( *itRef )->_moyenneTauxDeSimilariteLocal/=_groupes.size()-1;
+//    }
 
     //Trie des groupes par petit tau
 //     sort ( _groupes.begin(),_groupes.end(),trieGroupeParTau );
@@ -286,12 +286,12 @@ void Instance::heuristiqueDesMasques()
 //     sort ( _groupes.begin(),_groupes.end(),trieGroupeParRatio );
 // 		//Fin Heuristique de trie par ratio de masques
 
-initialiseParcoursGroupe();
+    initialiseParcoursGroupe(); //<-- FONCTIONNE TRES BIEN
 
 
     calculMasqueDesGroupesEtMajImage();
-    cout<<endl<<"Image triée par TAU et tau"<<endl;
-    afficheImage();
+//     cout<<endl<<"Image triée par TAU et GAMMA"<<endl;
+//     afficheImage();
 
 
     //Moyenne des taux de similarite:NOTE: peut servir de coef pour determiner une instance difficile
@@ -307,10 +307,12 @@ initialiseParcoursGroupe();
     for ( vector<Groupe*>::const_iterator it=_groupes.begin(); it!=_groupes.end(); it++ )
         moy+= ( *it )->_ratio;
     moy=moy/_groupes.size();
-    cout<<endl<<"Coeficient de difficulté sigma de l'instance: "<<moy<<endl;
-
+    cout<<endl<<"Coefficient de difficulté sigma de l'instance: "<<1-moy<<endl;
+	
+// 		afficheVecteur<float>(_tauxDeSimilariteGlobale);
+		cout<<endl<<"Ecart type des TAU: "<<ecartType(_tauxDeSimilariteGlobale)<<endl;
     //MAJ attribut _tabous dans chaque groupe
-//     majListeTabousDansLesGroupes();
+    majListeTabousDansLesGroupes();
 }
 
 
@@ -458,8 +460,8 @@ void Instance::majListeTabousDansLesGroupes() const
 
 
 bool Instance::certificat ( const vector< int >& solutions ) const
-{
-    return true;
+{  
+	return true;
 }
 
 void Instance::afficheInstance() const
@@ -472,17 +474,18 @@ void Instance::afficheInstance() const
 
 void Instance::initialiseParcoursGroupe()
 {
-		//Parcours des groupes
+    _parcoursGroupe.clear();
+    //Parcours des groupes
     for ( vector<Groupe*>::const_iterator itGroupe=_groupes.begin(); itGroupe!=_groupes.end(); itGroupe++ )
     {
         //Nouveau parcours des groupes
         for ( vector<Groupe*>::const_iterator itGroupe2=itGroupe+1; itGroupe2!=_groupes.end(); itGroupe2++ )
         {
             float taux=calculTauxDeSimilariteEntreLesDeuxGroupes ( **itGroupe,**itGroupe2 );
-						_parcoursGroupe.insert(make_pair(taux,make_pair(*itGroupe,*itGroupe2)));
+            _parcoursGroupe.insert ( make_pair ( taux,make_pair ( *itGroupe,*itGroupe2 ) ) );
         }
     }
-    
+
 //     //AFFICHAGE
 //     for (multimap<float,pair<const Groupe * const,const Groupe * const> >::const_reverse_iterator it=_parcoursGroupe.rbegin();it!=_parcoursGroupe.rend();it++)
 // 		{
@@ -491,6 +494,29 @@ void Instance::initialiseParcoursGroupe()
 // 		sleep(5);
 }
 
+void Instance::majParcoursGroupePourCombinaison ( const vector< int >& combinaison )
+{
+    _parcoursGroupe.clear();
+    //Parcours des groupes
+    for ( vector<Groupe*>::const_iterator itGroupe=_groupes.begin(); itGroupe!=_groupes.end(); itGroupe++ )
+    {
+        //Nouveau parcours des groupes
+        for ( vector<Groupe*>::const_iterator itGroupe2=itGroupe+1; itGroupe2!=_groupes.end(); itGroupe2++ )
+        {
+            float taux=calculTauxDeSimilariteEntreLesDeuxGroupesSurCombinaison ( **itGroupe,**itGroupe2 , combinaison );
+            _parcoursGroupe.insert ( make_pair ( taux,make_pair ( *itGroupe,*itGroupe2 ) ) );
+        }
+    }
+
+//     //AFFICHAGE
+//     for ( multimap<float,pair<const Groupe * const,const Groupe * const> >::const_reverse_iterator it=_parcoursGroupe.rbegin(); it!=_parcoursGroupe.rend(); it++ )
+//     {
+//         cout<<"TAUX:\t"<<it->first<<"\t Groupes:\t"<<it->second.first->_id<<" X "<<it->second.second->_id<<endl;
+//     }
+//     sleep ( 5 );
+}
+
+
 float calculTauxDeSimilariteEntreLesDeuxGroupes ( const Groupe & g1, const Groupe & g2 )
 {
     assert ( g1._id!=g2._id );
@@ -498,6 +524,24 @@ float calculTauxDeSimilariteEntreLesDeuxGroupes ( const Groupe & g1, const Group
     for ( unsigned int i =0; i<g1._masque.size(); i++ )
     {
         float temp= ( g1._masque[i] + g2._masque[i] ) /2;
+        //Transformation entre 0 et 1
+        if ( temp<0.5 )
+            moyTemp+= ( 0.5-temp ) *2;
+        else
+            moyTemp+= ( 0.5 - ( 1 - temp ) ) *2;
+    }
+    moyTemp/=g1._masque.size();
+
+    return moyTemp;
+}
+
+float calculTauxDeSimilariteEntreLesDeuxGroupesSurCombinaison ( const Groupe& g1, const Groupe& g2, const vector< int >& combinaison )
+{
+    assert ( g1._id!=g2._id );
+    float moyTemp=0;
+    for ( unsigned int i =0; i<combinaison.size(); i++ )
+    {
+        float temp= ( g1._masque[combinaison[i]] + g2._masque[combinaison[i]] ) /2;
         //Transformation entre 0 et 1
         if ( temp<0.5 )
             moyTemp+= ( 0.5-temp ) *2;

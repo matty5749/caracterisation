@@ -47,9 +47,17 @@ void RechercheApproche::roulette ()
 
     //Lancement de la recherche
     unsigned int k=_instance->_genes.size()-1;
+    unsigned int nbIterations=0;
+    cout<<"k\tnbComp\t\ttemps\t\ttemps_cumulé\t\tnbIterations"<<endl;
 
+    _startTime=clock();
     while ( k>_instance->_borneMin )
     {
+        //Si temps d'éxécution supérieur à 10 min arret.
+        double overTime= ( double ) ( clock()-_startTime ) /CLOCKS_PER_SEC;
+        if ( overTime >= 10*60 ) exit ( EXIT_SUCCESS );
+
+        nbIterations++;
         //Création de la combinaison
         set<int> combinaison;
         do
@@ -75,10 +83,32 @@ void RechercheApproche::roulette ()
 
         if ( estCaracterisePar_version4 ( indices ) )
         {
-            cout<<"L'instance admet une caracterisation de taille " <<k<<endl;
+            _endTime=clock();
+            _cumulTime+=  _endTime-_startTime ;
+            cout<<"\t\t"<< ( double ) ( _endTime-_startTime ) /CLOCKS_PER_SEC<< "\t\t" << ( double ) _cumulTime/CLOCKS_PER_SEC<<"\t\t"<<nbIterations<<endl;
+            _startTime=clock();
+//             cout<<"L'instance admet une caracterisation de taille " <<k<<endl;
             --k;
             _individus.clear();
         }
+    }
+}
+
+// TODO:Optimisable en utilisant enfant en parametre
+vector< int > RechercheApproche::croisementParPlusFaibleSimilariteEntreLesIndices ( const vector< int >& pere, const vector< int >& mere ) const
+{
+    vector<int> enfant;
+    enfant.resize ( pere.size(),0 );
+    int i=0;
+    vector<int>::const_iterator itMere=mere.begin();
+    for ( vector<int>::const_iterator itPere=pere.begin(); itPere!=pere.end(); itPere++,itMere++,i++ )
+        if ( *itPere<=*itMere ) enfant[i]=*itPere;
+        else enfant[i]=*itMere;
+
+    return enfant;
+}
+
+
 //         else //Si solution proche, travail sur la solution partielle
 //         {
 //             double rapport= ( double ) _fitness/_nbComparaisonsMax;
@@ -116,23 +146,6 @@ void RechercheApproche::roulette ()
 //                     }
 //                 }
 //         }
-
-    }
-}
-
-// TODO:Optimisable en utilisant enfant en parametre
-vector< int > RechercheApproche::croisementParPlusFaibleSimilariteEntreLesIndices ( const vector< int >& pere, const vector< int >& mere ) const
-{
-    vector<int> enfant;
-    enfant.resize ( pere.size(),0 );
-    int i=0;
-    vector<int>::const_iterator itMere=mere.begin();
-    for ( vector<int>::const_iterator itPere=pere.begin(); itPere!=pere.end(); itPere++,itMere++,i++ )
-        if ( *itPere<=*itMere ) enfant[i]=*itPere;
-        else enfant[i]=*itMere;
-
-    return enfant;
-}
 
 
 // void RechercheApproche::rouletteAdaptative ( float pMin )

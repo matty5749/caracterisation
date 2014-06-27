@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Algo::Algo ( Instance* instance ) :_instance ( instance ),_parcours ( vector<int>() ),_e1 ( 0 ),_e2 ( 0 ),_poidCourant ( 0 ),_nbComparaisons ( 0 ),_debut ( true ),_nbComparaisonsMax ( 0 )
+Algo::Algo ( Instance* instance ) :_instance ( instance ),_parcours ( vector<int>() ),_e1 ( 0 ),_e2 ( 0 ),_poidCourant ( 0 ),_nbComparaisons ( 0 ),_debut ( true ),_nbComparaisonsMax ( 0 ),_startTime ( 0 ),_endTime ( 0 ),_cumulTime ( 0 )
 {
 
 }
@@ -306,7 +306,7 @@ bool Algo::estCaracterisePar_version2 ( const vector< int >& indices )
     cout<<_nbComparaisons<<endl;
     _e1=0;
     _e2=0;
-    afficheVecteur ( indices );
+    afficheVecteur<int>( indices );
     cout<<endl;
     return true;
 }
@@ -424,26 +424,25 @@ bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
     //NOTE:peut etre garder en memoire ceux qui ont été parcouru afin d'éviter de les parcourir une seconde fois
     //FAIT: est trop couteux en temp de calcul par rapport à un parcours multiple
 
-//     for ( vector<Entite*>::const_iterator itRef=_instance->_entites.begin(); itRef!=_instance->_entites.end(); itRef++ )
-//     {
-//         if ( ( *itRef )->_entitesCritique.size() >0 )
-//         {
-//             for ( set<Entite*>::const_iterator itComp= ( *itRef )->_entitesCritique.begin(); itComp!= ( *itRef )->_entitesCritique.end(); itComp++ )
-//             {
-//                 if ( entiteIdentiqueSurIndicesGenes ( *itRef,*itComp,indices ) )
-//                 {
-// //                     if ( _poidCourant < k-1 )
-// //                         ( *itRef )->_entitesCritique.erase ( *itComp );
-//                     return false;
-//                 }
+    //PMDA
+    for ( vector<Entite*>::const_iterator itRef=_instance->_entites.begin(); itRef!=_instance->_entites.end(); itRef++ )
+    {
+        if ( ( *itRef )->_entitesCritique.size() >0 )
+        {
+            for ( set<Entite*>::const_iterator itComp= ( *itRef )->_entitesCritique.begin(); itComp!= ( *itRef )->_entitesCritique.end(); itComp++ )
+            {
+                if ( entiteIdentiqueSurIndicesGenes ( *itRef,*itComp,indices ) )
+                {
+                    return false;
+                }
 //                 else if ( _poidCourant < k-1 )											//TODO:regarder de plus pres			<--En commentaire car meilleur si l'on garde en memoire
 //                     ( *itRef )->_entitesCritique.erase ( *itComp );
-//             }
-//         }
-//     }
+            }
+        }
+    }
 
 
-//     //AJOUT ALGO DYNAMIQUE TRIE PAR PETIT TAU SUR INDICE DES COMBINAISONS
+//     //AJOUT ALGO DYNAMIQUE TRIE PAR PETIT TAU SUR INDICE DES COMBINAISONS <-- NE FONCTIONNE PAS BIEN
 //     //Heuristique sur les taux de similarite locale (petit tau)
 //     //Parcours exhaustif des groupe
 //     for ( vector<Groupe*>::const_iterator itRef=_instance->_groupes.begin(); itRef!=_instance->_groupes.end(); itRef++ )
@@ -457,7 +456,7 @@ bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
 //         }
 //         ( *itRef )->_moyenneTauxDeSimilariteLocal/=_instance->_groupes.size()-1;
 //     }
-// 
+//
 //     //Trie des groupes par petit tau
 //     sort ( _instance->_groupes.begin(),_instance->_groupes.end(),trieGroupeParTauLocal );
 
@@ -467,6 +466,9 @@ bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
     //FIN (petit tau)
 
     //FIN AJOUT ALGO DYNAMIQUE TRIE PAR PETIT TAU SUR INDICE DES COMBINAISONS
+
+    //NOUVEAU PARCOURS DYNAMIQUE SUR INDICE DES COMBINAISONS <-- FONCTIONNE MOINS BIEN EN DYNAMIQUE QUE EN STATIQUE
+// 		_instance->majParcoursGroupePourCombinaison(indices);
 
     //NOUVEAU PARCOURS DE GROUPE
     for ( multimap<float,pair<const Groupe * const,const Groupe * const> >::const_reverse_iterator it=_instance->_parcoursGroupe.rbegin(); it!=_instance->_parcoursGroupe.rend(); it++ )
@@ -483,39 +485,42 @@ bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
 //**         {
 
         bool tabou=false;
-//             map<Groupe*,set<int> >::const_iterator elementIt= ( *itGroupe )->_tabous.find ( *itGroupe2 );
-//             //Si j'ai une liste d'indice tabous pour ce groupe de comparaison
-//             if ( ( elementIt != ( *itGroupe )->_tabous.end() ) )
-//             {
-// //                         cout<< ( *itGroupe )->_id<<" / "<< ( *itGroupe2 )->_id<<endl;
-//                 //Je cherche si un des indices d'indices fait partie de cette liste
-//                 for ( unsigned int i=0; i<indices.size(); i++ )
-//                 {
-// //                             cout<<i<<endl;
-//                     if ( elementIt->second.find ( indices[i] ) !=elementIt->second.end() )
-//                     {
-//                         tabou=true;
-//                         break;
-//                     }
-//                 }
-// //                         cout<<endl;
-//                 if ( tabou )
-//                 {
-//                     ++_fitness;
-//                     continue;//On change de groupe de comparaisons car on est sur d'avoir une caractérisation entre les deux groupes courants
-//                 }
-//             }
+//DEBUT TABOU
+        map<Groupe*,set<int> >::const_iterator elementIt= itGroupe->_tabous.find ( const_cast<Groupe*>(itGroupe2) );
+        //Si j'ai une liste d'indice tabous pour ce groupe de comparaison
+        if ( ( elementIt != itGroupe->_tabous.end() ) )
+        {
+//                         cout<< ( *itGroupe )->_id<<" / "<< ( *itGroupe2 )->_id<<endl;
+            //Je cherche si un des indices d'indices fait partie de cette liste
+            for ( unsigned int i=0; i<indices.size(); i++ )
+            {
+//                             cout<<i<<endl;
+                if ( elementIt->second.find ( indices[i] ) !=elementIt->second.end() )
+                {
+                    tabou=true;
+                    break;
+                }
+            }
+//                         cout<<endl;
+            if ( tabou )
+            {
+                ++_fitness;
+                continue;//On change de groupe de comparaisons car on est sur d'avoir une caractérisation entre les deux groupes courants
+            }
+        }
 
-//         if ( !tabou ) //Parcours standard
-//         {
-// // 							cout<<"Parcours standard"<<endl;
-//             if ( ( caracterise=caracteriseDeuxGroupe ( *itGroupe,*itGroupe2,indices ) ) )
-//             {
-//                 _fitness+= ( *itGroupe )->_entites.size() * ( *itGroupe2 )->_entites.size();
-//                 continue;
-//             }
-//             else break;
-//         }
+        //         if ( !tabou ) //Parcours standard
+        //         {
+        // // 							cout<<"Parcours standard"<<endl;
+        //             if ( ( caracterise=caracteriseDeuxGroupe ( *itGroupe,*itGroupe2,indices ) ) )
+        //             {
+        //                 _fitness+= ( *itGroupe )->_entites.size() * ( *itGroupe2 )->_entites.size();
+        //                 continue;
+        //             }
+        //             else break;
+        //         }
+//FIN TABOU
+
 
         //POUR NOUVEAU PARCOURS GROUPE
         if ( !tabou ) //Parcours standard
@@ -542,7 +547,7 @@ bool Algo::estCaracterisePar_version4 ( const vector< int >& indices )
 //         afficheVecteur ( indices );
 //         cout<<endl;
 
-        cout<<indices.size() <<" "<<_nbComparaisons;	//DATA
+        cout<<indices.size() <<"\t"<<_nbComparaisons;	//DATA
     }
 //     cout<<caracterise<<endl;
     return caracterise;
