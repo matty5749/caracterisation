@@ -35,6 +35,7 @@ F.Saubion
 \usepackage{float}
 \usepackage{pgfplots}
 \usepackage{slashbox}
+\usepackage[french, figure, onelanguage]{algorithm2e}
 
 
 \tikzset{
@@ -144,7 +145,7 @@ F.Saubion
 		\begin{itemize}
 			\item Nous disposons d'un ensemble d'entités (souches bactériennes) regroupées en groupes (pathovars).
 			\pause
-			\item Chaque entité est définie par la présence/absence de gènes (représentation booléenne).
+			\item Chaque entité est définie par la présence/absence de caractères(gènes).
 			\pause
 			\item Une entité peut être vue comme étant une interprétation booléenne sur les gènes.
 			\pause
@@ -178,13 +179,24 @@ F.Saubion
 \begin{frame}
 	\begin{alertblock}{Complexité}
 			\begin{itemize}
-				\item Le PCM appartient à la classe de complexité W[2]-complet.
+				\item Le PCM appartient à la classe de complexité NP-complet.
+				\pause
+				\item MIN-PCM appartient à la classe de complexité NP-difficile.
+				\pause
+				\item Plus spécifiquemment, le PCM appartient à la classe de complexité W[2]-complet.
 				\pause
 				\item MIN-PCM appartient à la classe de complexité W[2]-difficile.
 				\pause
-				\item La seule possibilité d'améliorer significativement la résolution complète est d'utiliser des heuristiques sur les choix de variables(i.e.: Quels sont les gènes à examiner en priorités?)
+				\item La seule possibilité d'améliorer significativement la résolution complète est d'utiliser des heuristiques sur les choix de variables
+				\pause
 			\end{itemize}
 	\end{alertblock}
+	\begin{block}{Problématique}
+		\begin{itemize}
+				\item A partir des conclusions des précédents travaux, nous cherchons à savoir quels sont les gènes à examiner en priorités lors de la résolution d'une instance MIN-PCM.
+			\end{itemize}
+	\end{block}
+	
 \end{frame}
 
 \begin{frame}{Plan}
@@ -198,7 +210,7 @@ F.Saubion
 	\begin{center}
 		\begin{tabular}{|c|c|c|c|c|c|c|}
 		\hline 
-		Instances & Entités & Gènes & Borne min connu \\ 
+		Instances & Entités & Gènes & Borne min connue \\ 
 		\hline 
 		s3836-0 & 1000 & 1000 & 16\\ 
 		\hline
@@ -206,15 +218,19 @@ F.Saubion
 		\hline
 		\end{tabular} 
 	\end{center}
-	
+
 	\begin{overprint}
-		\only<2>
+		\begin{itemize}
+			\only<2-3> {\item Borne minimum connue de  s3836-0 obtenue par une méthode de type recherche arborescente.}
+			\only<3> {\item Borne minimum connue de  rch10 obtenue par une transformation du MIN-PCM en MIN-ONE, résolu par le solveur \emph{cplex} d'IBM.}
+		\end{itemize}
+		\only<4>
 		{
 			\begin{figure}
 				\input{./figure/sh_rch10_s3836_nbComp.tex}
 			\end{figure}
 		}
-		\only<3>
+		\only<5>
 		{
 			\begin{figure}
 				\input{./figure/sh_rch10_s3836_temps.tex}
@@ -278,13 +294,58 @@ F.Saubion
 	\end{exampleblock}
 	
 	\pause
-		\begin{itemize}
-			\item Plus la moyenne des taux $\cal{T}$ est élevée, plus l'instance sera difficile à résoudre.
-			\pause			
-			\item Les instances réelles présentent une moyenne de taux $\cal{T}$ beaucoup plus élevée que les instances aléatoires(i.e: les groupes sont fortement similaires).
-%			\pause
-%			\item Nous disposons d'un critère permettant de différencier les gènes et las groupes ($\cal{T}$).
-		\end{itemize}
+	\begin{overprint}
+		\only<2-3>
+		{
+			\begin{itemize}
+				\item<2-3> Plus la moyenne des taux $\cal{T}$ est élevée, plus l'instance sera difficile à résoudre.		
+				\item<3> Les instances réelles présentent une moyenne de taux $\cal{T}$ beaucoup plus élevée que les instances aléatoires(i.e: les groupes sont fortement similaires).
+			\end{itemize}
+		}
+		\only<4-5>
+		{
+			\begin{block}{Heuristique de trie des gènes par $\cal{T}$}
+				\begin{itemize}
+					\item<4-5> Les gènes présentant des taux de similarité faible ont plus de chance de caractériser une instance.
+					\item<5> L' heuristique de trie par $\cal{T}$ consiste à examiner en priorité les gènes ayant de faible taux de similarité.
+				\end{itemize}
+			\end{block}
+		}
+	\end{overprint}
+\end{frame}
+
+\begin{frame}
+				\begin{center}
+					\begin{tabular}{|c||c|c|c|c|}
+						\hline
+						\multirow{2}{*}{Souches}&\multirow{2}{*}{Groupes}&\multicolumn{3}{c|}{Gènes
+						}\\
+						&&$a$&$b$&$c$\\
+						\hline
+						\hline
+						$e_1$&\multirow{2}{*}{$g_1$}& 0 & 0 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_2$&& 0 & 0 & 1\\
+						\hline
+						\hline
+						$e_3$&$g_2$& 1 &  1 & 1\\
+						\hline
+						\hline
+						$e_4$&\multirow{2}{*}{$g_3$}& 1 & 1 & 0\\
+						\cline{1-1} \cline{3-5}
+						$e_5$&& 0 & 1 & 0\\
+						\hline
+					\end{tabular}
+				\end{center}
+				\begin{block}{Heuristique de trie des groupes par $\Gamma$}
+					\begin{itemize}
+					\item Une caractérisation exige un parcours exhaustif de paires de groupes ($[g_1,g_2]$, $[g_1,g_3]$, $[g_2,g_3]$).
+					\pause
+					\item Idée: Parcourir en priorités les paires de groupes ayant des forts taux de similarité $\Gamma$ entre groupe ($[g_2,g_3]$, $[g_3,g_1]$, $[g_1,g_2]$).
+					\pause
+					\item Elimination rapide des combinaisons infructueuse.
+					\end{itemize}
+				\end{block}
 \end{frame}
 
 \subsection{Heuristiques pour une recherche exacte}
@@ -297,13 +358,49 @@ F.Saubion
 %\end{frame}
 
 \subsection{Recherche approchée}
-\begin{frame}{Recherche approchée}
-	\begin{itemize}
-		\item Roulette proportionelle (non adaptative) favorisant la sélection des gènes présentant de faible taux de similarité $\cal{T}$
-	\end{itemize}
-	
+\begin{frame}{Algorithme de recherche approchée par roulette proportionelle}
+% 	\begin{itemize}
+% 		\item Roulette proportionelle (non adaptative) favorisant la sélection des gènes présentant de faible taux de similarité $\cal{T}$
+% 	\end{itemize}
+	\begin{algorithm}
+ 	\scriptsize
+	\textbf{roulette ($taux$, $Groupes$, $k$, $n$)}\\
+	\tcp{Initialisation des probabilités pour chaque gène en fonction de leurs taux de similarité}
+	\tcp{Les gènes présentant de faible taux de similarité $\cal{T}$ auront plus de chance d'être sélectionné}
+	Réel $proba[] \leftarrow$ initialisation\_proba($taux$)\\
 	\pause
-	\begin{block}{Résultats sur instance réels}
+	\Tq{$VRAI$ \tcp{Boucle 1}}
+	{	
+		\pause
+		\tcp{Génération d'une combinaison à partir des probabilités de $proba$}
+		Entier $combinaison \leftarrow genereCombinaisonAvecProba(proba)$\\
+		
+% 		\Tq{$|combinaison| < k $ \tcp{Boucle 2}}
+% 		{
+% 			Réel $alea \leftarrow $ nombre aléatoire entre 0 et 1 \\
+% 			\PourTous{$i \in [1,\ldots,n]$ \tcp{Boucle 3: génération de la combinaison}}
+% 			{
+% 				\Si{$proba[i] \geq alea$}
+% 				{
+% 					$combinaison \leftarrow combinaison \cup i$\\
+% 					Sortir de la boucle 3
+% 				}
+% 			}
+% 		}
+		\pause
+		\Si{caractérise\_instance($I$,$combinaison$) \tcp{Test de la combinaison}}
+		{
+			afficher("La combinaison ",$combinaison$," permet de caractériser l'instance.")\\
+			$k \leftarrow k-1$\\
+			$combinaison \leftarrow \{\}$		
+		}
+	}
+	\label{algoRoulette}
+\end{algorithm}
+\end{frame}
+
+\begin{frame}{Recherche approchée}
+	\begin{block}{Résultats sur instances réels}
 		\begin{center}
 			\begin{tabular}{|c|c|c|c|c|c|}
 			\hline 

@@ -1,24 +1,42 @@
 
 \includepdf[pages=1]{couverture/couverture.pdf}
+\newpage
+\thispagestyle{empty}
+\null
+\newpage
 \includepdf[pages=1]{couverture/nonPlagiat.pdf}
-%
-%\section*{\begin{center}Remerciements\end{center}}
-%\par Tout d'abord, je tiens à remercier Frédéric LARDEUX et Frédéric SAUBION pour leur écoute, leurs disponibilités et leurs explications et pour la liberté qu'ils m'ont laissé lors de la réalisation de ce projet.
-%\par Je remercie également les membres du LERIA\footnote{Laboratoire d'études et de recherche en informatique d'Angers}, pour m'avoir accordé leur confiance en m'attribuant ce stage.
-%\par Je remercie l'équipe enseignante du DAEU\footnote{Diplôme d'accès aux études universitaire} d'Angers, et particulièrement Eric SCHRAFSTETTER qui m'a mis le pied à l'étrier pour intégrer la faculté des sciences d'Angers.
-%\par Enfin, je remercie ma famille, qui m'a toujours soutenu dans la reprise de mes études, et tout particulièrement Lucie, Marius et Paulin qui partagent mes humeurs et mon quotidien.
-%
-%
-%\newpage
-%\null
-%\begin{flushright}
-%\vspace{\fill}
-%\textbf{À Marius et Paulin.}
-%\vspace{\fill}
-%\end{flushright}
+\newpage
+\thispagestyle{empty}
+\null
 
+\newpage
+\thispagestyle{empty}
+\section*{\begin{center}Remerciements\end{center}}
+\par Tout d'abord, je tiens à remercier Frédéric LARDEUX et Frédéric SAUBION pour leur écoute, leurs disponibilités, leurs explications et pour la liberté qu'ils m'ont laissée lors de la réalisation de ce projet.
+\par Je remercie également les membres du LERIA\footnote{Laboratoire d'études et de recherche en informatique d'Angers}, pour m'avoir accordé leur confiance en m'attribuant ce stage.
+\par Je remercie l'équipe enseignante du DAEU\footnote{Diplôme d'accès aux études universitaire} d'Angers, et particulièrement Eric SCHRAFSTETTER qui m'a mis le pied à l'étrier pour intégrer la faculté des sciences d'Angers.
+\par Enfin, je remercie ma famille, qui m'a toujours soutenue dans la reprise de mes études, et tout particulièrement Lucie, Marius et Paulin qui partagent mes humeurs et mon quotidien.
+\newpage
+\thispagestyle{empty}
+\null
+\newpage
 
-\section*{Introduction}
+\newpage
+\thispagestyle{empty}
+\null
+\begin{flushright}
+\vspace{\fill}
+\textbf{À Marius et Paulin.}
+\vspace{\fill}
+\end{flushright}
+
+\newpage
+\thispagestyle{empty}
+\null
+\newpage
+
+\newpage
+\section{Introduction}
 \subsection*{Sujet du stage}
 \par La plupart des bactéries appartenant au genre Xanthomonas sont responsables de pathologies sur
 une large gamme de cultures économiquement importantes, induisant notamment des pertes
@@ -58,10 +76,20 @@ résolution de problèmes combinatoires (SAT-CSP).
 \subsection*{Plan du rapport}
 Dans la première partie de ce mémoire, nous dressons un état de l'art concernant l'étude du MIN-PCM. Celui-ci reprend les grands axes présentés dans l'article \cite{Chhel2013}. Ensuite nous décrivons les contributions que nous apportons à l'étude de ce problème: nous définissons la notion d'instance difficile, nous proposons des heuristiques de résolution (exactes ou approchées) et nous fournissons les résultats ainsi obtenus. Enfin, nous tirons les conclusions de nos travaux et nous discutons les perspectives de recherche envisagées.
 
+\newpage
+\thispagestyle{empty}
+\null
+\newpage
+
 % La table des matières
 \newpage
 \setcounter{tocdepth}{3}
 \tableofcontents
+\newpage
+
+\newpage
+\thispagestyle{empty}
+\null
 \newpage
 
 \section{État de l'art}
@@ -79,7 +107,8 @@ Dans la première partie de ce mémoire, nous dressons un état de l'art concern
 
 
 
-
+Nos travaux faisant suite à ceux présenté dans l'article\cite{Chhel2013} \emph{Application du problème de caractérisation multiple à la conception de test de diagnostic pour la biologie végétale} de F.Chhel, F.Lardeux, F.Saubion et B.Zanuttini parut en 2013 dans la \emph{Revue d'intelligence artificielle}  et dans un souci de cohérence, nous reprenons dans cette section, avec l'accord des auteurs, les éléments clefs de l'article afin de présenter un état de l'art du problème de caractérisation multiple.
+ 
 \subsection{Présentation générale du problème}
 La plupart des bactéries appartenant au genre Xanthomonas sont responsables de pathologies sur une large gamme de cultures économiquement importantes,  induisant notamment  des pertes de rendement et diminuant ainsi la valeur marchande des semences. Quelques graines contaminées sont suffisantes pour générer une source d'inoculation primaire et occasionner ainsi une dissémination ultérieure plus large. En particulier, le pathovar\footnote{La notion de pathovar correspond à une subdivision du genre ayant des caractéristiques pathologiques observées communes.} phaseoli de  Xanthomonas Axonopodis (Xap) qui regroupe toutes les souches identifiées comme pathogènes sur le haricot \cite{Vauterin1995}, n'est pas endémique en Europe mais pour limiter son introduction, il est inscrit sur la liste des agents pathogènes de quarantaine.
 
@@ -124,7 +153,7 @@ $e_5$&&0&\cellcolor{lightgray}1&\cellcolor{lightgray}0\\
 \end{figure}
 
 Dans la figure \ref{CD} il y a 5 entités réparties dans 3 groupes et dont
-la description se base sur un ensemble de 4 caractères.
+la description se base sur un ensemble de 3 caractères.
 Résoudre ce problème revient à caractériser chaque groupe. Il faut donc, pour
 chaque groupe, trouver une combinaison de  variables permettant de construire une formule vraie pour toutes les
 entités du groupe et fausse pour les autres entités des autres
@@ -242,12 +271,12 @@ La minimisation du problème de caractérisation multiple consiste à définir l
 
 
 \subsection{Complexité}
-Le problème SET-COVER appartient à la classe de complexité W[2]-complet. Il a été montré dans \cite{Chhel2013} qu'une instance PCM pouvait être réduite en temps polynômial en une instance SET-COVER. Il en résulte que PCM appartient à la classe de complexité W[2]-complet \footnote{En admettant l'hypothèse que la WEFT-hiérarchie proposé par [Downey, Fellows, 1995] soit correcte.}. Dès lors, il a été prouvé que le MIN-PCM appartient à la classe de complexité W[2]-difficile. L'impact direct de l'appartenance de MIN-PCM à cette classe de complexité est que l'\textbf{unique} possibilité d'améliorier significativement la résolution complète\footnote{Recherche exacte permettant de prouver l'optimalité d'une solution.} d'une instance est de \textbf{travailler sur des heuristiques de choix de variables}(gènes). 
+Le problème SET-COVER appartient à la classe de complexité W[2]-complet. Il a été montré dans \cite{Chhel2013} qu'une instance PCM pouvait être réduite en temps polynômial en une instance SET-COVER. Il en résulte que PCM appartient à la classe de complexité W[2]-complet \footnote{En admettant l'hypothèse que la WEFT-hiérarchie proposé par \cite{DowneyF95} soit correcte.}. Dès lors, il a été prouvé que le MIN-PCM appartient à la classe de complexité W[2]-difficile. L'impact direct de l'appartenance de MIN-PCM à cette classe de complexité est que l'\textbf{unique} possibilité d'améliorier significativement la résolution complète\footnote{Recherche exacte permettant de prouver l'optimalité d'une solution.} d'une instance est de \textbf{travailler sur des heuristiques de choix de variables}(gènes). 
 
-\subsection{Méthode de résolution}
+\subsection{Méthodes de résolutions}
 Toutes les méthodes présentées dans cette sous-section sont issus de \cite{Chhel2013}.
 
-\subsubsection{Une résolution basés sur les fonctions booléenes partiellement définis}
+\subsubsection{Une résolution basée sur les fonctions booléenes partiellement définis}
 
 Les fonctions booléennes partiellement définies, {\em partially
 defined Boolean formula - pdBf},  \cite{Iba99} permettent de proposer un
@@ -469,7 +498,7 @@ Afin de permettre une exploration plus large de l'espace de recherche, plusieurs
 
 
 
-Afin d'avoir un moyen de comparaison pour nos contributions, nous reproduisons ici les résultats fourni dans \cite{Chhel2013}\footnote{Nous nous sommes servi du code mis à disposition sur \url{http://forge.info.univ-angers.fr/~gh/Idas/Ccd/mcps/}}. Les expérimentations sont faites sur une machine composé d'un processeur Intel Core\up{tm} i7-2620M CPU à 2.70GHz (deux cœurs) avec 4 Go Ram tournant sous Linux 64-bits. L'option de compilation -Ofast est activé pour obtenir notre exécutable.
+Afin d'avoir un moyen de comparaison pour nos contributions, nous reproduisons ici les résultats fournis dans \cite{Chhel2013}\footnote{Nous nous sommes servi du code mis à disposition sur \url{http://forge.info.univ-angers.fr/~gh/Idas/Ccd/mcps/}}. Les expérimentations sont faites sur une machine composée d'un processeur Intel Core\up{tm} i7-2620M CPU à 2.70GHz (deux cœurs) avec 4 Go Ram tournant sous Linux 64-bits. L'option de compilation -Ofast est activée pour obtenir notre exécutable.
 \begin{itemize}
 \item Les instances réelles (raphv, raphy, rarep, rch8 et rch10) sont tirées de problèmes de caractérisation provenant de l'API BioMérieux basée sur des propriétés bio-chimiques de l'espèce Ralstonia et sur des expressions de gènes de virulences de l'espèce Xanthomonas.
 \item Les instances aléatoires sont générées en deux étapes, pour un nombre de variables et de groupes fixés. Tout d'abord, chaque entité est construite de manière aléatoire. Ensuite, une certaine proportion des entités est répartie de manière équitable entre tous les groupes et les entités
@@ -477,7 +506,7 @@ restantes sont affectées une à une aléatoirement aux groupes. La proportion
 d'entités affectées aléatoirement est donnée en pourcentage et est appelée
 $bruit$. Une instance aléatoire est notée sous la forme : s$graine$-$bruit$.
 \end{itemize}
-Le temps autorisé pour chaque exécution est 10 minutes. Les résultats en gras indiquent que les solutions sont optimales.
+La colonne PL présente les résultats obtenus par reformulation en programmation linéaire sur le solveur IBM \textit{cplex}\footnote{\url{http://www.ibm.com/software/integration/optimization/cplex-optimizer}}. Les instances marquées par "-" n'ont pas pu être chargées en mémoire car elles sollicitaient plus de 32 Go de RAM. SR présente les tailles des instances après suppression des redondances. Les résultats indiqués dans DIFF sont les résultats affichés dans l'article, différents de ceux obtenus sur notre machine. SH présente les résultats obtenus sans heuristique(heuristique par défaut) avec notre programme sur notre machine. Le temps autorisé pour chaque exécution est de 10 minutes. Les résultats en gras indiquent que les solutions sont optimales.
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline 
@@ -515,13 +544,10 @@ rch10 & 173 (112) & 27 & 98 (86) & \textbf{10} & 27 (15) (\textcolor{blue}{25}) 
 \hline 
 \end{tabular} 
 \end{center}
-Colonne PL: Résultats obtenu par reformulation en programmation linéaire sur le solveur IBM \textit{cplex}\footnote{\url{http://www.ibm.com/software/integration/optimization/cplex-optimizer}}.Les instances marqués par "-" ne pas pu être chargé en mémoire car elles solicitaient plus de 32 Go de RAM.\\
-SR: Obtenu après suppression des redondances.\\
-DIFF: Résultats affichés dans l'article étant différents de ceux obtenus sur notre machine.\\
-SH: Résultats obtenu sans heuristique avec notre programme sur notre machine.\\
 
 
-Les différences significatives sur les instances rarep et rch10 sont du au fait que ces résultats ont été obtenu en partant d'une borne supérieur égale aux nombre de gènes divisé par deux. De fait , il apparaît clairement que l'instance rarep n'a pas bénéficié de la suppression de ses redondances\footnote{$72/2<59$}.
+
+Les différences significatives sur les instances rarep et rch10 sont dues au fait que ces résultats ont été obtenu en partant d'une borne supérieur égale aux nombre de gènes divisé par deux. De fait , il apparaît clairement que l'instance rarep n'a pas bénéficié de la suppression de ses redondances\footnote{$72/2<59$}.
 
 Pour les comparaisons à venir sur les résultats qui diffèrent, nous prendrons en compte les résultats en bleu.
 
